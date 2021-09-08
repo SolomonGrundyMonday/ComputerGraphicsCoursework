@@ -1,0 +1,9 @@
+6732 frames in  5.000 seconds = 1346.400 FPS
+7670 frames in  5.000 seconds = 1534.000 FPS
+7639 frames in  5.000 seconds = 1527.800 FPS
+7741 frames in  5.000 seconds = 1548.200 FPS
+7718 frames in  5.000 seconds = 1543.600 FPS
+7830 frames in  5.000 seconds = 1566.000 FPS
+8178 frames in  5.000 seconds = 1635.600 FPS
+9288 frames in  5.000 seconds = 1857.600 FPS
+9187 frames in  5.001 seconds = 1837.033 FPS
