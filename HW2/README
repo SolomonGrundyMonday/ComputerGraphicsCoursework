@@ -1,2 +1,15 @@
-This is the repository for the second homework assignment for Computer Graphics, Lorenz Attractor.  This text will be replaced with a proper README once
-the program has been implemented.
+The user controls for hw2 are as follows:
+
+Keyboard inputs:
+
+Escape key      -> Terminates the application.
+Left Arrow key  -> Decrease the azimuth by 5 degrees.
+Right Arrow key -> Increase the azimuth by 5 degrees.
+Up Arrow key    -> Increase the elevation by 5 degrees.
+Down Arrow key  -> Decrease the elevation by 5 degrees.
+'s' key         -> Switch to mode 1.  In mode 1, the sigma lorenz parameter is displayed and can be modified.
+'b' key         -> Switch to mode 2.  In mode 2, the geometric factor lorenz parameter is displayed and can be modified.
+'r' key         -> Switch to mode 3.  In mode 3, the Rayleigh Number lorenz parameter is dispalyed and can be modified.
+'+' key         -> Increase the currently selected lorenz parameter (determined by mode variable).
+'-' key         -> Decrease the currently selected lorenaz parameter (determined by mode variable).
+'d' key         -> Return all lorenz parameters to their default starting parameters (s = 10, b = 2.6666, r = 28). 
