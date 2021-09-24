@@ -2,6 +2,9 @@
  *  Homework 3, CSCI-4229 Computer Graphics.
  *  Created by:  Jeff Colgan September 21, 2021. 
  */
+
+#define GL_GLEXT_PROTOTYPES
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -11,7 +14,6 @@
 #include <GL/glew.h>
 #endif
 
-#define GL_EXIT_PROTOTYPES
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -88,6 +90,13 @@ static void WheelAxel(double x, double y, double z, double dx, double dy,
    // Variables for circumference, axel circumference.
    double circumference = 0.05;
    double axel = circumference * 0.2;
+
+   // Local variables for readability.
+   double lInnerWall = 0.2;
+   double lOuterWall = 0.25;
+   double rInnerWall = 0.45;
+   double rOuterWall = 0.4;
+
    glPushMatrix();
 
    // Apply the translation, rotation and scaling to the object based on the input
@@ -100,8 +109,8 @@ static void WheelAxel(double x, double y, double z, double dx, double dy,
    glBegin(GL_QUAD_STRIP);
    for(int i = 0; i <= 360; i += 30)
    {
-      glVertex3d(circumference * Cos(i), circumference * Sin(i), 0.2);
-      glVertex3d(circumference * Cos(i), circumference * Sin(i), 0.25);
+      glVertex3d(circumference * Cos(i), circumference * Sin(i), lInnerWall);
+      glVertex3d(circumference * Cos(i), circumference * Sin(i), lOuterWall);
    }
    glEnd();
 
@@ -109,22 +118,22 @@ static void WheelAxel(double x, double y, double z, double dx, double dy,
    glBegin(GL_TRIANGLE_FAN);
    glVertex3f(0, 0, 0.2);
    for (int i = 0; i <= 360; i += 30)
-      glVertex3f(circumference * Cos(i), circumference * Sin(i), 0.2);
+      glVertex3f(circumference * Cos(i), circumference * Sin(i), lInnerWall);
    glEnd();
 
    // Draw the outside of the wheel wall
    glBegin(GL_TRIANGLE_FAN);
    glVertex3f(0, 0, 0.25);
    for (int i = 0; i <= 360; i += 30)
-      glVertex3f(circumference * Cos(i), circumference * Sin(i), 0.25);
+      glVertex3f(circumference * Cos(i), circumference * Sin(i), lOuterWall);
    glEnd();
 
    // Draw the right wheel tread.
    glBegin(GL_QUAD_STRIP);
    for(int i = 0; i <= 360; i += 30)
    {
-      glVertex3f(circumference * Cos(i), circumference * Sin(i), 0.4);
-      glVertex3f(circumference * Cos(i), circumference * Sin(i), 0.45);
+      glVertex3f(circumference * Cos(i), circumference * Sin(i), rOuterWall);
+      glVertex3f(circumference * Cos(i), circumference * Sin(i), rInnerWall);
    }
    glEnd();
 
@@ -132,22 +141,22 @@ static void WheelAxel(double x, double y, double z, double dx, double dy,
    glBegin(GL_TRIANGLE_FAN);
    glVertex3f(0, 0, 0.4);
    for (int i = 0; i <= 360; i += 30)
-      glVertex3f(circumference * Cos(i), circumference * Sin(i), 0.4);
+      glVertex3f(circumference * Cos(i), circumference * Sin(i), rOuterWall);
    glEnd();
 
    // Draw the outside wheel wall.
    glBegin(GL_TRIANGLE_FAN);
    glVertex3f(0, 0, 0.45);
    for (int i = 0; i <= 360; i += 30)
-      glVertex3f(circumference * Cos(i), circumference * Sin(i), 0.45);
+      glVertex3f(circumference * Cos(i), circumference * Sin(i), rInnerWall);
    glEnd();
 
    // Draw the axel between the wheels.
    glBegin(GL_QUAD_STRIP);
    for (int i = 0; i <= 360; i += 30)
    {
-      glVertex3f(axel * Cos(i), axel * Sin(i), 0.2);
-      glVertex3f(axel * Cos(i), axel * Sin(i), 0.45);
+      glVertex3f(axel * Cos(i), axel * Sin(i), lInnerWall);
+      glVertex3f(axel * Cos(i), axel * Sin(i), rInnerWall);
    }
    glEnd();
 
@@ -169,40 +178,39 @@ static void Rover(double x, double y, double z, double dx,
    glTranslated(x, y, z);
    glRotated(theta, 0, 1, 0);
    glScaled(dx, dy, dz);
-   glColor3f(0.2, 1.0, 0.2);
 
    glBegin(GL_QUADS);
-   // Front.
+   // Front face.
    glVertex3f(-1, -1, 1);
    glVertex3f(1, -1, 1);
    glVertex3f(1, 1, 1);
    glVertex3f(-1, 1, 1);
 
-   // Back.
+   // Back face.
    glVertex3f(1, -1, -1);
    glVertex3f(-1, -1, -1);
    glVertex3f(-1, 1, -1);
    glVertex3f(1, 1, -1);
 
-   // Left Middle.
+   // Middle face.
    glVertex3f(-1, -1, -1);
    glVertex3f(-1, -1, 1);
    glVertex3f(-1, 1, 1);
    glVertex3f(-1, 1, -1);
 
-   // Right Middle.
+   // Middle face. 
    glVertex3f(1, -1, 1);
    glVertex3f(1, -1, -1);
    glVertex3f(1, 1, -1);
    glVertex3f(1, 1, 1);
 
-   // Top
+   // Top face.
    glVertex3f(-1, 1, 1);
    glVertex3f(1, 1, 1);
    glVertex3f(1, 1, -1);
    glVertex3f(-1, 1, -1);
   
-   // Bottom
+   // Bottom face.
    glVertex3f(-1, -1, -1);
    glVertex3f(1, -1, -1);
    glVertex3f(1, -1, 1);
@@ -227,6 +235,14 @@ static void Rocket(double x, double y, double z,
    // Compute radius from specified circumference.
    double circumference = 0.05;
    double radius = circumference * 0.5;
+
+   // Local variables for readability.
+   double noseTip = 0.50;
+   double noseHeight = 0.20;
+   double fuselageBase = -0.50;
+   double finTip = -0.1;
+   double finEdge = -0.3;
+
    glPushMatrix();
 
    // Apply translation, rotation and scaling to object based on input parameters.
@@ -234,112 +250,122 @@ static void Rocket(double x, double y, double z,
    glRotated(theta, 0, 0, 1);
    glScaled(dx, dy, dz);
 
-   // Set the color.
+   // Set the fuselage color.
    glColor3f(1.0, 0.5, 0.0);
 
    // Nose cone for the Rocket object
    glBegin(GL_TRIANGLE_FAN);
-   glVertex3d(0.50, 0.0, 0.0);
+   glVertex3d(noseTip, 0.0, 0.0);
    for (int i = 0; i <= 360; i += 30)
-      glVertex3f(0.20, circumference * Cos(i), circumference * Sin(i));
+      glVertex3f(noseHeight, circumference * Cos(i), circumference * Sin(i));
    glEnd();
 
    // Fuselage of the Rocket object (implemented as a cyllender).
    glBegin(GL_QUAD_STRIP);
    for(int i = 0; i <= 360; i += 30)
    {
-      glVertex3f(0.20, circumference * Cos(i), circumference * Sin(i));
-      glVertex3f(-0.50, circumference * Cos(i), circumference * Sin(i));
+      glVertex3f(noseHeight, circumference * Cos(i), circumference * Sin(i));
+      glVertex3f(fuselageBase, circumference * Cos(i), circumference * Sin(i));
    }
    glEnd();
 
-   // Tail fin one: positive y,z (rocket coordinate system).
+   // Set the tail fin color.
    glColor3f(1.0, 0.0, 0.1);
+
+   // Tail fin one: positive y,z (rocket coordinate system).
    glBegin(GL_TRIANGLES);
-   glVertex3f(-0.1, radius, radius);
-   glVertex3f(-0.3, radius, radius);
-   glVertex3f(-0.3, radius + 0.1, radius + 0.1);
+   glVertex3f(finTip, radius, radius);
+   glVertex3f(finEdge, radius, radius);
+   glVertex3f(finEdge, radius + 0.1, radius + 0.1);
    glEnd();
 
    glBegin(GL_QUAD_STRIP);
-   glVertex3f(-0.5, radius, radius);
-   glVertex3f(-0.5, radius + 0.1, radius + 0.1);
-   glVertex3f(-0.3, radius, radius);
-   glVertex3f(-0.3, radius + 0.1, radius + 0.1);
+   glVertex3f(fuselageBase, radius, radius);
+   glVertex3f(fuselageBase, radius + 0.1, radius + 0.1);
+   glVertex3f(finEdge, radius, radius);
+   glVertex3f(finEdge, radius + 0.1, radius + 0.1);
    glEnd();
 
    // Lines so the fins are visible from above/below.
    glBegin(GL_LINES);
-   glVertex3f(-0.1, radius, radius);
-   glVertex3f(-0.3, radius + 0.1, radius + 0.1);
-   glVertex3f(-0.5, radius, radius);
-   glVertex3f(-0.5, radius + 0.1, radius + 0.1);
+   glVertex3f(finTip, radius, radius);
+   glVertex3f(finEdge, radius + 0.1, radius + 0.1);
+   glVertex3f(fuselageBase, radius, radius);
+   glVertex3f(fuselageBase, radius + 0.1, radius + 0.1);
+   glVertex3f(finEdge, radius + 0.1, radius + 0.1);
+   glVertex3f(fuselageBase, radius + 0.1, radius + 0.1);
    glEnd();
 
    // Tail fin two: negative y,z (rocket coordinate system).
    glBegin(GL_TRIANGLES);
-   glVertex3f(-0.1, -radius, -radius);
-   glVertex3f(-0.3, -radius, -radius);
-   glVertex3f(-0.3, -radius - 0.1, -radius - 0.1);
+   glVertex3f(finTip, -radius, -radius);
+   glVertex3f(finEdge, -radius, -radius);
+   glVertex3f(finEdge, -radius - 0.1, -radius - 0.1);
    glEnd();
 
    glBegin(GL_QUAD_STRIP);
-   glVertex3f(-0.5, -radius, -radius);
-   glVertex3f(-0.5, -radius - 0.1, -radius - 0.1);
-   glVertex3f(-0.3, -radius, -radius);
-   glVertex3f(-0.3, -radius - 0.1, -radius - 0.1);
+   glVertex3f(fuselageBase, -radius, -radius);
+   glVertex3f(fuselageBase, -radius - 0.1, -radius - 0.1);
+   glVertex3f(finEdge, -radius, -radius);
+   glVertex3f(finEdge, -radius - 0.1, -radius - 0.1);
    glEnd();
 
    // Lines so the fins are visible from above/below.
    glBegin(GL_LINES);
-   glVertex3f(-0.1, -radius, -radius);
-   glVertex3f(-0.3, -radius - 0.1, -radius - 0.1);
-   glVertex3f(-0.5, -radius, -radius);
-   glVertex3f(-0.5, -radius - 0.1, -radius - 0.1);
+   glVertex3f(finTip, -radius, -radius);
+   glVertex3f(finEdge, -radius - 0.1, -radius - 0.1);
+   glVertex3f(fuselageBase, -radius, -radius);
+   glVertex3f(fuselageBase, -radius - 0.1, -radius - 0.1);
+   glVertex3f(finEdge, -radius - 0.1, -radius - 0.1);
+   glVertex3f(fuselageBase, -radius - 0.1, -radius - 0.1);
    glEnd();
 
    // Tail fin three: negative y, positive z (rocket coordinate system).
    glBegin(GL_TRIANGLES);
-   glVertex3f(-0.1, -radius, radius);
-   glVertex3f(-0.3, -radius, radius);
-   glVertex3f(-0.3, -radius - 0.1, radius + 0.1);
+   glVertex3f(finTip, -radius, radius);
+   glVertex3f(finEdge, -radius, radius);
+   glVertex3f(finEdge, -radius - 0.1, radius + 0.1);
    glEnd();
 
    glBegin(GL_QUAD_STRIP);
-   glVertex3f(-0.5, -radius, radius);
-   glVertex3f(-0.5, -radius - 0.1, radius + 0.1);
-   glVertex3f(-0.3, -radius, radius);
-   glVertex3f(-0.3, -radius - 0.1, radius + 0.1);
+   glVertex3f(fuselageBase, -radius, radius);
+   glVertex3f(fuselageBase, -radius - 0.1, radius + 0.1);
+   glVertex3f(finEdge, -radius, radius);
+   glVertex3f(finEdge, -radius - 0.1, radius + 0.1);
    glEnd();
 
-   // Lines so the fins are visible from above/below.
+   // Lines so the fins are visible from sides/above/below.
    glBegin(GL_LINES);
-   glVertex3f(-0.1, -radius, radius);
-   glVertex3f(-0.3, -radius - 0.1, radius + 0.1);
-   glVertex3f(-0.5, -radius, radius);
-   glVertex3f(-0.5, -radius - 0.1, radius + 0.1);
+   glVertex3f(finTip, -radius, radius);
+   glVertex3f(finEdge, -radius - 0.1, radius + 0.1);
+   glVertex3f(fuselageBase, -radius, radius);
+   glVertex3f(fuselageBase, -radius - 0.1, radius + 0.1);
+   glVertex3f(finEdge, -radius - 0.1, radius + 0.1);
+   glVertex3f(fuselageBase, -radius - 0.1, radius + 0.1);
    glEnd();
 
    // Tail fin four: positive y, negative z (rocket coordinate system).
    glBegin(GL_TRIANGLES);
-   glVertex3f(-0.1, radius, -radius);
-   glVertex3f(-0.3, radius, -radius);
-   glVertex3f(-0.3, radius + 0.1, -radius - 0.1);
+   glVertex3f(finTip, radius, -radius);
+   glVertex3f(finEdge, radius, -radius);
+   glVertex3f(finEdge, radius + 0.1, -radius - 0.1);
    glEnd();
 
    glBegin(GL_QUAD_STRIP);
-   glVertex3f(-0.5, radius, -radius);
-   glVertex3f(-0.5, radius + 0.1, -radius - 0.1);
-   glVertex3f(-0.3, radius, -radius);
-   glVertex3f(-0.3, radius + 0.1, -radius - 0.1);
+   glVertex3f(fuselageBase, radius, -radius);
+   glVertex3f(fuselageBase, radius + 0.1, -radius - 0.1);
+   glVertex3f(finEdge, radius, -radius);
+   glVertex3f(finEdge, radius + 0.1, -radius - 0.1);
    glEnd();
 
-   // Lines so the fins are visible from above/below.
+   // Lines so the fins are visible from sides/above/below.
    glBegin(GL_LINES);
-   glVertex3f(-0.1, radius, -radius);
-   glVertex3f(-0.3, radius + 0.1, -radius - 0.1);
-   glVertex3f(-0.5, radius, -radius);
-   glVertex3f(-0.5, radius + 0.1, -radius - 0.1);
+   glVertex3f(finTip, radius, -radius);
+   glVertex3f(finEdge, radius + 0.1, -radius - 0.1);
+   glVertex3f(fuselageBase, radius, -radius);
+   glVertex3f(fuselageBase, radius + 0.1, -radius - 0.1);
+   glVertex3f(finEdge, radius + 0.1, -radius - 0.1);
+   glVertex3f(fuselageBase, radius + 0.1, -radius - 0.1);
    glEnd();
    
    // Thrusters here we just have a yellow cone emitted from the back of
@@ -350,7 +376,7 @@ static void Rocket(double x, double y, double z,
    glVertex3f(-0.7, 0.0, 0.0);
    for(int i = 0; i <= 360; i += 30)
    {
-      glVertex3f(-0.5, circumference * Cos(i), circumference * Sin(i));
+      glVertex3f(fuselageBase, circumference * Cos(i), circumference * Sin(i));
    }
    glEnd();
    
@@ -364,6 +390,7 @@ static void Box(double x, double y, double z, double dx, double dy, double dz, d
 {
    glPushMatrix();
 
+   // Apply scale, translation, and rotation from input parameters.
    glTranslated(x, y, z);
    glRotated(theta, 0, 1, 0);
    glScaled(dx, dy, dz);
@@ -371,32 +398,38 @@ static void Box(double x, double y, double z, double dx, double dy, double dz, d
 
    // Launch Platform.
    glBegin(GL_QUADS);
-   // Front
+
+   // Front face
    glVertex3f(-1, -1, 1);
    glVertex3f(1, -1, 1);
    glVertex3f(1, 1, 1);
    glVertex3f(-1, 1, 1);
-   // Back
+
+   // Back face.
    glVertex3f(1, -1, -1);
    glVertex3f(-1, -1, -1);
    glVertex3f(-1, 1, -1);
    glVertex3f(1, 1, -1);
-   // Right
+
+   // Right face.
    glVertex3f(1, -1, 1);
    glVertex3f(1, -1, -1);
    glVertex3f(1, 1, -1);
    glVertex3f(1, 1, 1);
-   // Left
+
+   // Left face.
    glVertex3f(-1, -1, -1);
    glVertex3f(-1, -1, 1);
    glVertex3f(-1, 1, 1);
    glVertex3f(-1, 1, -1);
-   // Top
+
+   // Top face.
    glVertex3f(-1, 1, 1);
    glVertex3f(1, 1, 1);
    glVertex3f(1, 1, -1);
    glVertex3f(-1, 1, -1);
-   // Base
+
+   // Bottom face.
    glVertex3f(-1, -1, -1);
    glVertex3f(1, -1, -1);
    glVertex3f(1, -1, 1);
@@ -413,17 +446,22 @@ static void Box(double x, double y, double z, double dx, double dy, double dz, d
  */
 void Projection(double fov)
 {
+   // Switch to manipulating projection matrix and undo previous transforms.
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
    
+   // If the fov is anything other than zero, perspective projection
    if (fov != 0)
    {
       gluPerspective(fov, asp, dim / 16, 16 * dim);
    }
+   // Otherwise do orthogonal.
    else
    {
       glOrtho(-asp * dim, asp * dim, -dim, dim, -dim, dim);
    }
+
+   // Switch back to model matrix and undo previous transforms.
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
 }
@@ -462,13 +500,17 @@ void display()
 
    // Generate a Rover object with 1.3,0.25,1.3 x,y,z translation, zero
    // rotation, 0.4, 0.15, 0.1 x,y,z scaling.
+   glColor3f(0.2, 1.0, 0.2);
    Rover(1.3, 0.225, 1.3, 0.4, 0.15, 0.1, 0);
 
-   // Generate a Rover object with 
+   // Generate a Rover object with  0, .225, 1.2 x, y, z translation, 90 degree
+   // rotation, 0.4, 0.15, 0.1 x, y, z scaling.
+   glColor3f(1.0, 0.0, 0.0);
    Rover(0.0, 0.225, 1.2, 0.4, 0.15, 0.1, 90);
 
    // Generate copy of a Rover object with -0.5,0.95,-0.1 (x,y,z) translation,
    // zero rotation, 0.4,0.4,0.4 x,y,x scaling.
+   glColor3f(0.0, 0.0, 1.0);
    Rover(-0.5, 0.95, -0.1, 0.8, 0.6, 0.5, 0);
 
    // Generate copy of a Rocket object with 0.4, 0.5, 0.4 x,y,z translation,
@@ -478,6 +520,7 @@ void display()
    // Bottom left corner.
    glWindowPos2i(5, 5);
 
+   // Print user-friendly message about mode at the bottom of the window.
    switch(mode)
    {
       case 0:
@@ -608,6 +651,7 @@ void key(unsigned char key, int x, int y)
       Projection(45);
    }
 
+   // Tell GLUT to redraw the scene.
    glutPostRedisplay();
 }
 
@@ -625,10 +669,10 @@ void reshape(int width, int height)
    // Undo previous transform.
    glLoadIdentity();
 
-   // Use orthogonal projection.
-   //const double dim = 3.0;
+   // Compute new aspect ratio.
    asp = (height > 0) ? (double)width/height : 1;
 
+   // Determine if using orthogonal or perspective projection based on mode.
    if (mode == 0)
    {
       glOrtho(-asp*dim, +asp*dim, -dim, +dim, -dim, +dim);

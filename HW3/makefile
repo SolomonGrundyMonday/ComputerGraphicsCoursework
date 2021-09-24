@@ -1,4 +1,4 @@
-# Homework 8
+# Homework 3, Jeff Colgan
 EXE=hw3
 
 # Main target
