@@ -1,1 +1,27 @@
-This is a placeholder for the README for assignment 3.
+Jeff Colgan, Homework 3 README
+CSCI 4229 Computer Graphics.
+
+User inputs:
+
+  "Escape" key:    exits the application.
+  "0" key:         Resets the viewing angles for orthogonal projection.
+  "m" key:         Switches to orthogonal projection.
+  "f" key:         Switches to a side angle perspective from one of the corners (perspective projection).
+  "o" key:         Switches to an overhead view of the scene (perspective projection).
+  "d" key:         Switches to a side-angle view from the "front" of the scene (perspective projection).
+  "r" key:         Switches to a first person view in the scene (perspective projection).
+  Left arrow key:  Increases view angle azimuth by 5 degrees (orthogonal projection).
+  Right arrow key: Decreases view angle azimuth by 5 degrees (orthogonal projection).
+  Up arrow key:    Increases view angle elevation by 5 degrees (orthogonal projection).
+  Down arrow key:  Decreases view angle elevation by 5 degrees (orthogonal projection).
+
+Sources (code):
+  I used the in-class example ex8 to learn how to generate 3D objects in GLUT.  In particular, the 
+  functions for building a solid plane and cubes were particularly useful.  Cubes for learning how
+  to make faces of polygons, scaling, translation, rotation, etc. and solid plane for learning how
+  to use GL_TRIANGLE_FAN to make cones.  Additionally, I found the in-class example ex13 particularly
+  helpful in learning to use perspective projection to give different eye positions.  Most of the 
+  helper functions Print, ErrCheck, Fatal, etc. are completely unchanged from HW1 (and were borrowed
+  from the in-class examples.
+
+This assignment took about 10 hours to complete.
