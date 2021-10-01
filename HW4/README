@@ -15,25 +15,26 @@ User Inputs:
 Sources (code):
 
    As per the assignment instruction, I based the 'Projection' function on the 'Project' 
-   function found in ex9 source code from the in-class examples.  The scene and and rendering
-   is from the previous week's assignment submission with a few minor changes.  The assignment
+   function found in ex9 source code from the in-class examples.  The scene and and objects
+   are from the previous week's assignment submission with a few minor changes.  The assignment
    specifications wanted an overhead, slanted orthogonal projection as well as an overhead,
    slanted perspective projection from the same vantage point.  Thus, I removed the user's
-   ability to change the view angle and view azimuth when in orthogonal mode.
+   ability to change the view angle and view azimuth when in overhead orthogonal/perspective
+   mode.
 
 Additional notes:
 
    I approximated the position of the camera from the orthogonal projection for the perspective
    projection from the same vantage point.  I was unaware of any way to get the exact coordinates
-   of the camera in orthogonal projection, so I had to eyeball the coordinates for perspective
+   of the camera in orthogonal projection, so I eyeballed the eye coordinates for perspective
    projection overhead mode.  I also took the helper functions (Fatal, ErrCheck, and Print) and
    placed them in a separate source file along with the include directives and the new movement
    code.  This was in part to make things easier on the graders to see what I added for movement,
-   and partially per the course expectations.  I feel that the code is becoming sufficiently complex
+   and partially per the course expectations - I felt that the code was becoming sufficiently complex
    to split things into different source files, as the main c file was approaching the 1,000 line mark.
+   Lastly, I limited the first-person movement to remain within the "floor" of my scene.  If you move
+   to one of the edges of the floor, the camera will behave as if it hit a wall and slides along it.
 
 Elapsed time:
 
-   It took me about 11 hours to complete the assignment.  (I know I didn't change all that much from
-   assignment 3 to achieve the first person navigation, but something about coordinate systems and
-   trigonometric calculations just melt my brain).
+   It took me about 11 hours to complete the assignment.

@@ -2,7 +2,6 @@
  *  Homework 4, CSCI-4229 Computer Graphics.
  *  Created by:  Jeff Colgan September 29, 2021. 
  */
-
 #include "utility.h"
 
 int th = 45;           // View angle azimuth.
@@ -19,7 +18,6 @@ double Upz = 0.0;     // Up vector z-value.
 double Cx = 3.3;      // C-vector x coordinate.
 double Cy = 0.4;      // C-vector y coordinate.
 double Cz = -3.3;     // C-vector z coordinate.
-
 
 /*
  *  Function draws a wheel axel, with two parallel cyllenders connected in the
@@ -40,8 +38,7 @@ static void WheelAxel(double x, double y, double z, double dx, double dy,
 
    glPushMatrix();
 
-   // Apply the translation, rotation and scaling to the object based on the input
-   // parameters.
+   // Apply the translation, rotation and scaling.
    glTranslated(x, y, z);
    glRotated(theta, 0, 0, 1);
    glScaled(dx, dy, dz);
@@ -387,24 +384,24 @@ static void Box(double x, double y, double z, double dx, double dy, double dz, d
  */
 void Projection()
 {
-	// Switch to manipulating projection matrix and undo previous transforms.
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+   // Switch to manipulating projection matrix and undo previous transforms.
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
 
-	// If the fov is anything other than zero, perspective projection
-	if (mode == 1 || mode == 2)
-	{
-		gluPerspective(45, asp, dim / 16, 16 * dim);
-	}
-	// Otherwise do orthogonal.
-	else
-	{
-		glOrtho(-asp * dim, asp * dim, -dim, dim, -dim, dim);
-	}
+   // I chose 45 degrees for the field of view.
+   if (mode == 1 || mode == 2)
+   {
+      gluPerspective(45, asp, dim / 16, 16 * dim);
+   }
+   // Otherwise do orthogonal.
+   else
+   {
+      glOrtho(-asp * dim, asp * dim, -dim, dim, -dim, dim);
+   }
 
-	// Switch back to model matrix and undo previous transforms.
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+   // Switch back to model matrix and undo previous transforms.
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();
 }
 
 /*
@@ -428,37 +425,33 @@ void display()
    // For perspective projection - slanted overhead
    else if (mode == 1)
    {
-	   gluLookAt(-5.0, 6.0, 5.0, 0.2, 0, -0.2, 0, 1, 0);
+      gluLookAt(-5.0, 6.0, 5.0, 0.0, 0.0, 0.0, 0, 1, 0);
    }
    else
    {
-       gluLookAt(Ex, Ey, Ez, Cx, Cy, Cz, Upx, Upy, Upz);
+      Turn(&Cx, &Cz, dim, th);
+      gluLookAt(Ex, Ey, Ez, Cx + Ex, Cy, Cz + Ey, Upx, Upy, Upz);
    }
 
-   // Generate a Rocket object with 0.75,0.9,0.75 x,y,x translation
-   // zero rotation, 1,1,1 x,y,z scaling
+   // Generate a Rocket object
    Rocket(0.75, 0.9, 0.75, 1.0, 1.0, 1.0, 0);
 
    // Generate a cube to represent the floor of my scene.
    Box(0.0, -0.1, 0.0, 3.0, 0.1, 3.0, 0);
 
-   // Generate a Rover object with 1.3,0.25,1.3 x,y,z translation, zero
-   // rotation, 0.4, 0.15, 0.1 x,y,z scaling.
+   // Generate a Rover object.
    glColor3f(0.2, 1.0, 0.2);
    Rover(1.3, 0.225, 1.3, 0.4, 0.15, 0.1, 0);
 
-   // Generate a Rover object with  0, .225, 1.2 x, y, z translation, 90 degree
-   // rotation, 0.4, 0.15, 0.1 x, y, z scaling.
+   // Generate a Rover object copy.
    glColor3f(1.0, 0.0, 0.0);
    Rover(0.0, 0.225, 1.2, 0.4, 0.15, 0.1, 90);
 
-   // Generate copy of a Rover object with -0.5,0.95,-0.1 (x,y,z) translation,
-   // zero rotation, 0.4,0.4,0.4 x,y,x scaling.
+   // Generate a Rover object copy.
    glColor3f(0.0, 0.0, 1.0);
    Rover(-0.5, 0.95, -0.1, 0.8, 0.6, 0.5, 0);
 
-   // Generate copy of a Rocket object with 0.4, 0.5, 0.4 x,y,z translation,
-   // 90 deg. rotation and 0.4, 0.4, 0.4 x,y,z scaling.
+   // Generate a Rocket object copy.
    Rocket(0.4, 0.5, 0.4, 0.4, 0.4, 0.4, 90);
 
    // Bottom left corner.
@@ -491,25 +484,27 @@ void special(int key, int x, int y)
 {
    if(mode == 2)
    {
-      // Increase elevation by 5 deg.
+      // Move first person camera forward.
       if(key == GLUT_KEY_UP)
       {
          MoveForward(&Ex, &Ez, th);
       }
-      // Decrease elevation by 5 deg.
+      // Move first person camera backward.
       else if (key == GLUT_KEY_DOWN)
       {
          MoveBackward(&Ex, &Ez, th);
       }
-      // Increase azimuth by 5 deg.
+      // Increase horizontal camera angle by 5 deg.
       else if (key == GLUT_KEY_RIGHT)
       {
-         TurnRight(&Cx, &Cz, Ex, Ez, &th);
+         th += 5;
+         th %= 360;
       }
-      // Decrease azimuth by 5 deg.
+      // Decrease horizontal camera angle by 5 deg.
       else if (key == GLUT_KEY_LEFT)
       {
-         TurnLeft(&Cx, &Cz, Ex, Ez, &th);
+         th -= 5;
+         th %= 360;
       }
    }
 
@@ -529,6 +524,7 @@ void key(unsigned char key, int x, int y)
    {
       exit(0);
    }
+   // M key toggles between orthogonal, perspective and first person modes.
    else if (key == 'm' || key == 'M')
    {
       switch(mode)
@@ -545,11 +541,13 @@ void key(unsigned char key, int x, int y)
             break;
          case 2:
             mode = 0;
-			Projection();
+            Projection();
             th = 45;
+            ph = 45;
             break;
       }
    }
+   // R key resets the first person camera to the starting position and orientation.
    else if (key == 'r' || key == 'R')
    {
       if (mode == 2)
@@ -582,7 +580,6 @@ void reshape(int width, int height)
  */
 int main(int argc, char* argv[])
 {
-
    // Initialize GLUT, and process command-line args.
    glutInit(&argc, argv);
 

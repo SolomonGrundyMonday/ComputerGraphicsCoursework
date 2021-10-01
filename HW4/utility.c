@@ -1,3 +1,9 @@
+/*
+ *  Utility function definitions for CSCI-4229 Homework
+ *  4.
+ *  Created by Jeff Colgan. 
+ */
+
 #include "utility.h"
 
 /*
@@ -46,40 +52,72 @@ void ErrCheck(const char* where)
  */
 void MoveForward(double* x, double* z, int theta)
 {  
+   // Compute the new Ex, Ez values.
    *x += (Sin(theta) * 0.1);
    *z += (-Cos(theta) * 0.1);
+
+   // Keep x-values in the boundaries established by the floor.
+   if (*x < -3.0)
+   {
+      *x = -3.0;
+   }
+   else if (*x > 3.0)
+   {
+      *x = 3.0;
+   }
+   
+   // Keep z-values in the boundaries established by the floor.
+   if (*z < -3.0)
+   {
+      *z = -3.0;
+   }
+   else if (*z > 3.0)
+   {
+      *z = 3.0;
+   }
 }
 
+/*
+ *  This utility function "moves" the camera backward by
+ *  modifying the x, z values of the Eye vector (for use in
+ *  glLookAt). 
+ */
 void MoveBackward(double* x, double* z, int theta)
 {
+   // Compute the new Ex, Ez values.
    *x -= (Sin(theta) * 0.1);
    *z -= (-Cos(theta) * 0.1);
+
+   // Keep x-values in the boundaries established by the floor.
+   if (*x < -3.0)
+   {
+      *x = -3.0;
+   }
+   else if (*x > 3.0)
+   {
+      *x = 3.0;
+   }
+
+   // Keep z-values in the boundaries established by the floor.
+   if (*z < -3.0)
+   {
+      *z = -3.0;
+   }
+   else if (*z > 3.0)
+   {
+      *z = 3.0;
+   }
 }
 
 /*
- *  This utility function "turns" the camera left by modifying
+ *  This utility function "turns" the camera by modifying
  *  the x, z values of the C-vector (for use in glLookAt). 
  */
-void TurnLeft(double* x, double* z, double Ex, double Ez, int* theta)
+void Turn(double* x, double* z, double dim, int theta)
 {
-   *theta -= 5;
-   *theta %= 360;
-   *x = Sin(*theta) + Ex;
-   *z = -Cos(*theta) + Ez;
-}
-
-/*
- *  This utility function "turns" the camera left by modifying
- *  the x, z values of the C-vector (for use in glLookAt).
- */
-void TurnRight(double* x, double* z, double Ex, double Ez, int* theta)
-{
-   *theta += 5;
-   *theta %= 360;
-   
-   *x = (Sin(*theta) + Ex);
-   
-   *z = (-Cos(*theta) + Ez);
+   // Compute the new Cx, Cz values.
+   *x = 2 * dim * Sin(theta);
+   *z = -2 * dim * Cos(theta);
 }
 
 /*

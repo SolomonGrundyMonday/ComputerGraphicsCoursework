@@ -1,3 +1,9 @@
+/*
+ *  Utility functions and include directives for CSCI-4229
+ *  Homework 4.
+ *  Created by Jeff Colgan. 
+ */
+
 #define GL_GLEXT_PROTOTYPES
 
 #include <stdio.h>
@@ -28,7 +34,6 @@ void Fatal(const char* format, ...);
 void ErrCheck(const char* where);
 void MoveForward(double* x, double* z, int theta);
 void MoveBackward(double* x, double* z, int theta);
-void TurnLeft(double* x, double* z, double Ex, double Ez, int* theta);
-void TurnRight(double* x, double* z, double Ex, double Ez, int* theta);
+void Turn(double* x, double* z, double dim, int theta);
 void ResetPosition(double* Ex, double* Ey, double* Ez, double* Cx, double* Cy,
                    double* Cz, double* dim, int* theta, int* phi);
