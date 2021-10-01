@@ -1,1 +1,39 @@
-Placeholder text for README.
+Homework 4, CSCI-4229: Computer Graphics 
+Jeff Colgan
+
+User Inputs:
+
+   'ESCAPE' key   ->  Exits the application.
+   'm' or 'M' key ->  Toggles between orthogonal overhead mode, perspective overhead mode
+                      and first person perspective mode.
+   'r' or 'R' key ->  (First person only) Resets the eye and C-vectors to the initial values.
+   'RIGHT ARROW'  ->  (First person only) Turns the camera 5 degrees to the right.
+   'LEFT ARROW'   ->  (Fisrt person only) Turns the camera 5 degrees to the left.
+   'UP ARROW'     ->  (First person only) Moves the camera forward through the scene.
+   'DOWN ARROW'   ->  (First person only) Moves the camera backward through the scene.
+
+Sources (code):
+
+   As per the assignment instruction, I based the 'Projection' function on the 'Project' 
+   function found in ex9 source code from the in-class examples.  The scene and and rendering
+   is from the previous week's assignment submission with a few minor changes.  The assignment
+   specifications wanted an overhead, slanted orthogonal projection as well as an overhead,
+   slanted perspective projection from the same vantage point.  Thus, I removed the user's
+   ability to change the view angle and view azimuth when in orthogonal mode.
+
+Additional notes:
+
+   I approximated the position of the camera from the orthogonal projection for the perspective
+   projection from the same vantage point.  I was unaware of any way to get the exact coordinates
+   of the camera in orthogonal projection, so I had to eyeball the coordinates for perspective
+   projection overhead mode.  I also took the helper functions (Fatal, ErrCheck, and Print) and
+   placed them in a separate source file along with the include directives and the new movement
+   code.  This was in part to make things easier on the graders to see what I added for movement,
+   and partially per the course expectations.  I feel that the code is becoming sufficiently complex
+   to split things into different source files, as the main c file was approaching the 1,000 line mark.
+
+Elapsed time:
+
+   It took me about 11 hours to complete the assignment.  (I know I didn't change all that much from
+   assignment 3 to achieve the first person navigation, but something about coordinate systems and
+   trigonometric calculations just melt my brain).

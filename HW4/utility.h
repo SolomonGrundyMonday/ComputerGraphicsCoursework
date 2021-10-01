@@ -25,9 +25,10 @@
 
 void Print(const char* format, ...);
 void Fatal(const char* format, ...);
-void Projection(double fov, double asp, double dim);
 void ErrCheck(const char* where);
-void MoveForward(double* x, double* y, double* z, double dim, int theta, int phi);
-void MoveBackward(double* x, double* y, double* z, double dim, int theta, int phi);
-void TurnLeft(double* x, double* y, double* z, double dim, int* theta, int phi);
-void TurnRight(double* x, double* y, double* z, double dim, int* theta, int phi);
+void MoveForward(double* x, double* z, int theta);
+void MoveBackward(double* x, double* z, int theta);
+void TurnLeft(double* x, double* z, double Ex, double Ez, int* theta);
+void TurnRight(double* x, double* z, double Ex, double Ez, int* theta);
+void ResetPosition(double* Ex, double* Ey, double* Ez, double* Cx, double* Cy,
+                   double* Cz, double* dim, int* theta, int* phi);

@@ -381,6 +381,33 @@ static void Box(double x, double y, double z, double dx, double dy, double dz, d
 }
 
 /*
+ *  This function sets the Projection matrix based on the fov.  For now, a
+ *  fov value of zero sets it to orthogonal, and any other value will set
+ *  to perspective.  I plan to iterate on this in the future.
+ */
+void Projection()
+{
+	// Switch to manipulating projection matrix and undo previous transforms.
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	// If the fov is anything other than zero, perspective projection
+	if (mode == 1 || mode == 2)
+	{
+		gluPerspective(45, asp, dim / 16, 16 * dim);
+	}
+	// Otherwise do orthogonal.
+	else
+	{
+		glOrtho(-asp * dim, asp * dim, -dim, dim, -dim, dim);
+	}
+
+	// Switch back to model matrix and undo previous transforms.
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+
+/*
  *  This function is called by GLUT to draw the scene.
  */
 void display()
@@ -398,11 +425,10 @@ void display()
       glRotatef(ph, 1, 0, 0);
       glRotatef(th, 0, 1, 0);
    }
-   // For perspective projection, allow the user to switch between several
-   // preset eye positions.
+   // For perspective projection - slanted overhead
    else if (mode == 1)
    {
-	   gluLookAt(-4.5, 5, 4.5, -0.2, 0, 0.2, 0, 1, 0);
+	   gluLookAt(-5.0, 6.0, 5.0, 0.2, 0, -0.2, 0, 1, 0);
    }
    else
    {
@@ -448,7 +474,7 @@ void display()
          Print("Mode = Perspective Projection, slanted overhead.");
          break;
       case 2:
-         Print("Ex, Ez, Ey = %.1lf, %.1lf, %.1lf", Ex, Ey, Ez);
+         Print("Cx, Cz = %.1lf, %.1lf; Theta = %d, Ex, Ez = %.1lf, %.1lf", Cx, Cz, th, Ex, Ez);
          break;
    }
 
@@ -468,31 +494,29 @@ void special(int key, int x, int y)
       // Increase elevation by 5 deg.
       if(key == GLUT_KEY_UP)
       {
-         dim -= 0.1;
-         MoveForward(&Ex, &Ey, &Ez, dim, th, ph);
+         MoveForward(&Ex, &Ez, th);
       }
       // Decrease elevation by 5 deg.
       else if (key == GLUT_KEY_DOWN)
       {
-         dim += 0.1;
-         MoveBackward(&Ex, &Ey, &Ez, dim, th, ph);
+         MoveBackward(&Ex, &Ez, th);
       }
       // Increase azimuth by 5 deg.
       else if (key == GLUT_KEY_RIGHT)
       {
-         TurnRight(&Cx, &Cy, &Cz, dim, &th, ph);
+         TurnRight(&Cx, &Cz, Ex, Ez, &th);
       }
       // Decrease azimuth by 5 deg.
       else if (key == GLUT_KEY_LEFT)
       {
-         TurnLeft(&Cx, &Cy, &Cz, dim, &th, ph);
+         TurnLeft(&Cx, &Cz, Ex, Ez, &th);
       }
-
-      Projection(45, asp, dim);
-   
-      // Redisplay the scene.
-      glutPostRedisplay();
    }
+
+   Projection();
+
+   // Redisplay the scene.
+   glutPostRedisplay();
 }
 
 /*
@@ -511,20 +535,29 @@ void key(unsigned char key, int x, int y)
       {
          case 0:
             mode = 1;
-            Projection(45, asp, dim);
+            th = 45;
+            Projection();
             break;
          case 1:
             mode = 2;
-            Projection(45, asp, dim);
+            ph = 0;
+            Projection();
             break;
          case 2:
             mode = 0;
-			Projection(0, asp, dim);
+			Projection();
             th = 45;
             break;
       }
    }
-   
+   else if (key == 'r' || key == 'R')
+   {
+      if (mode == 2)
+      {
+         ResetPosition(&Ex, &Ey, &Ez, &Cx, &Cy, &Cz, &dim, &th, &ph);
+         Projection();
+      }
+   }
 
    // Tell GLUT to redraw the scene.
    glutPostRedisplay();
@@ -538,28 +571,10 @@ void reshape(int width, int height)
    // Specify entire window as viewport.
    glViewport(0, 0, RES*width, RES*height);
 
-   // Tell GLUT to manipulate projection matrix.
-   glMatrixMode(GL_PROJECTION);
-
-   // Undo previous transform.
-   glLoadIdentity();
-
    // Compute new aspect ratio.
    asp = (height > 0) ? (double)width/height : 1;
 
-   // Determine if using orthogonal or perspective projection based on mode.
-   if (mode == 0)
-   {
-      glOrtho(-asp*dim, +asp*dim, -dim, +dim, -dim, +dim);
-   }
-   else
-   {
-      gluPerspective(45, asp, dim / 16, 16 * dim);
-   }
-
-   // Switch to manipulating model matrix and undo previous transform.
-   glMatrixMode(GL_MODELVIEW);
-   glLoadIdentity();
+   Projection();
 }
 
 /*

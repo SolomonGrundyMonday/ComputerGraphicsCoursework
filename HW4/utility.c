@@ -40,56 +40,67 @@ void ErrCheck(const char* where)
 }
 
 /*
- *  This function sets the Projection matrix based on the fov.  For now, a
- *  fov value of zero sets it to orthogonal, and any other value will set
- *  to perspective.  I plan to iterate on this in the future.
+ *  This utility function "moves" the camera forward/backward 
+ *  by modifying the x, z values of the Eye vector (for use in
+ *  glLookAt).
  */
-void Projection(double fov, double asp, double dim)
+void MoveForward(double* x, double* z, int theta)
+{  
+   *x += (Sin(theta) * 0.1);
+   *z += (-Cos(theta) * 0.1);
+}
+
+void MoveBackward(double* x, double* z, int theta)
 {
-   // Switch to manipulating projection matrix and undo previous transforms.
-   glMatrixMode(GL_PROJECTION);
-   glLoadIdentity();
-
-   // If the fov is anything other than zero, perspective projection
-   if (fov != 0)
-   {
-      gluPerspective(fov, asp, dim / 16, 16 * dim);
-   }
-   // Otherwise do orthogonal.
-   else
-   {
-      glOrtho(-asp * dim, asp * dim, -dim, dim, -dim, dim);
-   }
-
-   // Switch back to model matrix and undo previous transforms.
-   glMatrixMode(GL_MODELVIEW);
-   glLoadIdentity();
+   *x -= (Sin(theta) * 0.1);
+   *z -= (-Cos(theta) * 0.1);
 }
 
-void MoveForward(double* x, double* y, double* z, double dim, int theta, int phi)
-{   
-   *x = -2 * dim * Sin(theta) * Cos(phi);
-   *z = 2 * dim * Cos(theta) * Cos(phi);
-}
-
-void MoveBackward(double* x, double* y, double* z, double dim, int theta, int phi)
-{
-   *x = -2 * dim * Sin(theta) * Cos(phi);
-   *z = 2 * dim * Cos(theta) * Cos(phi);
-}
-
-void TurnLeft(double* x, double* y, double* z, double dim, int* theta, int phi)
+/*
+ *  This utility function "turns" the camera left by modifying
+ *  the x, z values of the C-vector (for use in glLookAt). 
+ */
+void TurnLeft(double* x, double* z, double Ex, double Ez, int* theta)
 {
    *theta -= 5;
    *theta %= 360;
-   *x = -2 * dim * Sin(*theta) * Cos(phi);
-   *z = 2 * dim * Cos(*theta) * Cos(phi);
+   *x = Sin(*theta) + Ex;
+   *z = -Cos(*theta) + Ez;
 }
 
-void TurnRight(double* x, double* y, double* z, double dim, int* theta, int phi)
+/*
+ *  This utility function "turns" the camera left by modifying
+ *  the x, z values of the C-vector (for use in glLookAt).
+ */
+void TurnRight(double* x, double* z, double Ex, double Ez, int* theta)
 {
    *theta += 5;
    *theta %= 360;
-   *x = -2 * dim * Sin(*theta) * Cos(phi);
-   *z = 2 * dim * Cos(*theta) * Cos(phi);
+   
+   *x = (Sin(*theta) + Ex);
+   
+   *z = (-Cos(*theta) + Ez);
+}
+
+/*
+ *  This utility function resets the eye position vector, theta, phi, and
+ *  C-vector (for first-person perspective navigation).
+ */
+void ResetPosition(double* Ex, double* Ey, double* Ez, double *Cx, double* Cy, 
+                   double* Cz, double* dim, int*theta, int* phi)
+{
+   // Reset the eye vector values to the start coordinates.
+   *Ex = -3.0;
+   *Ey = 0.4;
+   *Ez = 3.0;
+   
+   // Reset dim, th, ph to the start values.
+   *dim = 3.0;
+   *theta = 45;
+   *phi = 45;
+ 
+   // Reset C-vector to start coordinates.
+   *Cx = 3.3;
+   *Cy = 0.4;
+   *Cz = -3.3;
 }
