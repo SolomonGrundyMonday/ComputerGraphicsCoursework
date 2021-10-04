@@ -17,9 +17,13 @@ double Upz = 0.0;
 double Cx = 3.3;
 double Cy = 0.4;
 double Cz = -3.3;
-float distance = 5;
+float distance = 3;
 float lightElev = 1;
+int autoLight = 1;
 
+/*
+ *  MARKED FOR REMOVAL, USE LIBRARY FUNCTION INSTEAD!!!
+ */
 void Projection()
 {
    glMatrixMode(GL_PROJECTION);
@@ -38,6 +42,9 @@ void Projection()
    glLoadIdentity();
 }
 
+/*
+ *  Redraw the scene. 
+ */
 void display()
 {
 
@@ -65,6 +72,7 @@ void display()
 
    glShadeModel(GL_SMOOTH);
 
+   // Need to enable manual/automatic control of light source here.
    if (1)
    {
       float Ambient[] = {0.1, 0.1, 0.1, 1.0};
@@ -73,7 +81,15 @@ void display()
       float Pos[] = {distance * Cos(zh), 1.5, distance * Sin(zh), 1.0};
 
       glColor3f(1, 1, 1);
-      Ball(Pos[0], Pos[1], Pos[2], 0.1);
+
+      if (autoLight)
+      {
+         Ball(Pos[0], Pos[1], Pos[2], 0.1);
+      }
+      else
+      {
+         Ball(0, 2.0, 0, 0.1);
+      }
 
       glEnable(GL_NORMALIZE);
       glEnable(GL_LIGHTING);
@@ -122,6 +138,9 @@ void display()
    glutSwapBuffers();
 }
 
+/*
+ *  Called when user presses a special key. 
+ */
 void special(int key, int x, int y)
 {
    if (mode == 2)
@@ -150,6 +169,9 @@ void special(int key, int x, int y)
    glutPostRedisplay();
 }
 
+/*
+ *  Called when the user presses a key. 
+ */
 void key(unsigned char key, int x, int y)
 {
    if (key == 27)
@@ -186,10 +208,17 @@ void key(unsigned char key, int x, int y)
          Projection();
       }
    }
+   else if (key == 'l' || key == 'L')
+   {
+      autoLight = (autoLight == 1) ? 0 : 1; 
+   }
 
    glutPostRedisplay();
 }
 
+/*
+ *  Called when the window is resized.
+ */
 void reshape(int width, int height)
 {
    glViewport(0, 0, RES*width, RES*height);
@@ -197,13 +226,22 @@ void reshape(int width, int height)
    Projection();
 }
 
+/*
+ *  Called when there is nothing else to do. 
+ */
 void idle()
 {
-   double time = glutGet(GLUT_ELAPSED_TIME)/1000.0;
-   zh = fmod(90*time, 360.0);
-   glutPostRedisplay();
+   if (autoLight)
+   {
+      double time = glutGet(GLUT_ELAPSED_TIME)/1000.0;
+      zh = fmod(90*time, 360.0);
+      glutPostRedisplay();
+   }
 }
 
+/*
+ *  Main entry point.
+ */
 int main(int argc, char* argv[])
 {
    glutInit(&argc, argv);

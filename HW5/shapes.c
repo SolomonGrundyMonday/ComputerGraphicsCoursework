@@ -1,13 +1,48 @@
 #include "shapes.h"
 
+// Constants for lighting.
 const int shiny = 0;
 const float emission = 0;
 const float black[] = {0.0, 0.0, 0.0, 1.0};
 const float white[] = {1.0, 1.0, 1.0, 1.0};
 const float orange[] = {1.0, 0.5, 0.0, 1.0};
+const double noseHeight =  0.20;
+const double circ = 0.05;
+const double base = -0.50;
 
+/* 
+ *  Draw triangles for computing vertex normals of a 3D object
+ *  composed of triangles.
+ */ 
 void DrawTriangle(vtx A, vtx B, vtx C)
 {
+   // Compute A - B.
+   float dx0 = A.x - B.x;
+   float dy0 = A.y - B.y;
+   float dz0 = A.z - B.z;
+
+   // Compute C - A.
+   float dx1 = C.x - A.x;
+   float dy1 = C.y - A.y;
+   float dz1 = C.z - A.z;
+
+   // Compute Normal.
+   float Nx = dy0 * dz1 - dy1 * dz0;
+   float Ny = dz0 * dx1 - dz1 * dx0;
+   float Nz = dx0 * dy1 - dx1 * dy0;
+
+   // Draw the triangle.
+   glNormal3f(Nx, Ny, Nz);
+   glBegin(GL_TRIANGLES);
+   glVertex3f(A.x, A.y, A.z);
+   glVertex3f(B.x, B.y, B.z);
+   glVertex3f(C.x, C.y, C.z);
+   glEnd();
+}
+
+void DrawQuad(vtx A, vtx B, vtx C)
+{
+   
    float dx0 = A.x - B.x;
    float dy0 = A.y - B.y;
    float dz0 = A.z - B.z;
@@ -20,21 +55,21 @@ void DrawTriangle(vtx A, vtx B, vtx C)
    float Ny = dz0 * dx1 - dz1 * dx0;
    float Nz = dx0 * dy1 - dx1 * dy0;
 
-
    glNormal3f(Nx, Ny, Nz);
-   glBegin(GL_TRIANGLES);
    glVertex3f(A.x, A.y, A.z);
    glVertex3f(B.x, B.y, B.z);
    glVertex3f(C.x, C.y, C.z);
-   glEnd();
 }
 
+/*
+ *  Draw the wheel axel and attached wheels.  
+ */
 void WheelAxel(double x, double y, double z, double dx, double dy,
                double dz, double theta)
 {
+   // Locals for vertices.
    double circumference = 0.05;
    double axel = circumference * 0.2;
-
    double lInnerWall = 0.2;
    double lOuterWall = 0.25;
    double rInnerWall = 0.45;
@@ -42,6 +77,7 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
 
    glPushMatrix();
 
+   // Apply tranformations.
    glTranslated(x, y, z);
    glRotated(theta, 0, 0, 1);
    glScaled(dx, dy, dz);
@@ -104,11 +140,18 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
    glPopMatrix();
 }
 
+/*
+ *  Draw a Rover object.  For now, it is a simble cuboid
+ *  with attached wheels and wheel axels.  I plan on
+ *  further iteration to make a more complex object,
+ *  perhaps for the final project. 
+ */
 void Rover(double x, double y, double z, double dx,
            double dy, double dz, double theta)
 {
    glPushMatrix();
 
+   // Apply transformations.
    glTranslated(x, y, z);
    glRotated(theta, 0, 1, 0);
    glScaled(dx, dy, dz);
@@ -152,19 +195,22 @@ void Rover(double x, double y, double z, double dx,
    glVertex3f(-1, -1, 1);
    glEnd();
 
+   // Draw front and back wheel axels in grey.
    glColor3f(0.729, 0.690, 0.686);
    WheelAxel(-0.8, -1.1, -4.25, 5.0, 10.0, 13.0, 0);
    WheelAxel(0.8, -1.1, -4.25, 5.0, 10.0, 13.0, 0);
    glPopMatrix();
 }
 
+// Specify the triangles that compose a cone object.
 const tri idx[] =
 {
-   {0, 1, 2}, {0, 2, 3}, {0, 3, 4}, {0, 4, 5}, {0, 5, 6},
-   {0, 6, 7}, {0, 7, 8}, {0, 8, 9}, {0, 9, 10}, {0, 10, 11},
-   {0, 11, 12}, {0, 12, 1}
+   {1, 0, 2}, {2, 0, 3}, {3, 0, 4}, {4, 0, 5}, {5, 0, 6},
+   {6, 0, 7}, {7, 0, 8}, {8, 0, 9}, {9, 0, 10}, {10, 0, 11},
+   {11, 0, 12}, {12, 0, 1}
 };
 
+// Specify the vertices for drawing the nose cone of the Rocket.
 const vtx xyz[] = 
 {
    {0.50, 0.0, 0.0}, {0.20, 0.05, 0.0},
@@ -176,12 +222,41 @@ const vtx xyz[] =
    {0.20, 0.05 * Cos(330), 0.05 * Sin(330)}
 };
 
+// NEED TO EXAMINE THE ORDER OF NORMAL COMPUTATION HERE!!!
+const tri fuselage[] = 
+{
+   {0, 1, 2}, {1, 2, 3}, {2, 3, 4}, {3, 4, 5},
+   {4, 5, 6}, {5, 6, 7}, {6, 7, 8}, {7, 8, 9},
+   {8, 9, 10}, {9, 10, 11}, {10, 11, 12}, {11, 12, 13},
+   {12, 13, 14}, {13, 14, 15}, {14, 15, 16}, {15, 16, 17},
+   {16, 17, 18}, {17, 18, 19}, {18, 19, 20}, {19, 20, 21},
+   {20, 21, 22}, {21, 22, 23}, {22, 23, 0}, {23, 0, 1}
+};
+
+// Vertices for the fuselage.
+const vtx fuselageVert[] = 
+{
+   {noseHeight, circ, 0.0}, {base, circ, 0.0}, {noseHeight, circ * Cos(30), circ * Sin(30)},
+   {base, circ * Cos(30), circ * Sin(30)}, {noseHeight, circ * Cos(60), circ * Sin(60)},
+   {base, circ * Cos(60), circ * Sin(60)}, {noseHeight, 0.0, circ}, {base, 0.0, circ},
+   {noseHeight, circ * Cos(120), circ * Sin(120)}, {base, circ * Cos(120), circ * Sin(120)},
+   {noseHeight, circ * Cos(150), circ * Sin(150)}, {base, circ * Cos(150), circ * Sin(150)},
+   {noseHeight, -circ, 0.0}, {base, -circ, 0.0}, {noseHeight, circ * Cos(210), circ * Sin(210)},
+   {base, circ * Cos(210), circ * Sin(210)}, {noseHeight, circ * Cos(240), circ * Sin(240)},
+   {base, circ * Cos(240), circ * Sin(240)}, {noseHeight, 0.0, -circ}, {base, 0.0, -circ},
+   {noseHeight, circ * Cos(300), circ * Sin(300)}, {base, circ * Cos(300), circ * Sin(300)},
+   {noseHeight, circ * Cos(330), circ * Sin(330)}, {base, circ * Cos(330), circ * Sin(330)}
+};
+
+/*
+ *  Draw a rocket object. 
+ */
 void Rocket(double x, double y, double z, double dx, double dy,
             double dz, double theta)
 {
+   // Locals for computing vertices.
    double circumference = 0.05;
    double radius = circumference * 0.5;
-
    //double noseTip = 0.50;
    double noseHeight = 0.20;
    double fuselageBase = -0.50;
@@ -200,26 +275,22 @@ void Rocket(double x, double y, double z, double dx, double dy,
    glScaled(dx, dy, dz);
    glRotated(theta, 0, 0, 1);
 
-   /* Draw the nose cone.
-   glBegin(GL_TRIANGLE_FAN);
-   glVertex3f(noseTip, 0.0, 0.0);
-   for (int i = 0; i <= 360; i += 30)
-      glVertex3f(noseHeight, circumference * Cos(i), circumference * Sin(i));
-   glEnd();*/
-
    for (int i = 0; i < 12; i++)
    {
-      //glBegin(GL_TRIANGLE_FAN);
       DrawTriangle(xyz[idx[i].A], xyz[idx[i].B], xyz[idx[i].C]);
-      //glEnd();
    }
 
    // Draw the fuselage.
    glBegin(GL_QUAD_STRIP);
-   for (int i = 0; i <= 360; i += 30)
+   /*for (int i = 0; i <= 360; i += 30)
    {
       glVertex3f(noseHeight, circumference * Cos(i), circumference * Sin(i));
       glVertex3f(fuselageBase, circumference * Cos(i), circumference * Sin(i));
+   }*/
+
+   for (int i = 0; i < 24; i++)
+   {
+      DrawQuad(fuselageVert[fuselage[i].A], fuselageVert[fuselage[i].B], fuselageVert[fuselage[i].C]);
    }
    glEnd();
 
@@ -328,6 +399,10 @@ void Rocket(double x, double y, double z, double dx, double dy,
    glPopMatrix();
 }
 
+/*
+ *  Draw a cuboid object for use as a floor (and walls when
+ *  we introduce textures). 
+ */
 void Box(double x, double y, double z, double dx, double dy,
          double dz, double theta)
 {
@@ -337,6 +412,7 @@ void Box(double x, double y, double z, double dx, double dy,
 
    glPushMatrix();
 
+   // Apply transformations.
    glTranslated(x, y, z);
    glRotated(theta, 0, 1, 0);
    glScaled(dx, dy, dz);
@@ -384,6 +460,9 @@ void Box(double x, double y, double z, double dx, double dy,
    glPopMatrix();
 }
 
+/*
+ *  Placeholder for light source.
+ */
 void Ball(double x, double y, double z, double r)
 {
    glPushMatrix();
@@ -405,19 +484,24 @@ void Ball(double x, double y, double z, double r)
       for (int j = 0; j <= 360; j += 20)
       {
          Vertex(j, i);
-         Vertex(j, i + 20);
+         Vertex(j, i + 10);
       }
       glEnd();
    }
    glPopMatrix();
 }
 
+/*
+ *  Compute a vertex in polar coordinates.  
+ */
 void Vertex(double theta, double phi)
 {
+   // Compute polar x, y, z.
    double x = Sin(theta) * Cos(phi);
    double y = Cos(theta) * Cos(phi);
    double z = Sin(phi);
 
+   // Compute normal, draw vertex.
    glNormal3d(x, y, z);
    glVertex3d(x, y, z);
 }

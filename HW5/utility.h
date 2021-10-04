@@ -1,6 +1,6 @@
 /*
  *  Utility functions and include directives for CSCI-4229
- *  Homework 4.
+ *  Homework 5.
  *  Created by Jeff Colgan. 
  */
 
@@ -11,4 +11,3 @@ void MoveBackward(double* x, double* z, int theta);
 void Turn(double* x, double* z, double dim, int theta);
 void ResetPosition(double* Ex, double* Ey, double* Ez, double* Cx, double* Cy,
                    double* Cz, double* dim, int* theta, int* phi);
-//void Vertex(double theta, double phi);

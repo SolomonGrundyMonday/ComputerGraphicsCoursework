@@ -103,13 +103,3 @@ void ResetPosition(double* Ex, double* Ey, double* Ez, double *Cx, double* Cy,
    *Cy = 0.4;
    *Cz = -3.3;
 }
-
-/*void Vertex(double theta, double phi)
-{
-   double x = Sin(theta) * Cos(phi);
-   double y = Cos(theta) * Cos(phi);
-   double z = Sin(phi);
-
-   glNormal3d(x, y, z);
-   glVertex3d(x, y, z);
-}*/
