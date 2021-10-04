@@ -7,45 +7,6 @@
 #include "utility.h"
 
 /*
- *  Function to print raster text.
- */
-#define LEN 8192
-void Print(const char* format, ...)
-{
-   char buf[LEN];
-   char* ch = buf;
-
-   va_list args;
-   va_start(args, format);
-   vsnprintf(buf, LEN, format, args);
-   va_end(args);
-
-   while (*ch)
-      glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *ch++);
-}
-
-/*
- *  Print error message to stderr and exit with status 1.
- */
-void Fatal(const char* format, ...)
-{
-   va_list args;
-   va_start(args, format);
-   vfprintf(stderr, format, args);
-   va_end(args);
-   exit(1);
-}
-
-/*
- *  Check for errors in OpenGL.
- */
-void ErrCheck(const char* where)
-{
-   int err = glGetError();
-   if (err) fprintf(stderr, "ERROR: %s [%s]\n", gluErrorString(err), where);
-}
-
-/*
  *  This utility function "moves" the camera forward/backward 
  *  by modifying the x, z values of the Eye vector (for use in
  *  glLookAt).
@@ -142,3 +103,13 @@ void ResetPosition(double* Ex, double* Ey, double* Ez, double *Cx, double* Cy,
    *Cy = 0.4;
    *Cz = -3.3;
 }
+
+/*void Vertex(double theta, double phi)
+{
+   double x = Sin(theta) * Cos(phi);
+   double y = Cos(theta) * Cos(phi);
+   double z = Sin(phi);
+
+   glNormal3d(x, y, z);
+   glVertex3d(x, y, z);
+}*/

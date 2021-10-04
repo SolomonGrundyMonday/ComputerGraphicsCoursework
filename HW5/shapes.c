@@ -1,5 +1,34 @@
 #include "shapes.h"
 
+const int shiny = 0;
+const float emission = 0;
+const float black[] = {0.0, 0.0, 0.0, 1.0};
+const float white[] = {1.0, 1.0, 1.0, 1.0};
+const float orange[] = {1.0, 0.5, 0.0, 1.0};
+
+void DrawTriangle(vtx A, vtx B, vtx C)
+{
+   float dx0 = A.x - B.x;
+   float dy0 = A.y - B.y;
+   float dz0 = A.z - B.z;
+
+   float dx1 = C.x - A.x;
+   float dy1 = C.y - A.y;
+   float dz1 = C.z - A.z;
+
+   float Nx = dy0 * dz1 - dy1 * dz0;
+   float Ny = dz0 * dx1 - dz1 * dx0;
+   float Nz = dx0 * dy1 - dx1 * dy0;
+
+
+   glNormal3f(Nx, Ny, Nz);
+   glBegin(GL_TRIANGLES);
+   glVertex3f(A.x, A.y, A.z);
+   glVertex3f(B.x, B.y, B.z);
+   glVertex3f(C.x, C.y, C.z);
+   glEnd();
+}
+
 void WheelAxel(double x, double y, double z, double dx, double dy,
                double dz, double theta)
 {
@@ -129,32 +158,61 @@ void Rover(double x, double y, double z, double dx,
    glPopMatrix();
 }
 
+const tri idx[] =
+{
+   {0, 1, 2}, {0, 2, 3}, {0, 3, 4}, {0, 4, 5}, {0, 5, 6},
+   {0, 6, 7}, {0, 7, 8}, {0, 8, 9}, {0, 9, 10}, {0, 10, 11},
+   {0, 11, 12}, {0, 12, 1}
+};
+
+const vtx xyz[] = 
+{
+   {0.50, 0.0, 0.0}, {0.20, 0.05, 0.0},
+   {0.20, 0.05 * Cos(30), 0.05 * Sin(30)}, {0.20, 0.05 * Cos(60), 0.05 * Sin(60)}, 
+   {0.20, 0.0, 0.05}, {0.20, 0.05 * Cos(120), 0.05 * Sin(120)}, 
+   {0.20, 0.05 * Cos(150), 0.05 * Sin(150)}, {0.20, -0.05, 0.0}, 
+   {0.20, 0.05 * Cos(210), 0.05 * Sin(210)}, {0.20, 0.05 * Cos(240), 0.05 * Sin(240)}, 
+   {0.20, 0.0, -0.05}, {0.20, 0.05 * Cos(300), 0.05 * Sin(300)}, 
+   {0.20, 0.05 * Cos(330), 0.05 * Sin(330)}
+};
+
 void Rocket(double x, double y, double z, double dx, double dy,
             double dz, double theta)
 {
    double circumference = 0.05;
    double radius = circumference * 0.5;
 
-   double noseTip = 0.50;
+   //double noseTip = 0.50;
    double noseHeight = 0.20;
    double fuselageBase = -0.50;
    double finTip = -0.1;
    double finEdge = -0.3;
 
+   glColor4fv(orange);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, orange);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, white);
+   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shiny);
+
    glPushMatrix();
 
    glTranslated(x, y, z);
-   glRotated(theta, 0, 0, 1);
    glScaled(dx, dy, dz);
+   glRotated(theta, 0, 0, 1);
 
-   glColor3f(1.0, 0.5, 0.0);
-
-   // Draw the nose cone.
+   /* Draw the nose cone.
    glBegin(GL_TRIANGLE_FAN);
    glVertex3f(noseTip, 0.0, 0.0);
    for (int i = 0; i <= 360; i += 30)
       glVertex3f(noseHeight, circumference * Cos(i), circumference * Sin(i));
-   glEnd();
+   glEnd();*/
+
+   for (int i = 0; i < 12; i++)
+   {
+      //glBegin(GL_TRIANGLE_FAN);
+      DrawTriangle(xyz[idx[i].A], xyz[idx[i].B], xyz[idx[i].C]);
+      //glEnd();
+   }
 
    // Draw the fuselage.
    glBegin(GL_QUAD_STRIP);
@@ -273,6 +331,10 @@ void Rocket(double x, double y, double z, double dx, double dy,
 void Box(double x, double y, double z, double dx, double dy,
          double dz, double theta)
 {
+   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shiny);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, white);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black);
+
    glPushMatrix();
 
    glTranslated(x, y, z);
@@ -320,4 +382,42 @@ void Box(double x, double y, double z, double dx, double dy,
 
    glEnd();
    glPopMatrix();
+}
+
+void Ball(double x, double y, double z, double r)
+{
+   glPushMatrix();
+
+   glTranslated(x, y, z);
+   glScaled(r, r, r);
+
+   float yellow[] = {1.0, 1.0, 0.0, 1.0};
+   float Emission[] = {0.0, 0.0, 0.01 * emission, 1.0};
+
+   glColor3f(1, 1, 1);
+   glMaterialf(GL_FRONT, GL_SHININESS, shiny);
+   glMaterialfv(GL_FRONT, GL_SPECULAR, yellow);
+   glMaterialfv(GL_FRONT, GL_EMISSION, Emission);
+
+   for (int i = -90; i < 90; i += 10)
+   {
+      glBegin(GL_QUAD_STRIP);
+      for (int j = 0; j <= 360; j += 20)
+      {
+         Vertex(j, i);
+         Vertex(j, i + 20);
+      }
+      glEnd();
+   }
+   glPopMatrix();
+}
+
+void Vertex(double theta, double phi)
+{
+   double x = Sin(theta) * Cos(phi);
+   double y = Cos(theta) * Cos(phi);
+   double z = Sin(phi);
+
+   glNormal3d(x, y, z);
+   glVertex3d(x, y, z);
 }
