@@ -40,6 +40,9 @@ void DrawTriangle(vtx A, vtx B, vtx C)
    glEnd();
 }
 
+/*
+ *  Compute vertex normals for QUAD_STRIPS. 
+ */
 void DrawQuad(vtx A, vtx B, vtx C)
 {
    
@@ -203,7 +206,7 @@ void Rover(double x, double y, double z, double dx,
 }
 
 // Specify the triangles that compose a cone object.
-const tri idx[] =
+const tri nose[] =
 {
    {1, 0, 2}, {2, 0, 3}, {3, 0, 4}, {4, 0, 5}, {5, 0, 6},
    {6, 0, 7}, {7, 0, 8}, {8, 0, 9}, {9, 0, 10}, {10, 0, 11},
@@ -211,26 +214,26 @@ const tri idx[] =
 };
 
 // Specify the vertices for drawing the nose cone of the Rocket.
-const vtx xyz[] = 
+const vtx noseCone[] = 
 {
-   {0.50, 0.0, 0.0}, {0.20, 0.05, 0.0},
-   {0.20, 0.05 * Cos(30), 0.05 * Sin(30)}, {0.20, 0.05 * Cos(60), 0.05 * Sin(60)}, 
-   {0.20, 0.0, 0.05}, {0.20, 0.05 * Cos(120), 0.05 * Sin(120)}, 
-   {0.20, 0.05 * Cos(150), 0.05 * Sin(150)}, {0.20, -0.05, 0.0}, 
-   {0.20, 0.05 * Cos(210), 0.05 * Sin(210)}, {0.20, 0.05 * Cos(240), 0.05 * Sin(240)}, 
-   {0.20, 0.0, -0.05}, {0.20, 0.05 * Cos(300), 0.05 * Sin(300)}, 
-   {0.20, 0.05 * Cos(330), 0.05 * Sin(330)}
+   {0.50, 0.0, 0.0}, {noseHeight, circ, 0.0},
+   {noseHeight, circ * Cos(30), circ * Sin(30)}, {noseHeight, circ * Cos(60), circ * Sin(60)}, 
+   {noseHeight, 0.0, circ}, {noseHeight, circ * Cos(120), circ * Sin(120)}, 
+   {noseHeight, circ * Cos(150), circ * Sin(150)}, {noseHeight, -circ, 0.0}, 
+   {noseHeight, circ * Cos(210), circ * Sin(210)}, {noseHeight, circ * Cos(240), circ * Sin(240)}, 
+   {noseHeight, 0.0, -circ}, {noseHeight, circ * Cos(300), circ * Sin(300)}, 
+   {noseHeight, circ * Cos(330), circ * Sin(330)}
 };
 
-// NEED TO EXAMINE THE ORDER OF NORMAL COMPUTATION HERE!!!
+// Compute vertex normals in this order for the fuselage.
 const tri fuselage[] = 
 {
-   {0, 1, 2}, {1, 2, 3}, {2, 3, 4}, {3, 4, 5},
-   {4, 5, 6}, {5, 6, 7}, {6, 7, 8}, {7, 8, 9},
-   {8, 9, 10}, {9, 10, 11}, {10, 11, 12}, {11, 12, 13},
-   {12, 13, 14}, {13, 14, 15}, {14, 15, 16}, {15, 16, 17},
-   {16, 17, 18}, {17, 18, 19}, {18, 19, 20}, {19, 20, 21},
-   {20, 21, 22}, {21, 22, 23}, {22, 23, 0}, {23, 0, 1}
+   {2, 1, 0}, {1, 2, 3}, {4, 3, 2}, {3, 4, 5},
+   {6, 5, 4}, {5, 6, 7}, {8, 7, 6}, {7, 8, 9},
+   {10, 9, 8}, {9, 10, 11}, {12, 11, 10}, {11, 12, 13},
+   {14, 13, 12}, {13, 14, 15}, {16, 15, 14}, {15, 16, 17},
+   {18, 17, 16}, {17, 18, 19}, {20, 19, 18}, {19, 20, 21},
+   {22, 21, 20}, {21, 22, 23}, {0, 23, 22}, {23, 0, 1}
 };
 
 // Vertices for the fuselage.
@@ -257,8 +260,6 @@ void Rocket(double x, double y, double z, double dx, double dy,
    // Locals for computing vertices.
    double circumference = 0.05;
    double radius = circumference * 0.5;
-   //double noseTip = 0.50;
-   double noseHeight = 0.20;
    double fuselageBase = -0.50;
    double finTip = -0.1;
    double finEdge = -0.3;
@@ -271,23 +272,19 @@ void Rocket(double x, double y, double z, double dx, double dy,
 
    glPushMatrix();
 
+   // Apply transformations.
    glTranslated(x, y, z);
    glScaled(dx, dy, dz);
    glRotated(theta, 0, 0, 1);
 
+   // Compute vertex normals and draw the nose cone.
    for (int i = 0; i < 12; i++)
    {
-      DrawTriangle(xyz[idx[i].A], xyz[idx[i].B], xyz[idx[i].C]);
+      DrawTriangle(noseCone[nose[i].A], noseCone[nose[i].B], noseCone[nose[i].C]);
    }
 
    // Draw the fuselage.
    glBegin(GL_QUAD_STRIP);
-   /*for (int i = 0; i <= 360; i += 30)
-   {
-      glVertex3f(noseHeight, circumference * Cos(i), circumference * Sin(i));
-      glVertex3f(fuselageBase, circumference * Cos(i), circumference * Sin(i));
-   }*/
-
    for (int i = 0; i < 24; i++)
    {
       DrawQuad(fuselageVert[fuselage[i].A], fuselageVert[fuselage[i].B], fuselageVert[fuselage[i].C]);
