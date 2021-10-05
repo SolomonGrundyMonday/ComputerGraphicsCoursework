@@ -13,6 +13,10 @@ const double finTip = -0.1;
 const double finEdge = -0.3;
 const double radius = 0.025;
 const double fuselageBase = -0.50;
+const double lInnerWall = 0.2;
+const double lOuterWall = 0.25;
+const double rInnerWall = 0.45;
+const double rOuterWall = 0.4;
 
 /* 
  *  Draw triangles for computing vertex normals of a 3D object
@@ -68,6 +72,55 @@ void DrawQuad(vtx A, vtx B, vtx C)
    glVertex3f(C.x, C.y, C.z);
 }
 
+// Specify the triangles that compose a cone object.
+const tri wheelWall[] =
+{
+   {1, 0, 2}, {2, 0, 3}, {3, 0, 4}, {4, 0, 5}, {5, 0, 6},
+   {6, 0, 7}, {7, 0, 8}, {8, 0, 9}, {9, 0, 10}, {10, 0, 11},
+   {11, 0, 12}, {12, 0, 1}
+};
+
+
+const vtx leftOuterVert[] =
+{
+   {0.0, 0.0, 0.25}, {circ, 0.0, lOuterWall}, {circ * Cos(30), circ * Sin(30), lOuterWall},
+   {circ * Cos(60), circ * Sin(60), lOuterWall}, {0.0, circ, lOuterWall},
+   {circ * Cos(120), circ * Sin(120), lOuterWall}, {circ * Cos(150), circ * Sin(150), lOuterWall},
+   {-circ, 0.0, lOuterWall}, {circ * Cos(210), circ * Sin(210), lOuterWall},
+   {circ * Cos(240), circ * Sin(240), lOuterWall}, {0.0, -circ, lOuterWall},
+   {circ * Cos(300), circ * Sin(300), lOuterWall}, {circ * Cos(330), circ * Sin(330), lOuterWall}
+};
+
+const vtx leftInnerVert[] = 
+{
+   {0.0, 0.0, 0.2}, {circ, 0.0, lInnerWall}, {circ * Cos(30), circ * Sin(30), lInnerWall},
+   {circ * Cos(60), circ * Sin(60), lInnerWall}, {0.0, circ, lInnerWall},
+   {circ * Cos(120), circ * Sin(120), lInnerWall}, {circ * Cos(150), circ * Sin(150), lInnerWall},
+   {-circ, 0.0, lInnerWall}, {circ * Cos(210), circ * Sin(210), lInnerWall},
+   {circ * Cos(240), circ * Sin(240), lInnerWall}, {0.0, -circ, lInnerWall},
+   {circ * Cos(300), circ * Sin(300), lInnerWall}, {circ * Cos(330), circ * Sin(330), lInnerWall}
+};
+
+const vtx rightOuterVert[] = 
+{
+   {0.0, 0.0, 0.4}, {circ, 0.0, rOuterWall}, {circ * Cos(30), circ * Sin(30), rOuterWall},
+   {circ * Cos(60), circ * Sin(60), rOuterWall}, {0.0, circ, rOuterWall},
+   {circ * Cos(120), circ * Sin(120), rOuterWall}, {circ * Cos(150), circ * Sin(150), rOuterWall},
+   {-circ, 0.0, rOuterWall}, {circ * Cos(210), circ * Sin(210), rOuterWall},
+   {circ * Cos(240), circ * Sin(240), rOuterWall}, {0.0, -circ, rOuterWall},
+   {circ * Cos(300), circ * Sin(300), rOuterWall}, {circ * Cos(330), circ * Sin(330), rOuterWall},
+};
+
+const vtx rightInnerVert[] = 
+{
+   {0.0, 0.0, 0.45}, {circ, 0.0, rInnerWall}, {circ * Cos(30), circ * Sin(30), rInnerWall},
+   {circ * Cos(60), circ * Sin(60), rInnerWall}, {0.0, circ, rInnerWall},
+   {circ * Cos(120), circ * Sin(120), rInnerWall}, {circ * Cos(150), circ * Sin(150), rInnerWall},
+   {-circ, 0.0, rInnerWall}, {circ * Cos(210), circ * Sin(210), rInnerWall},
+   {circ * Cos(240), circ * Sin(240), rInnerWall}, {0.0, -circ, rInnerWall},
+   {circ * Cos(300), circ * Sin(300), rInnerWall}, {circ * Cos(330), circ * Sin(330), rInnerWall}
+};
+
 /*
  *  Draw the wheel axel and attached wheels.  
  */
@@ -77,10 +130,6 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
    // Locals for vertices.
    double circumference = 0.05;
    double axel = circumference * 0.2;
-   double lInnerWall = 0.2;
-   double lOuterWall = 0.25;
-   double rInnerWall = 0.45;
-   double rOuterWall = 0.4;
 
    glPushMatrix();
 
@@ -99,18 +148,30 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
    glEnd();
 
    // Draw the inside of the left wheel wall.
-   glBegin(GL_TRIANGLE_FAN);
-   glVertex3f(0, 0, 0.2);
-   for (int i = 0; i <= 360; i += 30)
-      glVertex3f(circumference * Cos(i), circumference * Sin(i), lInnerWall);
-   glEnd();
+   //glBegin(GL_TRIANGLE_FAN);
+   //glVertex3f(0, 0, 0.2);
+   //for (int i = 0; i <= 360; i += 30)
+      //glVertex3f(circumference * Cos(i), circumference * Sin(i), lInnerWall);
+   //glEnd();
+
+   for (int i = 0; i < 12; i++)
+      DrawTriangle(leftOuterVert[wheelWall[i].A], leftOuterVert[wheelWall[i].B], leftOuterVert[wheelWall[i].C]);
+
+   for (int i = 0; i < 12; i++)
+      DrawTriangle(leftInnerVert[wheelWall[i].A], leftInnerVert[wheelWall[i].B], leftInnerVert[wheelWall[i].C]);
+
+   for (int i = 0; i < 12; i++)
+      DrawTriangle(rightOuterVert[wheelWall[i].A], rightOuterVert[wheelWall[i].B], rightOuterVert[wheelWall[i].C]);
+
+   for (int  i = 0; i < 12; i++)
+      DrawTriangle(rightInnerVert[wheelWall[i].A], rightInnerVert[wheelWall[i].B], rightInnerVert[wheelWall[i].C]);
 
    // Draw the outside of the left wheel wall.
-   glBegin(GL_TRIANGLE_FAN);
-   glVertex3f(0, 0, 0.25);
-   for (int i = 0; i <= 360; i += 30)
-      glVertex3f(circumference * Cos(i), circumference * Sin(i), lOuterWall);
-   glEnd();
+   //glBegin(GL_TRIANGLE_FAN);
+   //glVertex3f(0, 0, 0.25);
+   //for (int i = 0; i <= 360; i += 30)
+      //glVertex3f(circumference * Cos(i), circumference * Sin(i), lOuterWall);
+   //glEnd();
 
    // Draw the right wheel tread.
    glBegin(GL_QUAD_STRIP);
@@ -122,18 +183,18 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
    glEnd();
 
    // Draw the right inside wheel wall.
-   glBegin(GL_TRIANGLE_FAN);
+   /*glBegin(GL_TRIANGLE_FAN);
    glVertex3f(0, 0, 0.4);
    for (int i = 0; i <= 360; i += 30)
       glVertex3f(circumference * Cos(i), circumference * Sin(i), rOuterWall);
-   glEnd();
+   glEnd();*/
 
    // Draw the right outside wheel wall.
-   glBegin(GL_TRIANGLE_FAN);
+   /*glBegin(GL_TRIANGLE_FAN);
    glVertex3f(0, 0, 0.45);
    for (int i = 0; i <= 360; i += 30)
       glVertex3f(circumference * Cos(i), circumference * Sin(i), rInnerWall);
-   glEnd();
+   glEnd();*/
 
    // Draw the axel between the wheels.
    glBegin(GL_QUAD_STRIP);
@@ -216,6 +277,7 @@ const tri nose[] =
    {6, 0, 7}, {7, 0, 8}, {8, 0, 9}, {9, 0, 10}, {10, 0, 11},
    {11, 0, 12}, {12, 0, 1}
 };
+
 
 // Specify the vertices for drawing the nose cone of the Rocket.
 const vtx noseCone[] = 
