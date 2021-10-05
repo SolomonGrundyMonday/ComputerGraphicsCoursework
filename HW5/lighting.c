@@ -82,14 +82,7 @@ void display()
 
       glColor3f(1, 1, 1);
 
-      if (autoLight)
-      {
-         Ball(Pos[0], Pos[1], Pos[2], 0.1);
-      }
-      else
-      {
-         Ball(0, 2.0, 0, 0.1);
-      }
+      Ball(Pos[0], Pos[1], Pos[2], 0.1);
 
       glEnable(GL_NORMALIZE);
       glEnable(GL_LIGHTING);
@@ -115,7 +108,7 @@ void display()
    //Rover(0.0, 0.225, 1.2, 0.4, 0.15, 0.1, 90);
    glColor3f(0.0, 0.0, 1.0);
    Rover(-0.5, 0.95, -0.1, 0.8, 0.6, 0.5, 0);
-   //Rocket(0.4, 0.5, 0.4, 0.4, 0.4, 0.4, 90);
+   //Rocket(0.4, 0.5, 0.4, 0.4, 0.4, 0.4, 0);
 
    // Raster text for user.
    glWindowPos2i(5, 5);
@@ -211,6 +204,14 @@ void key(unsigned char key, int x, int y)
    else if (key == 'l' || key == 'L')
    {
       autoLight = (autoLight == 1) ? 0 : 1; 
+   }
+   else if (key == 'p' || key == 'P')
+   {
+      if (!autoLight)
+      {
+         zh += 30;
+         zh %= 360;
+      }
    }
 
    glutPostRedisplay();

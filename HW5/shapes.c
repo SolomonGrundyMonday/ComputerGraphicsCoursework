@@ -9,6 +9,10 @@ const float orange[] = {1.0, 0.5, 0.0, 1.0};
 const double noseHeight =  0.20;
 const double circ = 0.05;
 const double base = -0.50;
+const double finTip = -0.1;
+const double finEdge = -0.3;
+const double radius = 0.025;
+const double fuselageBase = -0.50;
 
 /* 
  *  Draw triangles for computing vertex normals of a 3D object
@@ -251,6 +255,37 @@ const vtx fuselageVert[] =
    {noseHeight, circ * Cos(330), circ * Sin(330)}, {base, circ * Cos(330), circ * Sin(330)}
 };
 
+const tri finTop[] =
+{
+   {1, 0, 2}, {4, 3, 5}, {7, 6, 8}, {10, 9, 11}
+};
+
+const vtx finTopVert[] =
+{
+   {finTip, radius, radius}, {finEdge, radius, radius}, {finEdge, radius + 0.1, radius + 0.1},
+   {finTip, -radius, -radius}, {finEdge, -radius, -radius}, {finEdge, -radius - 0.1, -radius - 0.1},
+   {finTip, -radius, radius}, {finEdge, -radius, radius}, {finEdge, -radius - 0.1, radius + 0.1},
+   {finTip, radius, -radius}, {finEdge, radius, -radius}, {finEdge, radius + 0.1, -radius - 0.1}
+};
+
+const tri finBase[] =
+{
+   {2, 1, 0}, {1, 2, 3}, {6, 5, 4}, {5, 6, 7}, {10, 9, 8}, {9, 10, 11},
+   {14, 13, 12}, {13, 14, 15}
+};
+
+const vtx finBaseVert[] =
+{
+   {fuselageBase, radius, radius}, {fuselageBase, radius + 0.1, radius + 0.1},
+   {finEdge, radius, radius}, {finEdge, radius + 0.1, radius + 0.1},
+   {fuselageBase, -radius, -radius}, {fuselageBase, -radius - 0.1, -radius - 0.1},
+   {finEdge, -radius, -radius}, {finEdge, -radius - 0.1, -radius - 0.1},
+   {fuselageBase, -radius, radius}, {fuselageBase, -radius - 0.1, radius + 0.1},
+   {finEdge, -radius, radius}, {finEdge, -radius - 0.1, radius + 0.1},
+   {fuselageBase, radius, -radius}, {fuselageBase, radius + 0.1, -radius - 0.1},
+   {finEdge, radius, -radius}, {finEdge, radius + 0.1, -radius - 0.1}
+};
+
 /*
  *  Draw a rocket object. 
  */
@@ -293,19 +328,19 @@ void Rocket(double x, double y, double z, double dx, double dy,
 
    glColor3f(1.0, 0.0, 0.1);
 
-   // Tail fin one.
-   glBegin(GL_TRIANGLES);
-   glVertex3f(finTip, radius, radius);
-   glVertex3f(finEdge, radius, radius);
-   glVertex3f(finEdge, radius + 0.1, radius + 0.1);
-   glEnd();
+   for (int i = 0; i < 4; i ++)
+   {
+      DrawTriangle(finTopVert[finTop[i].A], finTopVert[finTop[i].B], finTopVert[finTop[i].C]);
+   }
 
-   glBegin(GL_QUAD_STRIP);
-   glVertex3f(fuselageBase, radius, radius);
-   glVertex3f(fuselageBase, radius + 0.1, radius + 0.1);
-   glVertex3f(finEdge, radius, radius);
-   glVertex3f(finEdge, radius + 0.1, radius + 0.1);
-   glEnd();
+   for (int i = 0; i < 8; i++)
+   {
+      if (i % 2 == 0)
+         glBegin(GL_QUAD_STRIP);
+      DrawQuad(finBaseVert[finBase[i].A], finBaseVert[finBase[i].B], finBaseVert[finBase[i].C]);
+      if (i % 2 == 1)
+         glEnd();
+   }
 
    glBegin(GL_LINES);
    glVertex3f(finTip, radius, radius);
@@ -314,20 +349,6 @@ void Rocket(double x, double y, double z, double dx, double dy,
    glVertex3f(fuselageBase, radius + 0.1, radius + 0.1);
    glVertex3f(finEdge, radius + 0.1, radius + 0.1);
    glVertex3f(fuselageBase, radius + 0.1, radius + 0.1);
-   glEnd();
-
-   // Tail fin two.
-   glBegin(GL_TRIANGLES);
-   glVertex3f(finTip, -radius, -radius);
-   glVertex3f(finEdge, -radius, -radius);
-   glVertex3f(finEdge, -radius - 0.1, -radius - 0.1);
-   glEnd();
-
-   glBegin(GL_QUAD_STRIP);
-   glVertex3f(fuselageBase, -radius, -radius);
-   glVertex3f(fuselageBase, -radius - 0.1, -radius - 0.1);
-   glVertex3f(finEdge, -radius, -radius);
-   glVertex3f(finEdge, -radius - 0.1, -radius - 0.1);
    glEnd();
 
    glBegin(GL_LINES);
@@ -339,41 +360,13 @@ void Rocket(double x, double y, double z, double dx, double dy,
    glVertex3f(fuselageBase, -radius - 0.1, -radius - 0.1);
    glEnd();
 
-   // Tail fin three.
-   glBegin(GL_TRIANGLES);
+   glBegin(GL_LINES);
    glVertex3f(finTip, -radius, radius);
-   glVertex3f(finEdge, -radius, radius);
-   glVertex3f(finEdge, -radius - 0.1, radius + 0.1);
-   glEnd();
-
-   glBegin(GL_QUAD_STRIP);
-   glVertex3f(fuselageBase, -radius, radius);
-   glVertex3f(fuselageBase, -radius - 0.1, radius + 0.1);
-   glVertex3f(finEdge, -radius, radius);
-   glVertex3f(finEdge, -radius - 0.1, radius + 0.1);
-   glEnd();
-
-   glBegin(GL_LINES);
-   glVertex3f(fuselageBase, -radius, radius);
    glVertex3f(finEdge, -radius - 0.1, radius + 0.1);
    glVertex3f(fuselageBase, -radius, radius);
    glVertex3f(fuselageBase, -radius - 0.1, radius + 0.1);
    glVertex3f(finEdge, -radius - 0.1, radius + 0.1);
    glVertex3f(fuselageBase, -radius - 0.1, radius + 0.1);
-   glEnd();
-
-   // Tail fin four.
-   glBegin(GL_TRIANGLES);
-   glVertex3f(finTip, radius, -radius);
-   glVertex3f(finEdge, radius, -radius);
-   glVertex3f(finEdge, radius + 0.1, -radius - 0.1);
-   glEnd();
-
-   glBegin(GL_QUAD_STRIP);
-   glVertex3f(fuselageBase, radius, -radius);
-   glVertex3f(fuselageBase, radius + 0.1, -radius - 0.1);
-   glVertex3f(finEdge, radius, -radius);
-   glVertex3f(finEdge, radius + 0.1, -radius - 0.1);
    glEnd();
 
    glBegin(GL_LINES);
