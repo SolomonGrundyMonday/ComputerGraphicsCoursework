@@ -6,6 +6,7 @@ const float emission = 0;
 const float black[] = {0.0, 0.0, 0.0, 1.0};
 const float white[] = {1.0, 1.0, 1.0, 1.0};
 const float orange[] = {1.0, 0.5, 0.0, 1.0};
+const float grey[] = {0.729, 0.690, 0.686, 1.0};
 const double noseHeight =  0.20;
 const double circ = 0.05;
 const double base = -0.50;
@@ -80,6 +81,16 @@ const tri wheelWall[] =
    {11, 0, 12}, {12, 0, 1}
 };
 
+const tri tread[] =
+{
+   {2, 1, 0}, {1, 2, 3}, {4, 3, 2}, {3, 4, 5},
+   {6, 5, 4}, {5, 6, 7}, {8, 7, 6}, {7, 8, 9},
+   {10, 9, 8}, {9, 10, 11}, {12, 11, 10}, {11, 12, 13},
+   {14, 13, 12}, {13, 14, 15}, {16, 15, 14}, {15, 16, 17},
+   {18, 17, 16}, {17, 18, 19}, {20, 19, 18}, {19, 20, 21},
+   {22, 21, 20}, {21, 22, 23}, {0, 23, 22}, {23, 0, 1}
+};
+
 
 const vtx leftOuterVert[] =
 {
@@ -91,6 +102,7 @@ const vtx leftOuterVert[] =
    {circ * Cos(300), circ * Sin(300), lOuterWall}, {circ * Cos(330), circ * Sin(330), lOuterWall}
 };
 
+// Fix this.
 const vtx leftInnerVert[] = 
 {
    {0.0, 0.0, 0.2}, {circ, 0.0, lInnerWall}, {circ * Cos(30), circ * Sin(30), lInnerWall},
@@ -111,6 +123,7 @@ const vtx rightOuterVert[] =
    {circ * Cos(300), circ * Sin(300), rOuterWall}, {circ * Cos(330), circ * Sin(330), rOuterWall},
 };
 
+// Fix this.
 const vtx rightInnerVert[] = 
 {
    {0.0, 0.0, 0.45}, {circ, 0.0, rInnerWall}, {circ * Cos(30), circ * Sin(30), rInnerWall},
@@ -119,6 +132,34 @@ const vtx rightInnerVert[] =
    {-circ, 0.0, rInnerWall}, {circ * Cos(210), circ * Sin(210), rInnerWall},
    {circ * Cos(240), circ * Sin(240), rInnerWall}, {0.0, -circ, rInnerWall},
    {circ * Cos(300), circ * Sin(300), rInnerWall}, {circ * Cos(330), circ * Sin(330), rInnerWall}
+};
+
+const vtx rightTread[] =
+{
+   {circ, 0.0, rInnerWall}, {circ, 0.0, rOuterWall}, {circ * Cos(30), circ * Sin(30), rInnerWall},
+   {circ * Cos(30), circ * Sin(30), rOuterWall}, {circ * Cos(60), circ * Sin(60), rInnerWall},
+   {circ * Cos(60), circ * Sin(60), rOuterWall}, {0.0, circ, rInnerWall}, {0.0, circ, rOuterWall},
+   {circ * Cos(120), circ * Sin(120), rInnerWall}, {circ * Cos(120), circ * Sin(120), rOuterWall},
+   {circ * Cos(150), circ * Sin(150), rInnerWall}, {circ * Cos(150), circ * Sin(150), rOuterWall},
+   {-circ, 0.0, rInnerWall}, {-circ, 0.0, rOuterWall}, {circ * Cos(210), circ * Sin(210), rInnerWall},
+   {circ * Cos(210), circ * Sin(210), rOuterWall}, {circ * Cos(240), circ * Sin(240), rInnerWall},
+   {circ * Cos(240), circ * Sin(240), rOuterWall}, {0.0, -circ, rInnerWall}, {0.0, -circ, rOuterWall},
+   {circ * Cos(300), circ * Sin(300), rInnerWall}, {circ * Cos(300), circ * Sin(300), rOuterWall},
+   {circ * Cos(330), circ * Sin(330), rInnerWall}, {circ * Cos(330), circ * Sin(330), rOuterWall}
+};
+
+const vtx leftTread[] =
+{
+   {circ, 0.0, lInnerWall}, {circ, 0.0, lOuterWall}, {circ * Cos(30), circ * Sin(30), lInnerWall},
+   {circ * Cos(30), circ * Sin(30), lOuterWall}, {circ * Cos(60), circ * Sin(60), lInnerWall},
+   {circ * Cos(60), circ * Sin(60), lOuterWall}, {0.0, circ, lInnerWall}, {0.0, circ, lOuterWall},
+   {circ * Cos(120), circ * Sin(120), lInnerWall}, {circ * Cos(120), circ * Sin(120), lOuterWall},
+   {circ * Cos(150), circ * Sin(150), lInnerWall}, {circ * Cos(150), circ * Sin(150), lOuterWall},
+   {-circ, 0.0, lInnerWall}, {-circ, 0.0, lOuterWall}, {circ * Cos(210), circ * Sin(210), lInnerWall},
+   {circ * Cos(210), circ * Sin(210), lOuterWall}, {circ * Cos(240), circ * Sin(240), lInnerWall},
+   {circ * Cos(240), circ * Sin(240), lOuterWall}, {0.0, -circ, lInnerWall}, {0.0, -circ, lOuterWall},
+   {circ * Cos(300), circ * Sin(300), lInnerWall}, {circ * Cos(300), circ * Sin(300), lOuterWall},
+   {circ * Cos(330), circ * Sin(330), lInnerWall}, {circ * Cos(330), circ * Sin(330), lOuterWall}
 };
 
 /*
@@ -131,6 +172,12 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
    double circumference = 0.05;
    double axel = circumference * 0.2;
 
+   glColor4fv(grey);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, grey);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, white);
+   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shiny);
+
    glPushMatrix();
 
    // Apply tranformations.
@@ -138,22 +185,7 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
    glRotated(theta, 0, 0, 1);
    glScaled(dx, dy, dz);
 
-   // Draw the left wheel tread.
-   glBegin(GL_QUAD_STRIP);
-   for (int i = 0; i <= 360; i += 30)
-   {
-      glVertex3f(circumference * Cos(i), circumference * Sin(i), lInnerWall);
-      glVertex3f(circumference * Cos(i), circumference * Sin(i), lOuterWall);
-   }
-   glEnd();
-
-   // Draw the inside of the left wheel wall.
-   //glBegin(GL_TRIANGLE_FAN);
-   //glVertex3f(0, 0, 0.2);
-   //for (int i = 0; i <= 360; i += 30)
-      //glVertex3f(circumference * Cos(i), circumference * Sin(i), lInnerWall);
-   //glEnd();
-
+   // Fix this.
    for (int i = 0; i < 12; i++)
       DrawTriangle(leftOuterVert[wheelWall[i].A], leftOuterVert[wheelWall[i].B], leftOuterVert[wheelWall[i].C]);
 
@@ -163,47 +195,33 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
    for (int i = 0; i < 12; i++)
       DrawTriangle(rightOuterVert[wheelWall[i].A], rightOuterVert[wheelWall[i].B], rightOuterVert[wheelWall[i].C]);
 
+   // Fix this.
    for (int  i = 0; i < 12; i++)
       DrawTriangle(rightInnerVert[wheelWall[i].A], rightInnerVert[wheelWall[i].B], rightInnerVert[wheelWall[i].C]);
 
-   // Draw the outside of the left wheel wall.
-   //glBegin(GL_TRIANGLE_FAN);
-   //glVertex3f(0, 0, 0.25);
-   //for (int i = 0; i <= 360; i += 30)
-      //glVertex3f(circumference * Cos(i), circumference * Sin(i), lOuterWall);
-   //glEnd();
+   // Draw the left wheel tread.
+   glBegin(GL_QUAD_STRIP);
+   for (int i = 0; i < 24; i++)
+   {
+      DrawQuad(leftTread[tread[i].A], leftTread[tread[i].B], leftTread[tread[i].C]);
+   }
+   glEnd();
 
    // Draw the right wheel tread.
    glBegin(GL_QUAD_STRIP);
-   for (int i = 0; i <= 360; i += 30)
+   for (int i = 0; i < 24; i++)
    {
-      glVertex3f(circumference * Cos(i), circumference * Sin(i), rOuterWall);
-      glVertex3f(circumference * Cos(i), circumference * Sin(i), rInnerWall);
+      DrawQuad(rightTread[tread[i].A], rightTread[tread[i].B], rightTread[tread[i].C]);
    }
    glEnd();
 
-   // Draw the right inside wheel wall.
-   /*glBegin(GL_TRIANGLE_FAN);
-   glVertex3f(0, 0, 0.4);
-   for (int i = 0; i <= 360; i += 30)
-      glVertex3f(circumference * Cos(i), circumference * Sin(i), rOuterWall);
-   glEnd();*/
-
-   // Draw the right outside wheel wall.
-   /*glBegin(GL_TRIANGLE_FAN);
-   glVertex3f(0, 0, 0.45);
-   for (int i = 0; i <= 360; i += 30)
-      glVertex3f(circumference * Cos(i), circumference * Sin(i), rInnerWall);
-   glEnd();*/
-
-   // Draw the axel between the wheels.
+   /* Draw the axel between the wheels.
    glBegin(GL_QUAD_STRIP);
-   for(int i = 0; i <= 360; i += 30)
+   for(int i = 0; i < 24; i++)
    {
-      glVertex3f(axel * Cos(i), axel * Sin(i), lInnerWall);
-      glVertex3f(axel * Cos(i), axel * Sin(i), rInnerWall);
+      DrawQuad(leftTread[tread[i].A], leftTread[tread[i].B], leftTread[tread[i].C]);
    }
-   glEnd();
+   glEnd();*/
 
    glPopMatrix();
 }
