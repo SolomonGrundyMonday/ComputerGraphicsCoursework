@@ -14,10 +14,11 @@ const double finTip = -0.1;
 const double finEdge = -0.3;
 const double radius = 0.025;
 const double fuselageBase = -0.50;
-const double lInnerWall = 0.2;
-const double lOuterWall = 0.25;
-const double rInnerWall = 0.45;
-const double rOuterWall = 0.4;
+const double lOuter = 0.2;
+const double lInner = 0.25;
+const double rOuter = 0.45;
+const double rInner = 0.4;
+const double axel = 0.01;
 
 /* 
  *  Draw triangles for computing vertex normals of a 3D object
@@ -54,34 +55,38 @@ void DrawTriangle(vtx A, vtx B, vtx C)
  */
 void DrawQuad(vtx A, vtx B, vtx C)
 {
-   
+   // Compute A - B.
    float dx0 = A.x - B.x;
    float dy0 = A.y - B.y;
    float dz0 = A.z - B.z;
 
+   // Compute C - A.
    float dx1 = C.x - A.x;
    float dy1 = C.y - A.y;
    float dz1 = C.z - A.z;
 
+   // Normalize.
    float Nx = dy0 * dz1 - dy1 * dz0;
    float Ny = dz0 * dx1 - dz1 * dx0;
    float Nz = dx0 * dy1 - dx1 * dy0;
 
+   // Draw three vertices.
    glNormal3f(Nx, Ny, Nz);
    glVertex3f(A.x, A.y, A.z);
    glVertex3f(B.x, B.y, B.z);
    glVertex3f(C.x, C.y, C.z);
 }
 
-// Specify the triangles that compose a cone object.
-const tri wheelWall[] =
+// Specify the order of vertices to compute normals for a cone object.
+const tri cone[] =
 {
    {1, 0, 2}, {2, 0, 3}, {3, 0, 4}, {4, 0, 5}, {5, 0, 6},
    {6, 0, 7}, {7, 0, 8}, {8, 0, 9}, {9, 0, 10}, {10, 0, 11},
    {11, 0, 12}, {12, 0, 1}
 };
 
-const tri tread[] =
+// Specify order of vertices to compute normals for a cyllender.
+const tri cyllender[] =
 {
    {2, 1, 0}, {1, 2, 3}, {4, 3, 2}, {3, 4, 5},
    {6, 5, 4}, {5, 6, 7}, {8, 7, 6}, {7, 8, 9},
@@ -91,75 +96,170 @@ const tri tread[] =
    {22, 21, 20}, {21, 22, 23}, {0, 23, 22}, {23, 0, 1}
 };
 
-
-const vtx leftOuterVert[] =
+// List of vertices for the inner wall of the left wheel.
+const vtx lInnerVert[] =
 {
-   {0.0, 0.0, 0.25}, {circ, 0.0, lOuterWall}, {circ * Cos(30), circ * Sin(30), lOuterWall},
-   {circ * Cos(60), circ * Sin(60), lOuterWall}, {0.0, circ, lOuterWall},
-   {circ * Cos(120), circ * Sin(120), lOuterWall}, {circ * Cos(150), circ * Sin(150), lOuterWall},
-   {-circ, 0.0, lOuterWall}, {circ * Cos(210), circ * Sin(210), lOuterWall},
-   {circ * Cos(240), circ * Sin(240), lOuterWall}, {0.0, -circ, lOuterWall},
-   {circ * Cos(300), circ * Sin(300), lOuterWall}, {circ * Cos(330), circ * Sin(330), lOuterWall}
+   {0.0, 0.0, lInner}, {circ, 0.0, lInner}, {circ * Cos(30), circ * Sin(30), lInner},
+   {circ * Cos(60), circ * Sin(60), lInner}, {0.0, circ, lInner},
+   {circ * Cos(120), circ * Sin(120), lInner}, {circ * Cos(150), circ * Sin(150), lInner},
+   {-circ, 0.0, lInner}, {circ * Cos(210), circ * Sin(210), lInner},
+   {circ * Cos(240), circ * Sin(240), lInner}, {0.0, -circ, lInner},
+   {circ * Cos(300), circ * Sin(300), lInner}, {circ * Cos(330), circ * Sin(330), lInner}
 };
 
-// Fix this.
-const vtx leftInnerVert[] = 
+// List of vertices for the outer wall of the left wheel.
+const vtx lOuterVert[] = 
 {
-   {0.0, 0.0, 0.2}, {circ, 0.0, lInnerWall}, {circ * Cos(30), circ * Sin(30), lInnerWall},
-   {circ * Cos(60), circ * Sin(60), lInnerWall}, {0.0, circ, lInnerWall},
-   {circ * Cos(120), circ * Sin(120), lInnerWall}, {circ * Cos(150), circ * Sin(150), lInnerWall},
-   {-circ, 0.0, lInnerWall}, {circ * Cos(210), circ * Sin(210), lInnerWall},
-   {circ * Cos(240), circ * Sin(240), lInnerWall}, {0.0, -circ, lInnerWall},
-   {circ * Cos(300), circ * Sin(300), lInnerWall}, {circ * Cos(330), circ * Sin(330), lInnerWall}
+   {0.0, 0.0, lOuter}, {circ, 0.0, lOuter}, {circ * Cos(30), circ * Sin(30), lOuter},
+   {circ * Cos(60), circ * Sin(60), lOuter}, {0.0, circ, lOuter},
+   {circ * Cos(120), circ * Sin(120), lOuter}, {circ * Cos(150), circ * Sin(150), lOuter},
+   {-circ, 0.0, lOuter}, {circ * Cos(210), circ * Sin(210), lOuter},
+   {circ * Cos(240), circ * Sin(240), lOuter}, {0.0, -circ, lOuter},
+   {circ * Cos(300), circ * Sin(300), lOuter}, {circ * Cos(330), circ * Sin(330), lOuter}
 };
 
-const vtx rightOuterVert[] = 
+// List of vertices for the inner wall of the right wheel.
+const vtx rInnerVert[] = 
 {
-   {0.0, 0.0, 0.4}, {circ, 0.0, rOuterWall}, {circ * Cos(30), circ * Sin(30), rOuterWall},
-   {circ * Cos(60), circ * Sin(60), rOuterWall}, {0.0, circ, rOuterWall},
-   {circ * Cos(120), circ * Sin(120), rOuterWall}, {circ * Cos(150), circ * Sin(150), rOuterWall},
-   {-circ, 0.0, rOuterWall}, {circ * Cos(210), circ * Sin(210), rOuterWall},
-   {circ * Cos(240), circ * Sin(240), rOuterWall}, {0.0, -circ, rOuterWall},
-   {circ * Cos(300), circ * Sin(300), rOuterWall}, {circ * Cos(330), circ * Sin(330), rOuterWall},
+   {0.0, 0.0, rInner}, {circ, 0.0, rInner}, {circ * Cos(30), circ * Sin(30), rInner},
+   {circ * Cos(60), circ * Sin(60), rInner}, {0.0, circ, rInner},
+   {circ * Cos(120), circ * Sin(120), rInner}, {circ * Cos(150), circ * Sin(150), rInner},
+   {-circ, 0.0, rInner}, {circ * Cos(210), circ * Sin(210), rInner},
+   {circ * Cos(240), circ * Sin(240), rInner}, {0.0, -circ, rInner},
+   {circ * Cos(300), circ * Sin(300), rInner}, {circ * Cos(330), circ * Sin(330), rInner}
 };
 
-// Fix this.
-const vtx rightInnerVert[] = 
+// List of vertices for the outer wall of the right wheel.
+const vtx rOuterVert[] = 
 {
-   {0.0, 0.0, 0.45}, {circ, 0.0, rInnerWall}, {circ * Cos(30), circ * Sin(30), rInnerWall},
-   {circ * Cos(60), circ * Sin(60), rInnerWall}, {0.0, circ, rInnerWall},
-   {circ * Cos(120), circ * Sin(120), rInnerWall}, {circ * Cos(150), circ * Sin(150), rInnerWall},
-   {-circ, 0.0, rInnerWall}, {circ * Cos(210), circ * Sin(210), rInnerWall},
-   {circ * Cos(240), circ * Sin(240), rInnerWall}, {0.0, -circ, rInnerWall},
-   {circ * Cos(300), circ * Sin(300), rInnerWall}, {circ * Cos(330), circ * Sin(330), rInnerWall}
+   {0.0, 0.0, rOuter}, {circ, 0.0, rOuter}, {circ * Cos(30), circ * Sin(30), rOuter},
+   {circ * Cos(60), circ * Sin(60), rOuter}, {0.0, circ, rOuter},
+   {circ * Cos(120), circ * Sin(120), rOuter}, {circ * Cos(150), circ * Sin(150), rOuter},
+   {-circ, 0.0, rOuter}, {circ * Cos(210), circ * Sin(210), rOuter},
+   {circ * Cos(240), circ * Sin(240), rOuter}, {0.0, -circ, rOuter},
+   {circ * Cos(300), circ * Sin(300), rOuter}, {circ * Cos(330), circ * Sin(330), rOuter}
 };
 
-const vtx rightTread[] =
-{
-   {circ, 0.0, rInnerWall}, {circ, 0.0, rOuterWall}, {circ * Cos(30), circ * Sin(30), rInnerWall},
-   {circ * Cos(30), circ * Sin(30), rOuterWall}, {circ * Cos(60), circ * Sin(60), rInnerWall},
-   {circ * Cos(60), circ * Sin(60), rOuterWall}, {0.0, circ, rInnerWall}, {0.0, circ, rOuterWall},
-   {circ * Cos(120), circ * Sin(120), rInnerWall}, {circ * Cos(120), circ * Sin(120), rOuterWall},
-   {circ * Cos(150), circ * Sin(150), rInnerWall}, {circ * Cos(150), circ * Sin(150), rOuterWall},
-   {-circ, 0.0, rInnerWall}, {-circ, 0.0, rOuterWall}, {circ * Cos(210), circ * Sin(210), rInnerWall},
-   {circ * Cos(210), circ * Sin(210), rOuterWall}, {circ * Cos(240), circ * Sin(240), rInnerWall},
-   {circ * Cos(240), circ * Sin(240), rOuterWall}, {0.0, -circ, rInnerWall}, {0.0, -circ, rOuterWall},
-   {circ * Cos(300), circ * Sin(300), rInnerWall}, {circ * Cos(300), circ * Sin(300), rOuterWall},
-   {circ * Cos(330), circ * Sin(330), rInnerWall}, {circ * Cos(330), circ * Sin(330), rOuterWall}
-};
-
+// List of vertices for the tread of the left wheel.
 const vtx leftTread[] =
 {
-   {circ, 0.0, lInnerWall}, {circ, 0.0, lOuterWall}, {circ * Cos(30), circ * Sin(30), lInnerWall},
-   {circ * Cos(30), circ * Sin(30), lOuterWall}, {circ * Cos(60), circ * Sin(60), lInnerWall},
-   {circ * Cos(60), circ * Sin(60), lOuterWall}, {0.0, circ, lInnerWall}, {0.0, circ, lOuterWall},
-   {circ * Cos(120), circ * Sin(120), lInnerWall}, {circ * Cos(120), circ * Sin(120), lOuterWall},
-   {circ * Cos(150), circ * Sin(150), lInnerWall}, {circ * Cos(150), circ * Sin(150), lOuterWall},
-   {-circ, 0.0, lInnerWall}, {-circ, 0.0, lOuterWall}, {circ * Cos(210), circ * Sin(210), lInnerWall},
-   {circ * Cos(210), circ * Sin(210), lOuterWall}, {circ * Cos(240), circ * Sin(240), lInnerWall},
-   {circ * Cos(240), circ * Sin(240), lOuterWall}, {0.0, -circ, lInnerWall}, {0.0, -circ, lOuterWall},
-   {circ * Cos(300), circ * Sin(300), lInnerWall}, {circ * Cos(300), circ * Sin(300), lOuterWall},
-   {circ * Cos(330), circ * Sin(330), lInnerWall}, {circ * Cos(330), circ * Sin(330), lOuterWall}
+   {circ, 0.0, lOuter}, {circ, 0.0, lInner}, {circ * Cos(30), circ * Sin(30), lOuter},
+   {circ * Cos(30), circ * Sin(30), lInner}, {circ * Cos(60), circ * Sin(60), lOuter},
+   {circ * Cos(60), circ * Sin(60), lInner}, {0.0, circ, lOuter}, {0.0, circ, lInner},
+   {circ * Cos(120), circ * Sin(120), lOuter}, {circ * Cos(120), circ * Sin(120), lInner},
+   {circ * Cos(150), circ * Sin(150), lOuter}, {circ * Cos(150), circ * Sin(150), lInner},
+   {-circ, 0.0, lOuter}, {-circ, 0.0, lInner}, {circ * Cos(210), circ * Sin(210), lOuter},
+   {circ * Cos(210), circ * Sin(210), lInner}, {circ * Cos(240), circ * Sin(240), lOuter},
+   {circ * Cos(240), circ * Sin(240), lInner}, {0.0, -circ, lOuter}, {0.0, -circ, lInner},
+   {circ * Cos(300), circ * Sin(300), lOuter}, {circ * Cos(300), circ * Sin(300), lInner},
+   {circ * Cos(330), circ * Sin(330), lOuter}, {circ * Cos(330), circ * Sin(330), lInner}
+};
+
+// List of vertices for the tread of the right wheel.
+const vtx rightTread[] =
+{
+   {circ, 0.0, rOuter}, {circ, 0.0, rInner}, {circ * Cos(30), circ * Sin(30), rOuter},
+   {circ * Cos(30), circ * Sin(30), rInner}, {circ * Cos(60), circ * Sin(60), rOuter},
+   {circ * Cos(60), circ * Sin(60), rInner}, {0.0, circ, rOuter}, {0.0, circ, rInner},
+   {circ * Cos(120), circ * Sin(120), rOuter}, {circ * Cos(120), circ * Sin(120), rInner},
+   {circ * Cos(150), circ * Sin(150), rOuter}, {circ * Cos(150), circ * Sin(150), rInner},
+   {-circ, 0.0, rOuter}, {-circ, 0.0, rInner}, {circ * Cos(210), circ * Sin(210), rOuter},
+   {circ * Cos(210), circ * Sin(210), rInner}, {circ * Cos(240), circ * Sin(240), rOuter},
+   {circ * Cos(240), circ * Sin(240), rInner}, {0.0, -circ, rOuter}, {0.0, -circ, rInner},
+   {circ * Cos(300), circ * Sin(300), rOuter}, {circ * Cos(300), circ * Sin(300), rInner},
+   {circ * Cos(330), circ * Sin(330), rOuter}, {circ * Cos(330), circ * Sin(330), rInner}
+};
+
+// List of vertices for the tread of the left wheel.
+const vtx axelBar[] =
+{
+   {axel, 0.0, lInner}, {axel, 0.0, rInner}, {axel * Cos(30), axel * Sin(30), lInner},
+   {axel * Cos(30), axel * Sin(30), rInner}, {axel * Cos(60), axel * Sin(60), lInner},
+   {axel * Cos(60), axel * Sin(60), rInner}, {0.0, axel, lInner}, {0.0, axel, rInner},
+   {axel * Cos(120), axel * Sin(120), lInner}, {axel * Cos(120), axel * Sin(120), rInner},
+   {axel * Cos(150), axel * Sin(150), lInner}, {axel * Cos(150), axel * Sin(150), rInner},
+   {-axel, 0.0, lInner}, {-axel, 0.0, rInner}, {axel * Cos(210), axel * Sin(210), lInner},
+   {axel * Cos(210), axel * Sin(210), rInner}, {axel * Cos(240), axel * Sin(240), lInner},
+   {axel * Cos(240), axel * Sin(240), rInner}, {0.0, -axel, lInner}, {0.0, -axel, rInner},
+   {axel * Cos(300), axel * Sin(300), lInner}, {axel * Cos(300), axel * Sin(300), rInner},
+   {axel * Cos(330), axel * Sin(330), lInner}, {axel * Cos(330), axel * Sin(330), rInner}
+};
+
+// Specify the vertices for drawing the nose cone of the Rocket.
+const vtx noseCone[] =
+{
+   {0.50, 0.0, 0.0}, {noseHeight, circ, 0.0},
+   {noseHeight, circ * Cos(30), circ * Sin(30)}, {noseHeight, circ * Cos(60), circ * Sin(60)},
+   {noseHeight, 0.0, circ}, {noseHeight, circ * Cos(120), circ * Sin(120)},
+   {noseHeight, circ * Cos(150), circ * Sin(150)}, {noseHeight, -circ, 0.0},
+   {noseHeight, circ * Cos(210), circ * Sin(210)}, {noseHeight, circ * Cos(240), circ * Sin(240)},
+   {noseHeight, 0.0, -circ}, {noseHeight, circ * Cos(300), circ * Sin(300)},
+   {noseHeight, circ * Cos(330), circ * Sin(330)}
+};
+
+// Vertices for the fuselage.
+const vtx fuselageVert[] =
+{
+   {noseHeight, circ, 0.0}, {base, circ, 0.0}, {noseHeight, circ * Cos(30), circ * Sin(30)},
+   {base, circ * Cos(30), circ * Sin(30)}, {noseHeight, circ * Cos(60), circ * Sin(60)},
+   {base, circ * Cos(60), circ * Sin(60)}, {noseHeight, 0.0, circ}, {base, 0.0, circ},
+   {noseHeight, circ * Cos(120), circ * Sin(120)}, {base, circ * Cos(120), circ * Sin(120)},
+   {noseHeight, circ * Cos(150), circ * Sin(150)}, {base, circ * Cos(150), circ * Sin(150)},
+   {noseHeight, -circ, 0.0}, {base, -circ, 0.0}, {noseHeight, circ * Cos(210), circ * Sin(210)},
+   {base, circ * Cos(210), circ * Sin(210)}, {noseHeight, circ * Cos(240), circ * Sin(240)},
+   {base, circ * Cos(240), circ * Sin(240)}, {noseHeight, 0.0, -circ}, {base, 0.0, -circ},
+   {noseHeight, circ * Cos(300), circ * Sin(300)}, {base, circ * Cos(300), circ * Sin(300)},
+   {noseHeight, circ * Cos(330), circ * Sin(330)}, {base, circ * Cos(330), circ * Sin(330)}
+};
+
+// Order to compute normals for the top triangles of the tail fins.
+const tri finTop[] =
+{
+   {1, 0, 2}, {4, 3, 5}, {7, 6, 8}, {10, 9, 11}
+};
+
+// Vertices for the top triangles of the tail fins.
+const vtx finTopVert[] =
+{
+   {finTip, radius, radius}, {finEdge, radius, radius}, {finEdge, radius + 0.1, radius + 0.1},
+   {finTip, -radius, -radius}, {finEdge, -radius, -radius}, {finEdge, -radius - 0.1, -radius - 0.1},
+   {finTip, -radius, radius}, {finEdge, -radius, radius}, {finEdge, -radius - 0.1, radius + 0.1},
+   {finTip, radius, -radius}, {finEdge, radius, -radius}, {finEdge, radius + 0.1, -radius - 0.1}
+};
+
+// Order to compute normals for the rectangle components of the tail fins.
+const tri finBase[] =
+{
+   {2, 1, 0}, {1, 2, 3}, {6, 5, 4}, {5, 6, 7}, {10, 9, 8}, {9, 10, 11},
+   {14, 13, 12}, {13, 14, 15}
+};
+
+// Vertices for the rectangle components of the tail fins.
+const vtx finBaseVert[] =
+{
+   {fuselageBase, radius, radius}, {fuselageBase, radius + 0.1, radius + 0.1},
+   {finEdge, radius, radius}, {finEdge, radius + 0.1, radius + 0.1},
+   {fuselageBase, -radius, -radius}, {fuselageBase, -radius - 0.1, -radius - 0.1},
+   {finEdge, -radius, -radius}, {finEdge, -radius - 0.1, -radius - 0.1},
+   {fuselageBase, -radius, radius}, {fuselageBase, -radius - 0.1, radius + 0.1},
+   {finEdge, -radius, radius}, {finEdge, -radius - 0.1, radius + 0.1},
+   {fuselageBase, radius, -radius}, {fuselageBase, radius + 0.1, -radius - 0.1},
+   {finEdge, radius, -radius}, {finEdge, radius + 0.1, -radius - 0.1}
+};
+
+// Order of vertices to compute normals for cuboid.
+const tri cuboid[] =
+{
+   {2, 1, 0}, {6, 1, 2}, {7, 4, 5}, {3, 5, 7},
+   {1, 6, 7}, {6, 5, 1}, {4, 2, 3}, {0, 3, 4},
+   {3, 0, 1}, {1, 5, 3}, {4, 7, 2}, {6, 2, 4}
+};
+
+// Vertices for cuboid object.
+const vtx cuboidVert[] =
+{
+   {1, 1, 1}, {-1, 1, 1}, {1, -1, 1}, {1, 1, -1},
+   {1, -1, -1}, {-1, 1, -1}, {-1, -1, 1}, {-1, -1, -1}
 };
 
 /*
@@ -168,10 +268,8 @@ const vtx leftTread[] =
 void WheelAxel(double x, double y, double z, double dx, double dy,
                double dz, double theta)
 {
-   // Locals for vertices.
-   double circumference = 0.05;
-   double axel = circumference * 0.2;
 
+   // Apply color, emission, ambient, diffuse, specular and shininess lighing qualities.
    glColor4fv(grey);
    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black);
    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, grey);
@@ -185,25 +283,24 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
    glRotated(theta, 0, 0, 1);
    glScaled(dx, dy, dz);
 
-   // Fix this.
+   // Compute normals and draw the inner and outer wheel walls.
    for (int i = 0; i < 12; i++)
-      DrawTriangle(leftOuterVert[wheelWall[i].A], leftOuterVert[wheelWall[i].B], leftOuterVert[wheelWall[i].C]);
+      DrawTriangle(lInnerVert[cone[i].A], lInnerVert[cone[i].B], lInnerVert[cone[i].C]);
 
    for (int i = 0; i < 12; i++)
-      DrawTriangle(leftInnerVert[wheelWall[i].A], leftInnerVert[wheelWall[i].B], leftInnerVert[wheelWall[i].C]);
+      DrawTriangle(lOuterVert[cone[i].C], lOuterVert[cone[i].B], lOuterVert[cone[i].A]);
 
    for (int i = 0; i < 12; i++)
-      DrawTriangle(rightOuterVert[wheelWall[i].A], rightOuterVert[wheelWall[i].B], rightOuterVert[wheelWall[i].C]);
+      DrawTriangle(rInnerVert[cone[i].C], rInnerVert[cone[i].B], rInnerVert[cone[i].A]);
 
-   // Fix this.
    for (int  i = 0; i < 12; i++)
-      DrawTriangle(rightInnerVert[wheelWall[i].A], rightInnerVert[wheelWall[i].B], rightInnerVert[wheelWall[i].C]);
+      DrawTriangle(rOuterVert[cone[i].A], rOuterVert[cone[i].B], rOuterVert[cone[i].C]);
 
    // Draw the left wheel tread.
    glBegin(GL_QUAD_STRIP);
    for (int i = 0; i < 24; i++)
    {
-      DrawQuad(leftTread[tread[i].A], leftTread[tread[i].B], leftTread[tread[i].C]);
+      DrawQuad(leftTread[cyllender[i].C], leftTread[cyllender[i].B], leftTread[cyllender[i].A]);
    }
    glEnd();
 
@@ -211,17 +308,17 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
    glBegin(GL_QUAD_STRIP);
    for (int i = 0; i < 24; i++)
    {
-      DrawQuad(rightTread[tread[i].A], rightTread[tread[i].B], rightTread[tread[i].C]);
+      DrawQuad(rightTread[cyllender[i].A], rightTread[cyllender[i].B], rightTread[cyllender[i].C]);
    }
    glEnd();
 
-   /* Draw the axel between the wheels.
+   // Draw the axel between the wheels.
    glBegin(GL_QUAD_STRIP);
    for(int i = 0; i < 24; i++)
    {
-      DrawQuad(leftTread[tread[i].A], leftTread[tread[i].B], leftTread[tread[i].C]);
+      DrawQuad(axelBar[cyllender[i].C], axelBar[cyllender[i].B], axelBar[cyllender[i].A]);
    }
-   glEnd();*/
+   glEnd();
 
    glPopMatrix();
 }
@@ -242,44 +339,7 @@ void Rover(double x, double y, double z, double dx,
    glRotated(theta, 0, 1, 0);
    glScaled(dx, dy, dz);
 
-   glBegin(GL_QUADS);
-
-   // Front face.
-   glVertex3f(-1, -1, 1);
-   glVertex3f(1, -1, 1);
-   glVertex3f(1, 1, 1);
-   glVertex3f(-1, 1, 1);
-
-   // Back face.
-   glVertex3f(1, -1, -1);
-   glVertex3f(-1, -1, -1);
-   glVertex3f(-1, 1, -1);
-   glVertex3f(1, 1, -1);
-
-   // Middle side face.
-   glVertex3f(-1, -1, -1);
-   glVertex3f(-1, -1, 1);
-   glVertex3f(-1, 1, 1);
-   glVertex3f(-1, 1, -1);
-
-   // Middle side face.
-   glVertex3f(1, -1, 1);
-   glVertex3f(1, -1, -1);
-   glVertex3f(1, 1, -1);
-   glVertex3f(1, 1, 1);
-
-   // Top face.
-   glVertex3f(-1, 1, 1);
-   glVertex3f(1, 1, 1);
-   glVertex3f(1, 1, -1);
-   glVertex3f(-1, 1, -1);
-
-   // Bottom face.
-   glVertex3f(-1, -1, -1);
-   glVertex3f(1, -1, -1);
-   glVertex3f(1, -1, 1);
-   glVertex3f(-1, -1, 1);
-   glEnd();
+   Box(0.0, 0.0, 0.0, 1.25, 1.0, 1.0, 0);
 
    // Draw front and back wheel axels in grey.
    glColor3f(0.729, 0.690, 0.686);
@@ -287,84 +347,6 @@ void Rover(double x, double y, double z, double dx,
    WheelAxel(0.8, -1.1, -4.25, 5.0, 10.0, 13.0, 0);
    glPopMatrix();
 }
-
-// Specify the triangles that compose a cone object.
-const tri nose[] =
-{
-   {1, 0, 2}, {2, 0, 3}, {3, 0, 4}, {4, 0, 5}, {5, 0, 6},
-   {6, 0, 7}, {7, 0, 8}, {8, 0, 9}, {9, 0, 10}, {10, 0, 11},
-   {11, 0, 12}, {12, 0, 1}
-};
-
-
-// Specify the vertices for drawing the nose cone of the Rocket.
-const vtx noseCone[] = 
-{
-   {0.50, 0.0, 0.0}, {noseHeight, circ, 0.0},
-   {noseHeight, circ * Cos(30), circ * Sin(30)}, {noseHeight, circ * Cos(60), circ * Sin(60)}, 
-   {noseHeight, 0.0, circ}, {noseHeight, circ * Cos(120), circ * Sin(120)}, 
-   {noseHeight, circ * Cos(150), circ * Sin(150)}, {noseHeight, -circ, 0.0}, 
-   {noseHeight, circ * Cos(210), circ * Sin(210)}, {noseHeight, circ * Cos(240), circ * Sin(240)}, 
-   {noseHeight, 0.0, -circ}, {noseHeight, circ * Cos(300), circ * Sin(300)}, 
-   {noseHeight, circ * Cos(330), circ * Sin(330)}
-};
-
-// Compute vertex normals in this order for the fuselage.
-const tri fuselage[] = 
-{
-   {2, 1, 0}, {1, 2, 3}, {4, 3, 2}, {3, 4, 5},
-   {6, 5, 4}, {5, 6, 7}, {8, 7, 6}, {7, 8, 9},
-   {10, 9, 8}, {9, 10, 11}, {12, 11, 10}, {11, 12, 13},
-   {14, 13, 12}, {13, 14, 15}, {16, 15, 14}, {15, 16, 17},
-   {18, 17, 16}, {17, 18, 19}, {20, 19, 18}, {19, 20, 21},
-   {22, 21, 20}, {21, 22, 23}, {0, 23, 22}, {23, 0, 1}
-};
-
-// Vertices for the fuselage.
-const vtx fuselageVert[] = 
-{
-   {noseHeight, circ, 0.0}, {base, circ, 0.0}, {noseHeight, circ * Cos(30), circ * Sin(30)},
-   {base, circ * Cos(30), circ * Sin(30)}, {noseHeight, circ * Cos(60), circ * Sin(60)},
-   {base, circ * Cos(60), circ * Sin(60)}, {noseHeight, 0.0, circ}, {base, 0.0, circ},
-   {noseHeight, circ * Cos(120), circ * Sin(120)}, {base, circ * Cos(120), circ * Sin(120)},
-   {noseHeight, circ * Cos(150), circ * Sin(150)}, {base, circ * Cos(150), circ * Sin(150)},
-   {noseHeight, -circ, 0.0}, {base, -circ, 0.0}, {noseHeight, circ * Cos(210), circ * Sin(210)},
-   {base, circ * Cos(210), circ * Sin(210)}, {noseHeight, circ * Cos(240), circ * Sin(240)},
-   {base, circ * Cos(240), circ * Sin(240)}, {noseHeight, 0.0, -circ}, {base, 0.0, -circ},
-   {noseHeight, circ * Cos(300), circ * Sin(300)}, {base, circ * Cos(300), circ * Sin(300)},
-   {noseHeight, circ * Cos(330), circ * Sin(330)}, {base, circ * Cos(330), circ * Sin(330)}
-};
-
-const tri finTop[] =
-{
-   {1, 0, 2}, {4, 3, 5}, {7, 6, 8}, {10, 9, 11}
-};
-
-const vtx finTopVert[] =
-{
-   {finTip, radius, radius}, {finEdge, radius, radius}, {finEdge, radius + 0.1, radius + 0.1},
-   {finTip, -radius, -radius}, {finEdge, -radius, -radius}, {finEdge, -radius - 0.1, -radius - 0.1},
-   {finTip, -radius, radius}, {finEdge, -radius, radius}, {finEdge, -radius - 0.1, radius + 0.1},
-   {finTip, radius, -radius}, {finEdge, radius, -radius}, {finEdge, radius + 0.1, -radius - 0.1}
-};
-
-const tri finBase[] =
-{
-   {2, 1, 0}, {1, 2, 3}, {6, 5, 4}, {5, 6, 7}, {10, 9, 8}, {9, 10, 11},
-   {14, 13, 12}, {13, 14, 15}
-};
-
-const vtx finBaseVert[] =
-{
-   {fuselageBase, radius, radius}, {fuselageBase, radius + 0.1, radius + 0.1},
-   {finEdge, radius, radius}, {finEdge, radius + 0.1, radius + 0.1},
-   {fuselageBase, -radius, -radius}, {fuselageBase, -radius - 0.1, -radius - 0.1},
-   {finEdge, -radius, -radius}, {finEdge, -radius - 0.1, -radius - 0.1},
-   {fuselageBase, -radius, radius}, {fuselageBase, -radius - 0.1, radius + 0.1},
-   {finEdge, -radius, radius}, {finEdge, -radius - 0.1, radius + 0.1},
-   {fuselageBase, radius, -radius}, {fuselageBase, radius + 0.1, -radius - 0.1},
-   {finEdge, radius, -radius}, {finEdge, radius + 0.1, -radius - 0.1}
-};
 
 /*
  *  Draw a rocket object. 
@@ -379,6 +361,7 @@ void Rocket(double x, double y, double z, double dx, double dy,
    double finTip = -0.1;
    double finEdge = -0.3;
 
+   // Apply color, emission, ambient, diffuse, specular and shininess lighting qualities.
    glColor4fv(orange);
    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black);
    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, orange);
@@ -395,19 +378,20 @@ void Rocket(double x, double y, double z, double dx, double dy,
    // Compute vertex normals and draw the nose cone.
    for (int i = 0; i < 12; i++)
    {
-      DrawTriangle(noseCone[nose[i].A], noseCone[nose[i].B], noseCone[nose[i].C]);
+      DrawTriangle(noseCone[cone[i].A], noseCone[cone[i].B], noseCone[cone[i].C]);
    }
 
    // Draw the fuselage.
    glBegin(GL_QUAD_STRIP);
    for (int i = 0; i < 24; i++)
    {
-      DrawQuad(fuselageVert[fuselage[i].A], fuselageVert[fuselage[i].B], fuselageVert[fuselage[i].C]);
+      DrawQuad(fuselageVert[cyllender[i].A], fuselageVert[cyllender[i].B], fuselageVert[cyllender[i].C]);
    }
    glEnd();
 
    glColor3f(1.0, 0.0, 0.1);
 
+   // Draw tail fins.
    for (int i = 0; i < 4; i ++)
    {
       DrawTriangle(finTopVert[finTop[i].A], finTopVert[finTop[i].B], finTopVert[finTop[i].C]);
@@ -422,6 +406,7 @@ void Rocket(double x, double y, double z, double dx, double dy,
          glEnd();
    }
 
+   // Draw lines so tail fins are visible from sides/front/back.
    glBegin(GL_LINES);
    glVertex3f(finTip, radius, radius);
    glVertex3f(finEdge, radius + 0.1, radius + 0.1);
@@ -476,9 +461,10 @@ void Rocket(double x, double y, double z, double dx, double dy,
 void Box(double x, double y, double z, double dx, double dy,
          double dz, double theta)
 {
-   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shiny);
-   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, white);
+   // Apply shininess, specular and emission qualities for a box object.
    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, white);
+   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shiny);
 
    glPushMatrix();
 
@@ -486,47 +472,18 @@ void Box(double x, double y, double z, double dx, double dy,
    glTranslated(x, y, z);
    glRotated(theta, 0, 1, 0);
    glScaled(dx, dy, dz);
-   glColor3f(0.196, 0.514, 0.659);
 
-   glBegin(GL_QUADS);
+   for (int i = 0; i < 12; i++)
+   {
+      if (i % 2 == 0)
+         glBegin(GL_QUAD_STRIP);
 
-   // Front face.
-   glVertex3f(-1, -1, 1);
-   glVertex3f(1, -1, 1);
-   glVertex3f(1, 1, 1);
-   glVertex3f(-1, 1, 1);
+	  DrawQuad(cuboidVert[cuboid[i].A], cuboidVert[cuboid[i].B], cuboidVert[cuboid[i].C]);
 
-   // Back face.
-   glVertex3f(1, -1, -1);
-   glVertex3f(-1, -1, -1);
-   glVertex3f(-1, 1, -1);
-   glVertex3f(1, 1, -1);
+      if (i % 2 == 1)
+         glEnd();
+   }
 
-   // Right face.
-   glVertex3f(1, -1, 1);
-   glVertex3f(-1, -1, 1);
-   glVertex3f(-1, 1, 1);
-   glVertex3f(-1, 1, -1);
-
-   // Left face.
-   glVertex3f(-1, -1, -1);
-   glVertex3f(-1, -1, 1);
-   glVertex3f(-1, 1, 1);
-   glVertex3f(-1, 1, -1);
-
-   // Top face.
-   glVertex3f(-1, 1, 1);
-   glVertex3f(1, 1, 1);
-   glVertex3f(1, 1, -1);
-   glVertex3f(-1, 1, -1);
-
-   // Bottom face.
-   glVertex3f(-1, -1, -1);
-   glVertex3f(1, -1, -1);
-   glVertex3f(1, -1, 1);
-   glVertex3f(-1, -1, 1);
-
-   glEnd();
    glPopMatrix();
 }
 

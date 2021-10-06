@@ -9,6 +9,7 @@ typedef struct {int A, B, C;} tri;
 #endif
 
 void DrawTriangle(vtx A, vtx B, vtx C);
+void DrawQuad(vtx A, vtx B, vtx C);
 void WheelAxel(double x, double y, double z, double dx, double dy, 
                       double dz, double theta);
 void Rover(double x, double y, double z, double dx, double dy,
