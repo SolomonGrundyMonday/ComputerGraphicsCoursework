@@ -15,7 +15,7 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
 void Rover(double x, double y, double z, double dx, double dy,
                   double dz, double theta);
 void Rocket(double x, double y, double z, double dx, double dy,
-                   double dz, double theta);
+                   double dz, double theta, double gamma, double omega);
 void Box(double x, double y, double z, double dx, double dy,
                 double dz, double theta);
 void Ball(double x, double y, double z, double r);

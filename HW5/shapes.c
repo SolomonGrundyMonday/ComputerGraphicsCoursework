@@ -7,6 +7,7 @@ const float black[] = {0.0, 0.0, 0.0, 1.0};
 const float white[] = {1.0, 1.0, 1.0, 1.0};
 const float orange[] = {1.0, 0.5, 0.0, 1.0};
 const float grey[] = {0.729, 0.690, 0.686, 1.0};
+const float yellow[] = {1.0, 1.0, 0.0, 1.0};
 const double noseHeight =  0.20;
 const double circ = 0.05;
 const double base = -0.50;
@@ -247,6 +248,18 @@ const vtx finBaseVert[] =
    {finEdge, radius, -radius}, {finEdge, radius + 0.1, -radius - 0.1}
 };
 
+// Specify the vertices for drawing the nose cone of the Rocket.
+const vtx thrusterCone[] =
+{
+   {-0.7, 0.0, 0.0}, {base, circ, 0.0},
+   {base, circ * Cos(30), circ * Sin(30)}, {base, circ * Cos(60), circ * Sin(60)},
+   {base, 0.0, circ}, {base, circ * Cos(120), circ * Sin(120)},
+   {base, circ * Cos(150), circ * Sin(150)}, {base, -circ, 0.0},
+   {base, circ * Cos(210), circ * Sin(210)}, {base, circ * Cos(240), circ * Sin(240)},
+   {base, 0.0, -circ}, {base, circ * Cos(300), circ * Sin(300)},
+   {base, circ * Cos(330), circ * Sin(330)}
+};
+
 // Order of vertices to compute normals for cuboid.
 const tri cuboid[] =
 {
@@ -352,7 +365,7 @@ void Rover(double x, double y, double z, double dx,
  *  Draw a rocket object. 
  */
 void Rocket(double x, double y, double z, double dx, double dy,
-            double dz, double theta)
+            double dz, double theta, double gamma, double omega)
 {
    // Locals for computing vertices.
    double circumference = 0.05;
@@ -374,6 +387,8 @@ void Rocket(double x, double y, double z, double dx, double dy,
    glTranslated(x, y, z);
    glScaled(dx, dy, dz);
    glRotated(theta, 0, 0, 1);
+   glRotated(gamma, 1, 0, 0);
+   glRotated(omega, 0, 1, 0);
 
    // Compute vertex normals and draw the nose cone.
    for (int i = 0; i < 12; i++)
@@ -443,14 +458,16 @@ void Rocket(double x, double y, double z, double dx, double dy,
    glVertex3f(fuselageBase, radius + 0.1, -radius - 0.1);
    glEnd();
 
-   // Thruster jet.
-   glBegin(GL_TRIANGLE_FAN);
-   glColor3f(1.0, 1.0, 0.0);
-   glVertex3f(-0.7, 0.0, 0.0);
-   for (int i = 0; i <= 360; i += 30)
-      glVertex3f(fuselageBase, circumference * Cos(i), circumference * Sin(i));
-   glEnd();
+   glColor4fv(yellow);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, yellow);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, yellow);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, yellow);
+   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shiny);
 
+   // Thruster jet.
+   for (int i = 0; i < 12; i++)
+      DrawTriangle(thrusterCone[cone[i].A], thrusterCone[cone[i].B], thrusterCone[cone[i].C]);
+      
    glPopMatrix();
 }
 
@@ -484,37 +501,6 @@ void Box(double x, double y, double z, double dx, double dy,
          glEnd();
    }
 
-   glPopMatrix();
-}
-
-/*
- *  Placeholder for light source.
- */
-void Ball(double x, double y, double z, double r)
-{
-   glPushMatrix();
-
-   glTranslated(x, y, z);
-   glScaled(r, r, r);
-
-   float yellow[] = {1.0, 1.0, 0.0, 1.0};
-   float Emission[] = {0.0, 0.0, 0.01 * emission, 1.0};
-
-   glColor3f(1, 1, 1);
-   glMaterialf(GL_FRONT, GL_SHININESS, shiny);
-   glMaterialfv(GL_FRONT, GL_SPECULAR, yellow);
-   glMaterialfv(GL_FRONT, GL_EMISSION, Emission);
-
-   for (int i = -90; i < 90; i += 10)
-   {
-      glBegin(GL_QUAD_STRIP);
-      for (int j = 0; j <= 360; j += 20)
-      {
-         Vertex(j, i);
-         Vertex(j, i + 10);
-      }
-      glEnd();
-   }
    glPopMatrix();
 }
 

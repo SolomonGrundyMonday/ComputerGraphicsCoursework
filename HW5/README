@@ -1,1 +1,38 @@
-Placeholder for HW5 README file.
+CSCI-4229 Homework 5 : Lighting
+Created by Jeff Colgan
+
+User controls:
+
+ESCAPE key       -> Exits the application.
+'m' key          -> Toggles orthogonal overhead projection and first person perspective
+                    projection.
+'r' key          -> (First person mode only) Resets eye and center point position.
+'l' key          -> Toggles automatic light movement (orbit scene).
+'p' key          -> (Light orbit disabled only) Increments the light source's position
+                    along the orbit path, enabling manual control of light movement.
+'o' key          -> Toggles vertical/horizontal light source orbit.
+RIGHT ARROW key  -> (Orthogonal projection) : Increments view azimuth by 5 degrees.
+                    (First person projection) : Turns eye/camera 5 degrees right.
+LEFT ARROW key   -> (Orthogonal projection) : Decrements view azimuth by 5 degrees.
+                    (First person projection): Turns eye/camera 5 degrees left.
+UP ARROW key     -> (Orthogonal projeciton) : Increments view elevation by 5 degrees.
+                    (First person projection) : Moves eye/camera forward.
+DOWN ARROW key   -> (Orthogonal projection) : Decrements view elevation by 5 degrees.
+                    (First person projection) : Moves eye/camera backward.
+
+Sources (code):
+
+  Example 13 from the in-class examples, in-class lecture slides for computing vertex normals.
+  for this assignment I chose to iterate on the same scene I submitted from the previous two 
+  assignments, and add lighting effects.
+
+Notes:
+  I made the light source for the scene the thruster jet from a rocket object that is orbiting
+  the scene.  I decided to only add the light source to this rocket, and not the stationary one
+  so that the lighting changes during the light source movement would be more apparent for grading
+  and debugging.  I allowed the user to toggle between vertical and horizontal orbits.  In addition,
+  I allowed the user to toggle the automatic orbit of the light source, so that they can increment
+  the light source's position along the selected orbit path manually.  
+
+Estimated time:
+  TBD.  18hrs. so far.
