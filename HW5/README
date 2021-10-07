@@ -4,35 +4,42 @@ Created by Jeff Colgan
 User controls:
 
 ESCAPE key       -> Exits the application.
-'m' key          -> Toggles orthogonal overhead projection and first person perspective
-                    projection.
+'m' key          -> Toggles orthogonal overhead projection, first person perspective
+                    projection and debug mode.
 'r' key          -> (First person mode only) Resets eye and center point position.
 'l' key          -> Toggles automatic light movement (orbit scene).
-'p' key          -> (Light orbit disabled only) Increments the light source's position
+'p' key          -> (If light orbit disabled) Increments the light source's position
                     along the orbit path, enabling manual control of light movement.
 'o' key          -> Toggles vertical/horizontal light source orbit.
-RIGHT ARROW key  -> (Orthogonal projection) : Increments view azimuth by 5 degrees.
+'s' key          -> (Debug mode only) Toggle between objects displayed in debug mode.
+RIGHT ARROW key  -> (Orthogonal projection/debug) : Increments view azimuth by 5 degrees.
                     (First person projection) : Turns eye/camera 5 degrees right.
-LEFT ARROW key   -> (Orthogonal projection) : Decrements view azimuth by 5 degrees.
+LEFT ARROW key   -> (Orthogonal projection/debug) : Decrements view azimuth by 5 degrees.
                     (First person projection): Turns eye/camera 5 degrees left.
-UP ARROW key     -> (Orthogonal projeciton) : Increments view elevation by 5 degrees.
+UP ARROW key     -> (Orthogonal projeciton/debug) : Increments view elevation by 5 degrees.
                     (First person projection) : Moves eye/camera forward.
-DOWN ARROW key   -> (Orthogonal projection) : Decrements view elevation by 5 degrees.
+DOWN ARROW key   -> (Orthogonal projection/debug) : Decrements view elevation by 5 degrees.
                     (First person projection) : Moves eye/camera backward.
 
 Sources (code):
 
   Example 13 from the in-class examples, in-class lecture slides for computing vertex normals.
-  for this assignment I chose to iterate on the same scene I submitted from the previous two 
-  assignments, and add lighting effects.
+  For this assignment I chose to iterate on the same scene I submitted from the previous two 
+  assignments, and add lighting effects.  I also looked up how to do face culling on the Khronos
+  documentation so that I could get the normals to work correctly on the tail fins of the rocket
+  objects (https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glCullFace.xhtml).
 
 Notes:
-  I made the light source for the scene the thruster jet from a rocket object that is orbiting
-  the scene.  I decided to only add the light source to this rocket, and not the stationary one
-  so that the lighting changes during the light source movement would be more apparent for grading
-  and debugging.  I allowed the user to toggle between vertical and horizontal orbits.  In addition,
+  I made the light source for the scene be the thruster jet from a rocket object that is orbiting
+  the scene.  I decided to only add the light source to this rocket, and not the stationary ones
+  so that the lighting changes during the light source movement would be more apparent.  I also
+  allowed the user to toggle between vertical and horizontal orbits.  In addition,
   I allowed the user to toggle the automatic orbit of the light source, so that they can increment
-  the light source's position along the selected orbit path manually.  
+  the light source's position along the selected orbit path manually.  The user may also toggle 
+  between vertical and horizontal orbits so that the lighting changes can be seen on the top and
+  bottom of objects as well as the sides.  As per the notification on Canvas, I added a debug mode
+  that will allow the user to view the individual objects with the light source, not rendering the 
+  rest of the scene.
 
 Estimated time:
-  TBD.  18hrs. so far.
+  About 18-20 hours.

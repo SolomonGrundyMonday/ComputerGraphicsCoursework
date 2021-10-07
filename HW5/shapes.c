@@ -1,6 +1,11 @@
+/*
+ *  Definitions for helper functions to draw 3D objects
+ *  for CSCI-4229 Homework 5: Lighting.
+ *  Created by Jeff Colgan. 
+ */
 #include "shapes.h"
 
-// Constants for lighting.
+// Constants for lighting and computing vertices and normals.
 const int shiny = 0;
 const float emission = 0;
 const float black[] = {0.0, 0.0, 0.0, 1.0};
@@ -8,6 +13,7 @@ const float white[] = {1.0, 1.0, 1.0, 1.0};
 const float orange[] = {1.0, 0.5, 0.0, 1.0};
 const float grey[] = {0.729, 0.690, 0.686, 1.0};
 const float yellow[] = {1.0, 1.0, 0.0, 1.0};
+const float red[] = {1.0, 0.0, 0.1, 1.0};
 const double noseHeight =  0.20;
 const double circ = 0.05;
 const double base = -0.50;
@@ -231,7 +237,7 @@ const vtx finTopVert[] =
 // Order to compute normals for the rectangle components of the tail fins.
 const tri finBase[] =
 {
-   {2, 1, 0}, {1, 2, 3}, {6, 5, 4}, {5, 6, 7}, {10, 9, 8}, {9, 10, 11},
+   {0, 1, 2}, {3, 2, 1}, {6, 5, 4}, {5, 6, 7}, {10, 9, 8}, {9, 10, 11},
    {14, 13, 12}, {13, 14, 15}
 };
 
@@ -392,34 +398,39 @@ void Rocket(double x, double y, double z, double dx, double dy,
 
    // Compute vertex normals and draw the nose cone.
    for (int i = 0; i < 12; i++)
-   {
       DrawTriangle(noseCone[cone[i].A], noseCone[cone[i].B], noseCone[cone[i].C]);
-   }
 
    // Draw the fuselage.
    glBegin(GL_QUAD_STRIP);
    for (int i = 0; i < 24; i++)
-   {
       DrawQuad(fuselageVert[cyllender[i].A], fuselageVert[cyllender[i].B], fuselageVert[cyllender[i].C]);
-   }
    glEnd();
 
-   glColor3f(1.0, 0.0, 0.1);
+   glColor4fv(red);
 
-   // Draw tail fins.
-   for (int i = 0; i < 4; i ++)
+   // Draw the tops of the tail fins.
+   for (int i = 0; i < 4; i++)
    {
+      glEnable(GL_CULL_FACE);
+      glCullFace(GL_FRONT);
       DrawTriangle(finTopVert[finTop[i].A], finTopVert[finTop[i].B], finTopVert[finTop[i].C]);
+      glDisable(GL_CULL_FACE);
+      DrawTriangle(finTopVert[finTop[i].C], finTopVert[finTop[i].B], finTopVert[finTop[i].A]);
    }
 
-   for (int i = 0; i < 8; i++)
+   // Draw the bottom rectangles of the tail fins.
+   for (int i = 0; i < 7; i += 2)
    {
-      if (i % 2 == 0)
-         glBegin(GL_QUAD_STRIP);
-      DrawQuad(finBaseVert[finBase[i].A], finBaseVert[finBase[i].B], finBaseVert[finBase[i].C]);
-      if (i % 2 == 1)
-         glEnd();
+      glEnable(GL_CULL_FACE);
+      glCullFace(GL_FRONT);
+      DrawTriangle(finBaseVert[finBase[i].A], finBaseVert[finBase[i].B], finBaseVert[finBase[i].C]);
+      DrawTriangle(finBaseVert[finBase[i+1].A], finBaseVert[finBase[i+1].B], finBaseVert[finBase[i+1].C]);
+
+      glDisable(GL_CULL_FACE);
+      DrawTriangle(finBaseVert[finBase[i].C], finBaseVert[finBase[i].B], finBaseVert[finBase[i].A]);
+      DrawTriangle(finBaseVert[finBase[i+1].C], finBaseVert[finBase[i+1].B], finBaseVert[finBase[i+1].A]);
    }
+   
 
    // Draw lines so tail fins are visible from sides/front/back.
    glBegin(GL_LINES);
@@ -458,6 +469,7 @@ void Rocket(double x, double y, double z, double dx, double dy,
    glVertex3f(fuselageBase, radius + 0.1, -radius - 0.1);
    glEnd();
 
+   // Set material settings approprate for the tail thruster flame jet.
    glColor4fv(yellow);
    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, yellow);
    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, yellow);
@@ -490,6 +502,7 @@ void Box(double x, double y, double z, double dx, double dy,
    glRotated(theta, 0, 1, 0);
    glScaled(dx, dy, dz);
 
+   // Draw the faces of the box.
    for (int i = 0; i < 12; i++)
    {
       if (i % 2 == 0)
@@ -502,19 +515,4 @@ void Box(double x, double y, double z, double dx, double dy,
    }
 
    glPopMatrix();
-}
-
-/*
- *  Compute a vertex in polar coordinates.  
- */
-void Vertex(double theta, double phi)
-{
-   // Compute polar x, y, z.
-   double x = Sin(theta) * Cos(phi);
-   double y = Cos(theta) * Cos(phi);
-   double z = Sin(phi);
-
-   // Compute normal, draw vertex.
-   glNormal3d(x, y, z);
-   glVertex3d(x, y, z);
 }

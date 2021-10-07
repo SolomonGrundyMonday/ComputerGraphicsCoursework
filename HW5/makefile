@@ -24,9 +24,19 @@ CLEAN=rm -f $(EXE) *.o *.a
 endif
 
 # Dependencies
-lighting.o: lighting.c utility.h shapes.h
-utility.o: utility.c utility.h
-shapes.o: shapes.c shapes.h
+lighting.o: lighting.c CSCIx229.h utility.h shapes.h
+fatal.o: fatal.c CSCIx229.h 
+errcheck.o: errcheck.c CSCIx229.h
+print.o: print.c CSCIx229.h
+loadtexbmp.o: loadtexbmp.c CSCIx229.h
+loadobj.o: loadobj.c CSCIx229.h
+projection.o: projection.c CSCIx229.h
+utility.o: utility.c utility.h CSCIx229.h
+shapes.o: shapes.c shapes.h CSCIx229.h
+
+# Create archive
+CSCIx229.a:fatal.o errcheck.o print.o loadtexbmp.o loadobj.o projection.o
+	ar -rcs $@ $^
 
 # Compile rules
 .c.o:
@@ -35,7 +45,7 @@ shapes.o: shapes.c shapes.h
 	g++ -c $(CFLG)  $<
 
 #  Link
-hw5:lighting.o   shapes.o   utility.o
+hw5:lighting.o   CSCIx229.a   shapes.o   utility.o
 	gcc $(CFLG) -o $@ $^  $(LIBS)
 
 #  Clean

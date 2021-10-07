@@ -1,6 +1,6 @@
 /*
  *  Utility function definitions for CSCI-4229 Homework
- *  4.
+ *  5: Lighting.
  *  Created by Jeff Colgan. 
  */
 
