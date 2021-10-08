@@ -23,11 +23,14 @@ DOWN ARROW key   -> (Orthogonal projection/debug) : Decrements view elevation by
 
 Sources (code):
 
-  Example 13 from the in-class examples, in-class lecture slides for computing vertex normals.
   For this assignment I chose to iterate on the same scene I submitted from the previous two 
   assignments, and add lighting effects.  I also looked up how to do face culling on the Khronos
   documentation so that I could get the normals to work correctly on the tail fins of the rocket
-  objects (https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glCullFace.xhtml).
+  objects (https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glCullFace.xhtml).  Lastly,
+  code for the following sections of code were borrowed from the ex13.c in-class example: the 
+  DrawTriangle function (from shapes.c), the DrawQuad function, the idle function (from lighting.c), 
+  the reshape function (from lighting.c), the main function, the tri and vtx struct typedefs and
+  basically the entire makefile.  Obviously, all files from the CSCIx229 library are also borrowed.
 
 Notes:
   I made the light source for the scene be the thruster jet from a rocket object that is orbiting
@@ -39,7 +42,9 @@ Notes:
   between vertical and horizontal orbits so that the lighting changes can be seen on the top and
   bottom of objects as well as the sides.  As per the notification on Canvas, I added a debug mode
   that will allow the user to view the individual objects with the light source, not rendering the 
-  rest of the scene.
+  rest of the scene.  Lastly, I modified the code for drawing my 3D objects in the following ways
+  from the previous assignment: I pulled the code into its own header/c file, and got rid of some
+  redundant lines of code (specifically in the Rover function).
 
 Estimated time:
   About 18-20 hours.

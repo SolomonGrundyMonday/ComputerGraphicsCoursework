@@ -1,4 +1,5 @@
 # Homework 5, Jeff Colgan
+# Most of the structure of this makefile is borrowed from in-class examples.
 EXE=hw5
 
 # Main target

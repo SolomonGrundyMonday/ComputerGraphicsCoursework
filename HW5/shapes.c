@@ -50,6 +50,8 @@ void DrawTriangle(vtx A, vtx B, vtx C)
 
 /*
  *  Compute vertex normals for QUAD_STRIPS. 
+ *  This function is heavily based off of the draw triangle function
+ *  above, and is largely borrowed from ex13.c of the in-class examples.
  */
 void DrawQuad(vtx A, vtx B, vtx C)
 {
@@ -402,6 +404,7 @@ void Rocket(double x, double y, double z, double dx, double dy,
    // Draw the tops of the tail fins.
    for (int i = 0; i < 4; i++)
    {
+      // This bit of code is from my research into culling faces (khronos documentation, see README).
       glEnable(GL_CULL_FACE);
       glCullFace(GL_FRONT);
       DrawTriangle(finTopVert[finTop[i].A], finTopVert[finTop[i].B], finTopVert[finTop[i].C]);
@@ -412,6 +415,7 @@ void Rocket(double x, double y, double z, double dx, double dy,
    // Draw the bottom rectangles of the tail fins.
    for (int i = 0; i < 7; i += 2)
    {
+      // This bit of code is from my research into culling faces (khronos documentation, see README).
       glEnable(GL_CULL_FACE);
       glCullFace(GL_FRONT);
       DrawTriangle(finBaseVert[finBase[i].A], finBaseVert[finBase[i].B], finBaseVert[finBase[i].C]);
@@ -499,7 +503,7 @@ void Box(double x, double y, double z, double dx, double dy,
       if (i % 2 == 0)
          glBegin(GL_QUAD_STRIP);
 
-	  DrawQuad(cuboidVert[cuboid[i].A], cuboidVert[cuboid[i].B], cuboidVert[cuboid[i].C]);
+      DrawQuad(cuboidVert[cuboid[i].A], cuboidVert[cuboid[i].B], cuboidVert[cuboid[i].C]);
 
       if (i % 2 == 1)
          glEnd();

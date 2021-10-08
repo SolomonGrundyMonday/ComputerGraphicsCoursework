@@ -81,7 +81,7 @@ void display()
       Rocket(Pos[0], Pos[1], Pos[2], 1.0, 1.0, 1.0, 0, 180 + zh, 90);
    }
 
-   // This section of code (lines 84-101) are from ex13.c.
+   // This section of code (lines 84-100) are from ex13.c.
    // Enable normalization and lighting.
    glEnable(GL_NORMALIZE);
    glEnable(GL_LIGHTING);
@@ -229,12 +229,18 @@ void key(unsigned char key, int x, int y)
             mode = 2;
             th = 45;
             ph = 45;
+            lightElev = 0.0;
+            distance = 1.0;
+            dim = 2.0;
             Project(0, asp, dim);
             break;
          case 2:
             mode = 0;
             th = 45;
             ph = 45;
+            lightElev = 2.0;
+            dim = 5.0;
+            distance = 3.0;
             Project(0, asp, dim);
             break;
       }
@@ -288,7 +294,8 @@ void key(unsigned char key, int x, int y)
 
 /*
  *  Called when the window is resized.
- *  This code is mostly borrowed from the in-class examples.
+ *  This code is mostly borrowed from the in-class examples,
+ *  specifically ex13.c.
  */
 void reshape(int width, int height)
 {
