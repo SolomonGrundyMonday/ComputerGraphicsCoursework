@@ -12,7 +12,7 @@ int mode = 0;              // Viewing mode.
 int autoLight = 1;         // Automatic light orbit toggle.
 int horizontalOrbit = 1;   // Horizontal/vertical orbit toggle.
 int object = 0;            // Debug object toggle.
-double dim = 4.0;          // Size of world.
+double dim = 5.0;          // Size of world.
 double asp = 1.0;          // Aspect ratio.
 double Ex = -3.0;          // Eye position x-value.
 double Ey = 0.4;           // Eye position y-value.
@@ -32,6 +32,7 @@ float lightElev = 2.0;     // Light elevation (if horizontal orbit).
 void display()
 {
    char* objectString = "";
+
    // Erase window, depth buffer and enable z-buffering.
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glEnable(GL_DEPTH_TEST);
@@ -68,7 +69,6 @@ void display()
 
       // Generate a rocket object that orbits the scene.
       Rocket(Pos[0], Pos[1], Pos[2], 1.0, 1.0, 1.0, 0, 0, -90 - zh);
-      Box(Thruster[0], Thruster[1], Thruster[2], 0.1, 0.1, 0.1, 0);
    }
    else
    {
@@ -81,6 +81,7 @@ void display()
       Rocket(Pos[0], Pos[1], Pos[2], 1.0, 1.0, 1.0, 0, 180 + zh, 90);
    }
 
+   // This section of code (lines 84-101) are from ex13.c.
    // Enable normalization and lighting.
    glEnable(GL_NORMALIZE);
    glEnable(GL_LIGHTING);
@@ -130,6 +131,7 @@ void display()
    }
 
    glColor3f(1.0, 1.0, 1.0);
+
    // Raster text for user.
    glWindowPos2i(5, 5);
    switch(mode)
@@ -286,6 +288,7 @@ void key(unsigned char key, int x, int y)
 
 /*
  *  Called when the window is resized.
+ *  This code is mostly borrowed from the in-class examples.
  */
 void reshape(int width, int height)
 {
@@ -299,11 +302,12 @@ void reshape(int width, int height)
 
 /*
  *  Called when there is nothing else to do. 
+ *  This code is mostly borrowed from the in-class examples,
+ *  this function specifically is from the ex13.c example.
  */
 void idle()
 {
-   // If the automatic light orbit is enabled, change the zh parameter
-   // (based on ex13 code).
+   // If the automatic light orbit is enabled, change the zh parameter.
    if (autoLight)
    {
       double time = glutGet(GLUT_ELAPSED_TIME)/1000.0;
@@ -314,6 +318,7 @@ void idle()
 
 /*
  *  Main entry point.
+ *  This code is borrowed from the ex13.c in-class example.
  */
 int main(int argc, char* argv[])
 {

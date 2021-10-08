@@ -14,22 +14,13 @@ const float orange[] = {1.0, 0.5, 0.0, 1.0};
 const float grey[] = {0.729, 0.690, 0.686, 1.0};
 const float yellow[] = {1.0, 1.0, 0.0, 1.0};
 const float red[] = {1.0, 0.0, 0.1, 1.0};
-const double noseHeight =  0.20;
-const double circ = 0.05;
-const double base = -0.50;
-const double finTip = -0.1;
-const double finEdge = -0.3;
-const double radius = 0.025;
-const double fuselageBase = -0.50;
-const double lOuter = 0.2;
-const double lInner = 0.25;
-const double rOuter = 0.45;
-const double rInner = 0.4;
-const double axel = 0.01;
+
 
 /* 
  *  Draw triangles for computing vertex normals of a 3D object
  *  composed of triangles.
+ *  The code for this function is borrowed from ex13.c of the 
+ *  in-class examples.
  */ 
 void DrawTriangle(vtx A, vtx B, vtx C)
 {
@@ -106,117 +97,117 @@ const tri cyllender[] =
 // List of vertices for the inner wall of the left wheel.
 const vtx lInnerVert[] =
 {
-   {0.0, 0.0, lInner}, {circ, 0.0, lInner}, {circ * Cos(30), circ * Sin(30), lInner},
-   {circ * Cos(60), circ * Sin(60), lInner}, {0.0, circ, lInner},
-   {circ * Cos(120), circ * Sin(120), lInner}, {circ * Cos(150), circ * Sin(150), lInner},
-   {-circ, 0.0, lInner}, {circ * Cos(210), circ * Sin(210), lInner},
-   {circ * Cos(240), circ * Sin(240), lInner}, {0.0, -circ, lInner},
-   {circ * Cos(300), circ * Sin(300), lInner}, {circ * Cos(330), circ * Sin(330), lInner}
+   {0.0, 0.0, 0.25}, {0.05, 0.0, 0.25}, {0.05 * Cos(30), 0.05 * Sin(30), 0.25},
+   {0.05 * Cos(60), 0.05 * Sin(60), 0.25}, {0.0, 0.05, 0.25},
+   {0.05 * Cos(120), 0.05 * Sin(120), 0.25}, {0.05 * Cos(150), 0.05 * Sin(150), 0.25},
+   {-0.05, 0.0, 0.25}, {0.05 * Cos(210), 0.05 * Sin(210), 0.25},
+   {0.05 * Cos(240), 0.05 * Sin(240), 0.25}, {0.0, -0.05, 0.25},
+   {0.05 * Cos(300), 0.05 * Sin(300), 0.25}, {0.05 * Cos(330), 0.05 * Sin(330), 0.25}
 };
 
 // List of vertices for the outer wall of the left wheel.
 const vtx lOuterVert[] = 
 {
-   {0.0, 0.0, lOuter}, {circ, 0.0, lOuter}, {circ * Cos(30), circ * Sin(30), lOuter},
-   {circ * Cos(60), circ * Sin(60), lOuter}, {0.0, circ, lOuter},
-   {circ * Cos(120), circ * Sin(120), lOuter}, {circ * Cos(150), circ * Sin(150), lOuter},
-   {-circ, 0.0, lOuter}, {circ * Cos(210), circ * Sin(210), lOuter},
-   {circ * Cos(240), circ * Sin(240), lOuter}, {0.0, -circ, lOuter},
-   {circ * Cos(300), circ * Sin(300), lOuter}, {circ * Cos(330), circ * Sin(330), lOuter}
+   {0.0, 0.0, 0.2}, {0.05, 0.0, 0.2}, {0.05 * Cos(30), 0.05 * Sin(30), 0.2},
+   {0.05 * Cos(60), 0.05 * Sin(60), 0.2}, {0.0, 0.05, 0.2},
+   {0.05 * Cos(120), 0.05 * Sin(120), 0.2}, {0.05 * Cos(150), 0.05 * Sin(150), 0.2},
+   {-0.05, 0.0, 0.2}, {0.05 * Cos(210), 0.05 * Sin(210), 0.2},
+   {0.05 * Cos(240), 0.05 * Sin(240), 0.2}, {0.0, -0.05, 0.2},
+   {0.05 * Cos(300), 0.05 * Sin(300), 0.2}, {0.05 * Cos(330), 0.05 * Sin(330), 0.2}
 };
 
 // List of vertices for the inner wall of the right wheel.
 const vtx rInnerVert[] = 
 {
-   {0.0, 0.0, rInner}, {circ, 0.0, rInner}, {circ * Cos(30), circ * Sin(30), rInner},
-   {circ * Cos(60), circ * Sin(60), rInner}, {0.0, circ, rInner},
-   {circ * Cos(120), circ * Sin(120), rInner}, {circ * Cos(150), circ * Sin(150), rInner},
-   {-circ, 0.0, rInner}, {circ * Cos(210), circ * Sin(210), rInner},
-   {circ * Cos(240), circ * Sin(240), rInner}, {0.0, -circ, rInner},
-   {circ * Cos(300), circ * Sin(300), rInner}, {circ * Cos(330), circ * Sin(330), rInner}
+   {0.0, 0.0, 0.4}, {0.05, 0.0, 0.4}, {0.05 * Cos(30), 0.05 * Sin(30), 0.4},
+   {0.05 * Cos(60), 0.05 * Sin(60), 0.4}, {0.0, 0.05, 0.4},
+   {0.05 * Cos(120), 0.05 * Sin(120), 0.4}, {0.05 * Cos(150), 0.05 * Sin(150), 0.4},
+   {-0.05, 0.0, 0.4}, {0.05 * Cos(210), 0.05 * Sin(210), 0.4},
+   {0.05 * Cos(240), 0.05 * Sin(240), 0.4}, {0.0, -0.05, 0.4},
+   {0.05 * Cos(300), 0.05 * Sin(300), 0.4}, {0.05 * Cos(330), 0.05 * Sin(330), 0.4}
 };
 
 // List of vertices for the outer wall of the right wheel.
 const vtx rOuterVert[] = 
 {
-   {0.0, 0.0, rOuter}, {circ, 0.0, rOuter}, {circ * Cos(30), circ * Sin(30), rOuter},
-   {circ * Cos(60), circ * Sin(60), rOuter}, {0.0, circ, rOuter},
-   {circ * Cos(120), circ * Sin(120), rOuter}, {circ * Cos(150), circ * Sin(150), rOuter},
-   {-circ, 0.0, rOuter}, {circ * Cos(210), circ * Sin(210), rOuter},
-   {circ * Cos(240), circ * Sin(240), rOuter}, {0.0, -circ, rOuter},
-   {circ * Cos(300), circ * Sin(300), rOuter}, {circ * Cos(330), circ * Sin(330), rOuter}
+   {0.0, 0.0, 0.45}, {0.05, 0.0, 0.45}, {0.05 * Cos(30), 0.05 * Sin(30), 0.45},
+   {0.05 * Cos(60), 0.05 * Sin(60), 0.45}, {0.0, 0.05, 0.45},
+   {0.05 * Cos(120), 0.05 * Sin(120), 0.45}, {0.05 * Cos(150), 0.05 * Sin(150), 0.45},
+   {-0.05, 0.0, 0.45}, {0.05 * Cos(210), 0.05 * Sin(210), 0.45},
+   {0.05 * Cos(240), 0.05 * Sin(240), 0.45}, {0.0, -0.05, 0.45},
+   {0.05 * Cos(300), 0.05 * Sin(300), 0.45}, {0.05 * Cos(330), 0.05 * Sin(330), 0.45}
 };
 
 // List of vertices for the tread of the left wheel.
 const vtx leftTread[] =
 {
-   {circ, 0.0, lOuter}, {circ, 0.0, lInner}, {circ * Cos(30), circ * Sin(30), lOuter},
-   {circ * Cos(30), circ * Sin(30), lInner}, {circ * Cos(60), circ * Sin(60), lOuter},
-   {circ * Cos(60), circ * Sin(60), lInner}, {0.0, circ, lOuter}, {0.0, circ, lInner},
-   {circ * Cos(120), circ * Sin(120), lOuter}, {circ * Cos(120), circ * Sin(120), lInner},
-   {circ * Cos(150), circ * Sin(150), lOuter}, {circ * Cos(150), circ * Sin(150), lInner},
-   {-circ, 0.0, lOuter}, {-circ, 0.0, lInner}, {circ * Cos(210), circ * Sin(210), lOuter},
-   {circ * Cos(210), circ * Sin(210), lInner}, {circ * Cos(240), circ * Sin(240), lOuter},
-   {circ * Cos(240), circ * Sin(240), lInner}, {0.0, -circ, lOuter}, {0.0, -circ, lInner},
-   {circ * Cos(300), circ * Sin(300), lOuter}, {circ * Cos(300), circ * Sin(300), lInner},
-   {circ * Cos(330), circ * Sin(330), lOuter}, {circ * Cos(330), circ * Sin(330), lInner}
+   {0.05, 0.0, 0.2}, {0.05, 0.0, 0.25}, {0.05 * Cos(30), 0.05 * Sin(30), 0.2},
+   {0.05 * Cos(30), 0.05 * Sin(30), 0.25}, {0.05 * Cos(60), 0.05 * Sin(60), 0.2},
+   {0.05 * Cos(60), 0.05 * Sin(60), 0.25}, {0.0, 0.05, 0.2}, {0.0, 0.05, 0.25},
+   {0.05 * Cos(120), 0.05 * Sin(120), 0.2}, {0.05 * Cos(120), 0.05 * Sin(120), 0.25},
+   {0.05 * Cos(150), 0.05 * Sin(150), 0.2}, {0.05 * Cos(150), 0.05 * Sin(150), 0.25},
+   {-0.05, 0.0, 0.2}, {-0.05, 0.0, 0.25}, {0.05 * Cos(210), 0.05 * Sin(210), 0.2},
+   {0.05 * Cos(210), 0.05 * Sin(210), 0.25}, {0.05 * Cos(240), 0.05 * Sin(240), 0.2},
+   {0.05 * Cos(240), 0.05 * Sin(240), 0.25}, {0.0, -0.05, 0.2}, {0.0, -0.05, 0.25},
+   {0.05 * Cos(300), 0.05 * Sin(300), 0.2}, {0.05 * Cos(300), 0.05 * Sin(300), 0.25},
+   {0.05 * Cos(330), 0.05 * Sin(330), 0.2}, {0.05 * Cos(330), 0.05 * Sin(330), 0.25}
 };
 
 // List of vertices for the tread of the right wheel.
 const vtx rightTread[] =
 {
-   {circ, 0.0, rOuter}, {circ, 0.0, rInner}, {circ * Cos(30), circ * Sin(30), rOuter},
-   {circ * Cos(30), circ * Sin(30), rInner}, {circ * Cos(60), circ * Sin(60), rOuter},
-   {circ * Cos(60), circ * Sin(60), rInner}, {0.0, circ, rOuter}, {0.0, circ, rInner},
-   {circ * Cos(120), circ * Sin(120), rOuter}, {circ * Cos(120), circ * Sin(120), rInner},
-   {circ * Cos(150), circ * Sin(150), rOuter}, {circ * Cos(150), circ * Sin(150), rInner},
-   {-circ, 0.0, rOuter}, {-circ, 0.0, rInner}, {circ * Cos(210), circ * Sin(210), rOuter},
-   {circ * Cos(210), circ * Sin(210), rInner}, {circ * Cos(240), circ * Sin(240), rOuter},
-   {circ * Cos(240), circ * Sin(240), rInner}, {0.0, -circ, rOuter}, {0.0, -circ, rInner},
-   {circ * Cos(300), circ * Sin(300), rOuter}, {circ * Cos(300), circ * Sin(300), rInner},
-   {circ * Cos(330), circ * Sin(330), rOuter}, {circ * Cos(330), circ * Sin(330), rInner}
+   {0.05, 0.0, 0.45}, {0.05, 0.0, 0.4}, {0.05 * Cos(30), 0.05 * Sin(30), 0.45},
+   {0.05 * Cos(30), 0.05 * Sin(30), 0.4}, {0.05 * Cos(60), 0.05 * Sin(60), 0.45},
+   {0.05 * Cos(60), 0.05 * Sin(60), 0.4}, {0.0, 0.05, 0.45}, {0.0, 0.05, 0.4},
+   {0.05 * Cos(120), 0.05 * Sin(120), 0.45}, {0.05 * Cos(120), 0.05 * Sin(120), 0.4},
+   {0.05 * Cos(150), 0.05 * Sin(150), 0.45}, {0.05 * Cos(150), 0.05 * Sin(150), 0.4},
+   {-0.05, 0.0, 0.45}, {-0.05, 0.0, 0.4}, {0.05 * Cos(210), 0.05 * Sin(210), 0.45},
+   {0.05 * Cos(210), 0.05 * Sin(210), 0.4}, {0.05 * Cos(240), 0.05 * Sin(240), 0.45},
+   {0.05 * Cos(240), 0.05 * Sin(240), 0.4}, {0.0, -0.05, 0.45}, {0.0, -0.05, 0.4},
+   {0.05 * Cos(300), 0.05 * Sin(300), 0.45}, {0.05 * Cos(300), 0.05 * Sin(300), 0.4},
+   {0.05 * Cos(330), 0.05 * Sin(330), 0.45}, {0.05 * Cos(330), 0.05 * Sin(330), 0.4}
 };
 
 // List of vertices for the tread of the left wheel.
 const vtx axelBar[] =
 {
-   {axel, 0.0, lInner}, {axel, 0.0, rInner}, {axel * Cos(30), axel * Sin(30), lInner},
-   {axel * Cos(30), axel * Sin(30), rInner}, {axel * Cos(60), axel * Sin(60), lInner},
-   {axel * Cos(60), axel * Sin(60), rInner}, {0.0, axel, lInner}, {0.0, axel, rInner},
-   {axel * Cos(120), axel * Sin(120), lInner}, {axel * Cos(120), axel * Sin(120), rInner},
-   {axel * Cos(150), axel * Sin(150), lInner}, {axel * Cos(150), axel * Sin(150), rInner},
-   {-axel, 0.0, lInner}, {-axel, 0.0, rInner}, {axel * Cos(210), axel * Sin(210), lInner},
-   {axel * Cos(210), axel * Sin(210), rInner}, {axel * Cos(240), axel * Sin(240), lInner},
-   {axel * Cos(240), axel * Sin(240), rInner}, {0.0, -axel, lInner}, {0.0, -axel, rInner},
-   {axel * Cos(300), axel * Sin(300), lInner}, {axel * Cos(300), axel * Sin(300), rInner},
-   {axel * Cos(330), axel * Sin(330), lInner}, {axel * Cos(330), axel * Sin(330), rInner}
+   {0.01, 0.0, 0.25}, {0.01, 0.0, 0.4}, {0.01 * Cos(30), 0.01 * Sin(30), 0.25},
+   {0.01 * Cos(30), 0.01 * Sin(30), 0.4}, {0.01 * Cos(60), 0.01 * Sin(60), 0.25},
+   {0.01 * Cos(60), 0.01 * Sin(60), 0.4}, {0.0, 0.01, 0.25}, {0.0, 0.01, 0.4},
+   {0.01 * Cos(120), 0.01 * Sin(120), 0.25}, {0.01 * Cos(120), 0.01 * Sin(120), 0.4},
+   {0.01 * Cos(150), 0.01 * Sin(150), 0.25}, {0.01 * Cos(150), 0.01 * Sin(150), 0.4},
+   {-0.01, 0.0, 0.25}, {-0.01, 0.0, 0.4}, {0.01 * Cos(210), 0.01 * Sin(210), 0.25},
+   {0.01 * Cos(210), 0.01 * Sin(210), 0.4}, {0.01 * Cos(240), 0.01 * Sin(240), 0.25},
+   {0.01 * Cos(240), 0.01 * Sin(240), 0.4}, {0.0, -0.01, 0.25}, {0.0, -0.01, 0.4},
+   {0.01 * Cos(300), 0.01 * Sin(300), 0.25}, {0.01 * Cos(300), 0.01 * Sin(300), 0.4},
+   {0.01 * Cos(330), 0.01 * Sin(330), 0.25}, {0.01 * Cos(330), 0.01 * Sin(330), 0.4}
 };
 
 // Specify the vertices for drawing the nose cone of the Rocket.
 const vtx noseCone[] =
 {
-   {0.50, 0.0, 0.0}, {noseHeight, circ, 0.0},
-   {noseHeight, circ * Cos(30), circ * Sin(30)}, {noseHeight, circ * Cos(60), circ * Sin(60)},
-   {noseHeight, 0.0, circ}, {noseHeight, circ * Cos(120), circ * Sin(120)},
-   {noseHeight, circ * Cos(150), circ * Sin(150)}, {noseHeight, -circ, 0.0},
-   {noseHeight, circ * Cos(210), circ * Sin(210)}, {noseHeight, circ * Cos(240), circ * Sin(240)},
-   {noseHeight, 0.0, -circ}, {noseHeight, circ * Cos(300), circ * Sin(300)},
-   {noseHeight, circ * Cos(330), circ * Sin(330)}
+   {0.50, 0.0, 0.0}, {0.20, 0.05, 0.0},
+   {0.20, 0.05 * Cos(30), 0.05 * Sin(30)}, {0.20, 0.05 * Cos(60), 0.05 * Sin(60)},
+   {0.20, 0.0, 0.05}, {0.20, 0.05 * Cos(120), 0.05 * Sin(120)},
+   {0.20, 0.05 * Cos(150), 0.05 * Sin(150)}, {0.20, -0.05, 0.0},
+   {0.20, 0.05 * Cos(210), 0.05 * Sin(210)}, {0.20, 0.05 * Cos(240), 0.05 * Sin(240)},
+   {0.20, 0.0, -0.05}, {0.20, 0.05 * Cos(300), 0.05 * Sin(300)},
+   {0.20, 0.05 * Cos(330), 0.05 * Sin(330)}
 };
 
 // Vertices for the fuselage.
 const vtx fuselageVert[] =
 {
-   {noseHeight, circ, 0.0}, {base, circ, 0.0}, {noseHeight, circ * Cos(30), circ * Sin(30)},
-   {base, circ * Cos(30), circ * Sin(30)}, {noseHeight, circ * Cos(60), circ * Sin(60)},
-   {base, circ * Cos(60), circ * Sin(60)}, {noseHeight, 0.0, circ}, {base, 0.0, circ},
-   {noseHeight, circ * Cos(120), circ * Sin(120)}, {base, circ * Cos(120), circ * Sin(120)},
-   {noseHeight, circ * Cos(150), circ * Sin(150)}, {base, circ * Cos(150), circ * Sin(150)},
-   {noseHeight, -circ, 0.0}, {base, -circ, 0.0}, {noseHeight, circ * Cos(210), circ * Sin(210)},
-   {base, circ * Cos(210), circ * Sin(210)}, {noseHeight, circ * Cos(240), circ * Sin(240)},
-   {base, circ * Cos(240), circ * Sin(240)}, {noseHeight, 0.0, -circ}, {base, 0.0, -circ},
-   {noseHeight, circ * Cos(300), circ * Sin(300)}, {base, circ * Cos(300), circ * Sin(300)},
-   {noseHeight, circ * Cos(330), circ * Sin(330)}, {base, circ * Cos(330), circ * Sin(330)}
+   {0.20, 0.05, 0.0}, {-0.50, 0.05, 0.0}, {0.20, 0.05 * Cos(30), 0.05 * Sin(30)},
+   {-0.50, 0.05 * Cos(30), 0.05 * Sin(30)}, {0.20, 0.05 * Cos(60), 0.05 * Sin(60)},
+   {-0.50, 0.05 * Cos(60), 0.05 * Sin(60)}, {0.20, 0.0, 0.05}, {-0.50, 0.0, 0.05},
+   {0.20, 0.05 * Cos(120), 0.05 * Sin(120)}, {-0.50, 0.05 * Cos(120), 0.05 * Sin(120)},
+   {0.20, 0.05 * Cos(150), 0.05 * Sin(150)}, {-0.50, 0.05 * Cos(150), 0.05 * Sin(150)},
+   {0.20, -0.05, 0.0}, {-0.50, -0.05, 0.0}, {0.20, 0.05 * Cos(210), 0.05 * Sin(210)},
+   {-0.50, 0.05 * Cos(210), 0.05 * Sin(210)}, {0.20, 0.05 * Cos(240), 0.05 * Sin(240)},
+   {-0.50, 0.05 * Cos(240), 0.05 * Sin(240)}, {0.20, 0.0, -0.05}, {-0.50, 0.0, -0.05},
+   {0.20, 0.05 * Cos(300), 0.05 * Sin(300)}, {-0.50, 0.05 * Cos(300), 0.05 * Sin(300)},
+   {0.20, 0.05 * Cos(330), 0.05 * Sin(330)}, {-0.50, 0.05 * Cos(330), 0.05 * Sin(330)}
 };
 
 // Order to compute normals for the top triangles of the tail fins.
@@ -228,10 +219,10 @@ const tri finTop[] =
 // Vertices for the top triangles of the tail fins.
 const vtx finTopVert[] =
 {
-   {finTip, radius, radius}, {finEdge, radius, radius}, {finEdge, radius + 0.1, radius + 0.1},
-   {finTip, -radius, -radius}, {finEdge, -radius, -radius}, {finEdge, -radius - 0.1, -radius - 0.1},
-   {finTip, -radius, radius}, {finEdge, -radius, radius}, {finEdge, -radius - 0.1, radius + 0.1},
-   {finTip, radius, -radius}, {finEdge, radius, -radius}, {finEdge, radius + 0.1, -radius - 0.1}
+   {-0.1, 0.025, 0.025}, {-0.3, 0.025, 0.025}, {-0.3, 0.025 + 0.1, 0.025 + 0.1},
+   {-0.1, -0.025, -0.025}, {-0.3, -0.025, -0.025}, {-0.3, -0.025 - 0.1, -0.025 - 0.1},
+   {-0.1, -0.025, 0.025}, {-0.3, -0.025, 0.025}, {-0.3, -0.025 - 0.1, 0.025 + 0.1},
+   {-0.1, 0.025, -0.025}, {-0.3, 0.025, -0.025}, {-0.3, 0.025 + 0.1, -0.025 - 0.1}
 };
 
 // Order to compute normals for the rectangle components of the tail fins.
@@ -244,26 +235,26 @@ const tri finBase[] =
 // Vertices for the rectangle components of the tail fins.
 const vtx finBaseVert[] =
 {
-   {fuselageBase, radius, radius}, {fuselageBase, radius + 0.1, radius + 0.1},
-   {finEdge, radius, radius}, {finEdge, radius + 0.1, radius + 0.1},
-   {fuselageBase, -radius, -radius}, {fuselageBase, -radius - 0.1, -radius - 0.1},
-   {finEdge, -radius, -radius}, {finEdge, -radius - 0.1, -radius - 0.1},
-   {fuselageBase, -radius, radius}, {fuselageBase, -radius - 0.1, radius + 0.1},
-   {finEdge, -radius, radius}, {finEdge, -radius - 0.1, radius + 0.1},
-   {fuselageBase, radius, -radius}, {fuselageBase, radius + 0.1, -radius - 0.1},
-   {finEdge, radius, -radius}, {finEdge, radius + 0.1, -radius - 0.1}
+   {-0.50, 0.025, 0.025}, {-0.50, 0.025 + 0.1, 0.025 + 0.1},
+   {-0.3, 0.025, 0.025}, {-0.3, 0.025 + 0.1, 0.025 + 0.1},
+   {-0.50, -0.025, -0.025}, {-0.50, -0.025 - 0.1, -0.025 - 0.1},
+   {-0.3, -0.025, -0.025}, {-0.3, -0.025 - 0.1, -0.025 - 0.1},
+   {-0.50, -0.025, 0.025}, {-0.50, -0.025 - 0.1, 0.025 + 0.1},
+   {-0.3, -0.025, 0.025}, {-0.3, -0.025 - 0.1, 0.025 + 0.1},
+   {-0.50, 0.025, -0.025}, {-0.50, 0.025 + 0.1, -0.025 - 0.1},
+   {-0.3, 0.025, -0.025}, {-0.3, 0.025 + 0.1, -0.025 - 0.1}
 };
 
 // Specify the vertices for drawing the nose cone of the Rocket.
 const vtx thrusterCone[] =
 {
-   {-0.7, 0.0, 0.0}, {base, circ, 0.0},
-   {base, circ * Cos(30), circ * Sin(30)}, {base, circ * Cos(60), circ * Sin(60)},
-   {base, 0.0, circ}, {base, circ * Cos(120), circ * Sin(120)},
-   {base, circ * Cos(150), circ * Sin(150)}, {base, -circ, 0.0},
-   {base, circ * Cos(210), circ * Sin(210)}, {base, circ * Cos(240), circ * Sin(240)},
-   {base, 0.0, -circ}, {base, circ * Cos(300), circ * Sin(300)},
-   {base, circ * Cos(330), circ * Sin(330)}
+   {-0.7, 0.0, 0.0}, {-0.50, 0.05, 0.0},
+   {-0.50, 0.05 * Cos(30), 0.05 * Sin(30)}, {-0.50, 0.05 * Cos(60), 0.05 * Sin(60)},
+   {-0.50, 0.0, 0.05}, {-0.50, 0.05 * Cos(120), 0.05 * Sin(120)},
+   {-0.50, 0.05 * Cos(150), 0.05 * Sin(150)}, {-0.50, -0.05, 0.0},
+   {-0.50, 0.05 * Cos(210), 0.05 * Sin(210)}, {-0.50, 0.05 * Cos(240), 0.05 * Sin(240)},
+   {-0.50, 0.0, -0.05}, {-0.50, 0.05 * Cos(300), 0.05 * Sin(300)},
+   {-0.50, 0.05 * Cos(330), 0.05 * Sin(330)}
 };
 
 // Order of vertices to compute normals for cuboid.
