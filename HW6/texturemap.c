@@ -358,6 +358,7 @@ int main(int argc, char* argv[])
    // Load textures.
    textures[0] = LoadTexBMP("concrete.bmp");
    textures[1] = LoadTexBMP("Dirt.bmp");
+   LoadTextures();
 
    // Check for errors and pass control to glut.
    ErrCheck("init");

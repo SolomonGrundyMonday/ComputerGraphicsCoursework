@@ -1,6 +1,6 @@
 /*
  *  Definitions for helper functions to draw 3D objects
- *  for CSCI-4229 Homework 5: Lighting.
+ *  for CSCI-4229 Homework 6: Textures and Lighting.
  *  Created by Jeff Colgan. 
  */
 #include "shapes.h"
@@ -14,7 +14,17 @@ const float orange[] = {1.0, 0.5, 0.0, 1.0};
 const float grey[] = {0.729, 0.690, 0.686, 1.0};
 const float yellow[] = {1.0, 1.0, 0.0, 1.0};
 const float red[] = {1.0, 0.0, 0.1, 1.0};
+unsigned int axelTextures[4];
+unsigned int bodyTexture;
+unsigned int rocketTextures[3];
 
+void LoadTextures()
+{
+   axelTextures[0] = LoadTexBMP("hubcap.bmp");
+   axelTextures[1] = LoadTexBMP("tread.bmp");
+   axelTextures[2] = LoadTexBMP("innertire.bmp");
+   axelTextures[3] = LoadTexBMP("metal.bmp");
+}
 
 /* 
  *  Draw triangles for computing vertex normals of a 3D object
@@ -94,58 +104,6 @@ const tri cyllender[] =
    {14, 13, 12}, {13, 14, 15}, {16, 15, 14}, {15, 16, 17},
    {18, 17, 16}, {17, 18, 19}, {20, 19, 18}, {19, 20, 21},
    {22, 21, 20}, {21, 22, 23}, {0, 23, 22}, {23, 0, 1}
-};
-
-// List of vertices for the inner wall of the left wheel.
-const vtx lInnerVert[] =
-{
-   {0.0, 0.0, 0.25}, {0.05, 0.0, 0.25}, {0.05 * Cos(30), 0.05 * Sin(30), 0.25},
-   {0.05 * Cos(60), 0.05 * Sin(60), 0.25}, {0.0, 0.05, 0.25},
-   {0.05 * Cos(120), 0.05 * Sin(120), 0.25}, {0.05 * Cos(150), 0.05 * Sin(150), 0.25},
-   {-0.05, 0.0, 0.25}, {0.05 * Cos(210), 0.05 * Sin(210), 0.25},
-   {0.05 * Cos(240), 0.05 * Sin(240), 0.25}, {0.0, -0.05, 0.25},
-   {0.05 * Cos(300), 0.05 * Sin(300), 0.25}, {0.05 * Cos(330), 0.05 * Sin(330), 0.25}
-};
-
-// List of vertices for the inner wall of the right wheel.
-const vtx rInnerVert[] = 
-{
-   {0.0, 0.0, 0.4}, {0.05, 0.0, 0.4}, {0.05 * Cos(30), 0.05 * Sin(30), 0.4},
-   {0.05 * Cos(60), 0.05 * Sin(60), 0.4}, {0.0, 0.05, 0.4},
-   {0.05 * Cos(120), 0.05 * Sin(120), 0.4}, {0.05 * Cos(150), 0.05 * Sin(150), 0.4},
-   {-0.05, 0.0, 0.4}, {0.05 * Cos(210), 0.05 * Sin(210), 0.4},
-   {0.05 * Cos(240), 0.05 * Sin(240), 0.4}, {0.0, -0.05, 0.4},
-   {0.05 * Cos(300), 0.05 * Sin(300), 0.4}, {0.05 * Cos(330), 0.05 * Sin(330), 0.4}
-};
-
-// List of vertices for the tread of the left wheel.
-const vtx leftTread[] =
-{
-   {0.05, 0.0, 0.2}, {0.05, 0.0, 0.25}, {0.05 * Cos(30), 0.05 * Sin(30), 0.2},
-   {0.05 * Cos(30), 0.05 * Sin(30), 0.25}, {0.05 * Cos(60), 0.05 * Sin(60), 0.2},
-   {0.05 * Cos(60), 0.05 * Sin(60), 0.25}, {0.0, 0.05, 0.2}, {0.0, 0.05, 0.25},
-   {0.05 * Cos(120), 0.05 * Sin(120), 0.2}, {0.05 * Cos(120), 0.05 * Sin(120), 0.25},
-   {0.05 * Cos(150), 0.05 * Sin(150), 0.2}, {0.05 * Cos(150), 0.05 * Sin(150), 0.25},
-   {-0.05, 0.0, 0.2}, {-0.05, 0.0, 0.25}, {0.05 * Cos(210), 0.05 * Sin(210), 0.2},
-   {0.05 * Cos(210), 0.05 * Sin(210), 0.25}, {0.05 * Cos(240), 0.05 * Sin(240), 0.2},
-   {0.05 * Cos(240), 0.05 * Sin(240), 0.25}, {0.0, -0.05, 0.2}, {0.0, -0.05, 0.25},
-   {0.05 * Cos(300), 0.05 * Sin(300), 0.2}, {0.05 * Cos(300), 0.05 * Sin(300), 0.25},
-   {0.05 * Cos(330), 0.05 * Sin(330), 0.2}, {0.05 * Cos(330), 0.05 * Sin(330), 0.25}
-};
-
-// List of vertices for the tread of the right wheel.
-const vtx rightTread[] =
-{
-   {0.05, 0.0, 0.45}, {0.05, 0.0, 0.4}, {0.05 * Cos(30), 0.05 * Sin(30), 0.45},
-   {0.05 * Cos(30), 0.05 * Sin(30), 0.4}, {0.05 * Cos(60), 0.05 * Sin(60), 0.45},
-   {0.05 * Cos(60), 0.05 * Sin(60), 0.4}, {0.0, 0.05, 0.45}, {0.0, 0.05, 0.4},
-   {0.05 * Cos(120), 0.05 * Sin(120), 0.45}, {0.05 * Cos(120), 0.05 * Sin(120), 0.4},
-   {0.05 * Cos(150), 0.05 * Sin(150), 0.45}, {0.05 * Cos(150), 0.05 * Sin(150), 0.4},
-   {-0.05, 0.0, 0.45}, {-0.05, 0.0, 0.4}, {0.05 * Cos(210), 0.05 * Sin(210), 0.45},
-   {0.05 * Cos(210), 0.05 * Sin(210), 0.4}, {0.05 * Cos(240), 0.05 * Sin(240), 0.45},
-   {0.05 * Cos(240), 0.05 * Sin(240), 0.4}, {0.0, -0.05, 0.45}, {0.0, -0.05, 0.4},
-   {0.05 * Cos(300), 0.05 * Sin(300), 0.45}, {0.05 * Cos(300), 0.05 * Sin(300), 0.4},
-   {0.05 * Cos(330), 0.05 * Sin(330), 0.45}, {0.05 * Cos(330), 0.05 * Sin(330), 0.4}
 };
 
 // List of vertices for the tread of the left wheel.
@@ -273,66 +231,122 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
    glRotated(theta, 0, 0, 1);
    glScaled(dx, dy, dz);
 
-   // Compute normals and draw the inner and outer wheel walls.
-
-   unsigned int tireOuterWall = LoadTexBMP("hubcap.bmp");
+   // Apply hubcap texture to outer wheel walls.
    glEnable(GL_TEXTURE_2D);
    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-   glBindTexture(GL_TEXTURE_2D, tireOuterWall);
+   glBindTexture(GL_TEXTURE_2D, axelTextures[0]);
+
+   // Compute normals and draw the left outer wheel wall.
    glNormal3f(0.0, 0.0, -0.2);
-   
    glBegin(GL_TRIANGLE_FAN);
    glTexCoord2f(0.5, 0.5);
    glVertex3f(0.0, 0.0, 0.2);
+   
+   // Basic structure for applying hubcap texture borrowed from ex19 in-class example.
    for (int i = 0; i <= 360; i += 30)
    {
-      glTexCoord2f(0.5*Cos(i)+0.5, 0.5*Sin(i)+0.5);
+      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i)+0.5);
       glVertex3f(0.05 * Cos(i), 0.05 * Sin(i), 0.2);
    }
    glEnd();
 
+   // Compute normal and draw the right outer wheel wall
    glNormal3f(0.0, 0.0, 0.45);
-
    glBegin(GL_TRIANGLE_FAN);
    glTexCoord2f(0.5, 0.5);
    glVertex3f(0.0, 0.0, 0.45);
+
+   // Basic structure for applying hubcap texture borrowed from ex19 in-class example.
    for (int i = 0; i <= 360; i += 30)
    {
       glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5);
       glVertex3f(0.05 * Cos(i), 0.05 * Sin(i), 0.45);
    }
    glEnd();
+
+   // Compute normals, apply tread texture and draw the right wheel tread.
+   glBindTexture(GL_TEXTURE_2D, axelTextures[1]);
+   glBegin(GL_QUAD_STRIP);
+
+   for(int i = 0; i <= 12; i++)
+   {
+      // Make sure that exactly one copy of the tread texture is applied to each rectangle
+      // comprising the wheel tread.
+      int theta = i * 30;
+      glNormal3f(0.05 * Cos(theta), 0.05 * Sin(theta), 0.45);
+      glTexCoord2f(0, i % 2);
+      glVertex3f(0.05 * Cos(theta), 0.05 * Sin(theta), 0.45);
+      glTexCoord2f(1, i % 2);
+      glVertex3f(0.05 * Cos(theta), 0.05 * Sin(theta), 0.4);
+   }
+   glEnd();
+
+   // Compute normals and draw the left wheel tread.
+   glBegin(GL_QUAD_STRIP);
+   for (int i = 0; i <= 12; i++)
+   {
+      // Make sure that exactly one copy of the tread texture is applied to each rectangle
+      // comprising the wheel tread.
+      int theta = i * 30;
+      glNormal3f(0.05 * Cos(theta), 0.05 * Sin(theta), -0.2);
+      glTexCoord2f(0, i % 2);
+      glVertex3f(0.05 * Cos(theta), 0.05 * Sin(theta), 0.25);
+      glTexCoord2f(1, i % 2);
+      glVertex3f(0.05 * Cos(theta), 0.05 * Sin(theta), 0.2);
+   }
+   glEnd();
+
+   // Compute normal and apply innertire texture to inner right wheel wall.
+   glNormal3f(0.0, 0.0, -0.4);
+   glBindTexture(GL_TEXTURE_2D, axelTextures[2]);
+   glBegin(GL_TRIANGLE_FAN);
+   glTexCoord2f(0.5, 0.5);
+   glVertex3f(0.0, 0.0, 0.4);
+
+   // Basic structure for applying inner tire texture borrowed from ex19 in-class example.
+   for (int i = 0; i <= 360; i += 30)
+   {
+      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5);
+      glVertex3f(0.05 * Cos(i), 0.05 * Sin(i), 0.4);
+   }
+   glEnd();
+
+   // Compute normal and apply innertire texture to inner left wheel wall.
+   glNormal3f(0.0, 0.0, 0.25);
+   glBegin(GL_TRIANGLE_FAN);
+   glTexCoord2f(0.5, 0.5);
+   glVertex3f(0.0, 0.0, 0.25);
+
+   // Basic structure for applying inner tire texture borrowed from ex19 in-class example.
+   for (int i = 0; i <= 360; i += 30)
+   {
+      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5);
+      glVertex3f(0.05 * Cos(i), 0.05 * Sin(i), 0.25);
+   }
+   glEnd();
+
+   glBindTexture(GL_TEXTURE_2D, axelTextures[3]);
+   glBegin(GL_QUAD_STRIP);
+   for (int i = 0; i <= 12; i++)
+   {
+      int theta = i * 30;
+      glNormal3f(0.01 * Cos(theta), 0.01 * Cos(theta), 0.25);
+      glTexCoord2f(0, i % 2);
+      glVertex3f(0.01 * Cos(theta), 0.01 * Sin(theta), 0.25);
+      glTexCoord2f(1, i % 2);
+      glVertex3f(0.01 * Cos(theta), 0.01 * Sin(theta), 0.4);
+   }
+   glEnd();
+
    glDisable(GL_TEXTURE_2D);
 
-   for (int i = 0; i < 12; i++)
-      DrawTriangle(lInnerVert[cone[i].A], lInnerVert[cone[i].B], lInnerVert[cone[i].C]);
-
-   for (int i = 0; i < 12; i++)
-      DrawTriangle(rInnerVert[cone[i].C], rInnerVert[cone[i].B], rInnerVert[cone[i].A]);
-
-   // Draw the left wheel tread.
-   glBegin(GL_QUAD_STRIP);
-   for (int i = 0; i < 24; i++)
-   {
-      DrawQuad(leftTread[cyllender[i].C], leftTread[cyllender[i].B], leftTread[cyllender[i].A]);
-   }
-   glEnd();
-
-   // Draw the right wheel tread.
-   glBegin(GL_QUAD_STRIP);
-   for (int i = 0; i < 24; i++)
-   {
-      DrawQuad(rightTread[cyllender[i].A], rightTread[cyllender[i].B], rightTread[cyllender[i].C]);
-   }
-   glEnd();
-
    // Draw the axel between the wheels.
-   glBegin(GL_QUAD_STRIP);
-   for(int i = 0; i < 24; i++)
-   {
-      DrawQuad(axelBar[cyllender[i].C], axelBar[cyllender[i].B], axelBar[cyllender[i].A]);
-   }
-   glEnd();
+   //glBegin(GL_QUAD_STRIP);
+   //for(int i = 0; i < 24; i++)
+   //{
+      //DrawQuad(axelBar[cyllender[i].C], axelBar[cyllender[i].B], axelBar[cyllender[i].A]);
+   //}
+   //glEnd();
 
    glPopMatrix();
 }

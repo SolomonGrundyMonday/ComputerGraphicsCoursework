@@ -15,6 +15,8 @@ typedef struct {int A, B, C;} tri;
 
 #endif
 
+void LoadTextures();
+
 // Function declaration for DrawTriangle function.
 void DrawTriangle(vtx A, vtx B, vtx C);
 
