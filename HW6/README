@@ -1,8 +1,25 @@
 CSCI-4229; Homework 6 : Textures and Lighting
 Created by Jeff Colgan, 10/10/2021.
 
-Controls:
+User Controls:
 
+ESCAPE key       -> Exits the application.
+'m' key          -> Toggles orthogonal overhead projection, first person perspective
+                    projection and debug mode.
+'r' key          -> (First person mode only) Resets eye and center point position.
+'l' key          -> Toggles automatic light movement (orbit scene).
+'p' key          -> (If light orbit disabled) Increments the light source's position
+                    along the orbit path, enabling manual control of light movement.
+'o' key          -> Toggles vertical/horizontal light source orbit.
+'s' key          -> (Debug mode only) Toggle between objects displayed in debug mode.
+RIGHT ARROW key  -> (Orthogonal projection/debug) : Increments view azimuth by 5 degrees.
+                    (First person projection) : Turns eye/camera 5 degrees right.
+LEFT ARROW key   -> (Orthogonal projection/debug) : Decrements view azimuth by 5 degrees.
+                    (First person projection): Turns eye/camera 5 degrees left.
+UP ARROW key     -> (Orthogonal projeciton/debug) : Increments view elevation by 5 degrees.
+                    (First person projection) : Moves eye/camera forward.
+DOWN ARROW key   -> (Orthogonal projection/debug) : Decrements view elevation by 5 degrees.
+                    (First person projection) : Moves eye/camera backward.
 
 Sources (texture images):
 
@@ -30,4 +47,26 @@ https://pixabay.com/photos/texture-steel-painting-metal-4843486/
 
 Sources (Code):
 
+I continued to iterate on the scene in 3d that I have submitted for the previous few assignments.
+In addition, I borrowed several snippets of code on texture mapping from the following in-class
+examples: ex14 and ex19.  These snippets are labeled with appropriate comments in the code.  I also
+utilized the CSCI-x229 library for certain functionality.  Finally, I used the structure from the
+in-class examples generally for the following functions: main, idle, reshape, and DrawTriangles.  I
+also used the struct typedefs for the vtx and tri structs from ex13.  
+
+Notes:
+
+Although the steel grating texture that I used for the tail fins is not particularly aerodynamic,
+I selected this texture because the smoother metal texture images I was able to find were too subtle
+to be clearly noticable when applied to shapes.  Additionally, I used some images from the internet
+to convert to 3x8 RGB bitmaps for use in this assignment (see the above section for image sources). 
+Whenever I could I tried to use images that I took myself, but with how insanely busy my schedule
+is this week, it was not feesible to do so for every texture (unless I wanted to make completely
+nonsensical textures like wooden rockets, etc.).  For textures in the final project, I plan to source
+all images myself, however.
+
 Estimated time:
+
+Code - Approximately 8 hours
+Image Collection - Approximately 2 hours (it's hard to find images that are royalty-free and
+                   not obscured by watermarks as well as find decent lighting for outdoor photos).
