@@ -1,6 +1,6 @@
 /*
  *  Function declarations and struct definitions for
- *  3D object drawing for CSCI-4229 Homework 5: Lighting.
+ *  3D object drawing for CSCI-4229 Homework 6: Textures and Lighting.
  *  Created by Jeff Colgan.  
  */
 #include "CSCIx229.h"
@@ -15,6 +15,7 @@ typedef struct {int A, B, C;} tri;
 
 #endif
 
+// Function declaration for LoadTextures function.
 void LoadTextures();
 
 // Function declaration for DrawTriangle function.

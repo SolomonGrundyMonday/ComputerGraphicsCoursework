@@ -18,13 +18,23 @@ unsigned int axelTextures[4];
 unsigned int bodyTexture;
 unsigned int rocketTextures[3];
 
+/*
+ *  Load textures function.
+ *  This function loads the various textures required for my complex
+ *  3D objects. 
+ */
 void LoadTextures()
 {
+   // Load required textures for wheel axel objects.
    axelTextures[0] = LoadTexBMP("hubcap.bmp");
    axelTextures[1] = LoadTexBMP("tread.bmp");
    axelTextures[2] = LoadTexBMP("innertire.bmp");
    axelTextures[3] = LoadTexBMP("metal.bmp");
 
+   // Load texture for placholder texture for rover body.
+   bodyTexture = LoadTexBMP("steelgrate.bmp");
+
+   // Load textures for rocket objects.
    rocketTextures[0] = LoadTexBMP("rustymetal.bmp");
    rocketTextures[1] = axelTextures[3];
    rocketTextures[2] = LoadTexBMP("fire.bmp");
@@ -56,42 +66,10 @@ void DrawTriangle(vtx A, vtx B, vtx C)
    // Draw the triangle.
    glNormal3f(Nx, Ny, Nz);
    glBegin(GL_TRIANGLES);
-   glTexCoord2f(0.0, 0.0);
-   glVertex3f(B.x, B.y, B.z);
-   glTexCoord2f(1.0, 0.0);
-   glVertex3f(A.x, A.y, A.z);
-   glTexCoord2f(1.0, 1.0);
-   glVertex3f(C.x, C.y, C.z);
+   glTexCoord2f(0.0, 0.0); glVertex3f(B.x, B.y, B.z);
+   glTexCoord2f(1.0, 0.0); glVertex3f(A.x, A.y, A.z);
+   glTexCoord2f(1.0, 1.0); glVertex3f(C.x, C.y, C.z);
    glEnd();
-}
-
-/*
- *  Compute vertex normals for QUAD_STRIPS. 
- *  This function is heavily based off of the draw triangle function
- *  above, and is largely borrowed from ex13.c of the in-class examples.
- */
-void DrawQuad(vtx A, vtx B, vtx C)
-{
-   // Compute A - B.
-   float dx0 = A.x - B.x;
-   float dy0 = A.y - B.y;
-   float dz0 = A.z - B.z;
-
-   // Compute C - A.
-   float dx1 = C.x - A.x;
-   float dy1 = C.y - A.y;
-   float dz1 = C.z - A.z;
-
-   // Normalize.
-   float Nx = dy0 * dz1 - dy1 * dz0;
-   float Ny = dz0 * dx1 - dz1 * dx0;
-   float Nz = dx0 * dy1 - dx1 * dy0;
-
-   // Draw three vertices.
-   glNormal3f(Nx, Ny, Nz);
-   glTexCoord2f(0.0, 0.0); glVertex3f(A.x, A.y, A.z);
-   glTexCoord2f(5.0, 0.0); glVertex3f(B.x, B.y, B.z);
-   glTexCoord2f(5.0/2, 5.0); glVertex3f(C.x, C.y, C.z);
 }
 
 // Order to compute normals for the top triangles of the tail fins.
@@ -129,21 +107,6 @@ const vtx finBaseVert[] =
    {-0.50, 0.025, -0.025}, {-0.50, 0.025 + 0.1, -0.025 - 0.1}
 };
 
-// Order of vertices to compute normals for cuboid.
-const tri cuboid[] =
-{
-   {2, 1, 0}, {6, 1, 2}, {7, 4, 5}, {3, 5, 7},
-   {1, 6, 7}, {6, 5, 1}, {4, 2, 3}, {0, 3, 4},
-   {3, 0, 1}, {1, 5, 3}, {4, 7, 2}, {6, 2, 4}
-};
-
-// Vertices for cuboid object.
-const vtx cuboidVert[] =
-{
-   {1, 1, 1}, {-1, 1, 1}, {1, -1, 1}, {1, 1, -1},
-   {1, -1, -1}, {-1, 1, -1}, {-1, -1, 1}, {-1, -1, -1}
-};
-
 /*
  *  Draw the wheel axel and attached wheels.  
  */
@@ -173,28 +136,24 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
    // Compute normals and draw the left outer wheel wall.
    glNormal3f(0.0, 0.0, -0.2);
    glBegin(GL_TRIANGLE_FAN);
-   glTexCoord2f(0.5, 0.5);
-   glVertex3f(0.0, 0.0, 0.2);
+   glTexCoord2f(0.5, 0.5); glVertex3f(0.0, 0.0, 0.2);
    
    // Basic structure for applying hubcap texture borrowed from ex19 in-class example.
    for (int i = 0; i <= 360; i += 30)
    {
-      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i)+0.5);
-      glVertex3f(0.05 * Cos(i), 0.05 * Sin(i), 0.2);
+      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i)+0.5); glVertex3f(0.05 * Cos(i), 0.05 * Sin(i), 0.2);
    }
    glEnd();
 
    // Compute normal and draw the right outer wheel wall
    glNormal3f(0.0, 0.0, 0.45);
    glBegin(GL_TRIANGLE_FAN);
-   glTexCoord2f(0.5, 0.5);
-   glVertex3f(0.0, 0.0, 0.45);
+   glTexCoord2f(0.5, 0.5); glVertex3f(0.0, 0.0, 0.45);
 
    // Basic structure for applying hubcap texture borrowed from ex19 in-class example.
    for (int i = 0; i <= 360; i += 30)
    {
-      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5);
-      glVertex3f(0.05 * Cos(i), 0.05 * Sin(i), 0.45);
+      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5); glVertex3f(0.05 * Cos(i), 0.05 * Sin(i), 0.45);
    }
    glEnd();
 
@@ -208,10 +167,8 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
       // comprising the wheel tread.
       int theta = i * 30;
       glNormal3f(0.05 * Cos(theta), 0.05 * Sin(theta), 0.45);
-      glTexCoord2f(0, i % 2);
-      glVertex3f(0.05 * Cos(theta), 0.05 * Sin(theta), 0.45);
-      glTexCoord2f(1, i % 2);
-      glVertex3f(0.05 * Cos(theta), 0.05 * Sin(theta), 0.4);
+      glTexCoord2f(0, i % 2); glVertex3f(0.05 * Cos(theta), 0.05 * Sin(theta), 0.45);
+      glTexCoord2f(1, i % 2); glVertex3f(0.05 * Cos(theta), 0.05 * Sin(theta), 0.4);
    }
    glEnd();
 
@@ -223,10 +180,8 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
       // comprising the wheel tread.
       int theta = i * 30;
       glNormal3f(0.05 * Cos(theta), 0.05 * Sin(theta), -0.2);
-      glTexCoord2f(0, i % 2);
-      glVertex3f(0.05 * Cos(theta), 0.05 * Sin(theta), 0.25);
-      glTexCoord2f(1, i % 2);
-      glVertex3f(0.05 * Cos(theta), 0.05 * Sin(theta), 0.2);
+      glTexCoord2f(0, i % 2); glVertex3f(0.05 * Cos(theta), 0.05 * Sin(theta), 0.25);
+      glTexCoord2f(1, i % 2); glVertex3f(0.05 * Cos(theta), 0.05 * Sin(theta), 0.2);
    }
    glEnd();
 
@@ -234,28 +189,24 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
    glNormal3f(0.0, 0.0, -0.4);
    glBindTexture(GL_TEXTURE_2D, axelTextures[2]);
    glBegin(GL_TRIANGLE_FAN);
-   glTexCoord2f(0.5, 0.5);
-   glVertex3f(0.0, 0.0, 0.4);
+   glTexCoord2f(0.5, 0.5); glVertex3f(0.0, 0.0, 0.4);
 
    // Basic structure for applying inner tire texture borrowed from ex19 in-class example.
    for (int i = 0; i <= 360; i += 30)
    {
-      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5);
-      glVertex3f(0.05 * Cos(i), 0.05 * Sin(i), 0.4);
+      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5); glVertex3f(0.05 * Cos(i), 0.05 * Sin(i), 0.4);
    }
    glEnd();
 
    // Compute normal and apply innertire texture to inner left wheel wall.
    glNormal3f(0.0, 0.0, 0.25);
    glBegin(GL_TRIANGLE_FAN);
-   glTexCoord2f(0.5, 0.5);
-   glVertex3f(0.0, 0.0, 0.25);
+   glTexCoord2f(0.5, 0.5); glVertex3f(0.0, 0.0, 0.25);
 
    // Basic structure for applying inner tire texture borrowed from ex19 in-class example.
    for (int i = 0; i <= 360; i += 30)
    {
-      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5);
-      glVertex3f(0.05 * Cos(i), 0.05 * Sin(i), 0.25);
+      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5); glVertex3f(0.05 * Cos(i), 0.05 * Sin(i), 0.25);
    }
    glEnd();
 
@@ -268,10 +219,8 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
       // rectangle.
       int theta = i * 30;
       glNormal3f(0.01 * Cos(theta), 0.01 * Cos(theta), 0.25);
-      glTexCoord2f(0, i % 2);
-      glVertex3f(0.01 * Cos(theta), 0.01 * Sin(theta), 0.25);
-      glTexCoord2f(1, i % 2);
-      glVertex3f(0.01 * Cos(theta), 0.01 * Sin(theta), 0.4);
+      glTexCoord2f(0, i % 2); glVertex3f(0.01 * Cos(theta), 0.01 * Sin(theta), 0.25);
+      glTexCoord2f(1, i % 2); glVertex3f(0.01 * Cos(theta), 0.01 * Sin(theta), 0.4);
    }
    glEnd();
 
@@ -296,7 +245,11 @@ void Rover(double x, double y, double z, double dx,
    glRotated(theta, 0, 1, 0);
    glScaled(dx, dy, dz);
 
+   // Draw the body.
+   glEnable(GL_TEXTURE_2D);
+   glBindTexture(GL_TEXTURE_2D, bodyTexture);
    Box(0.0, 0.0, 0.0, 1.25, 1.0, 1.0, 0);
+   glDisable(GL_TEXTURE_2D);
 
    // Draw front and back wheel axels in grey.
    glColor3f(0.729, 0.690, 0.686);
@@ -351,8 +304,7 @@ void Rocket(double x, double y, double z, double dx, double dy,
    for (int i = 0; i <= 360; i += 30)
    {
       glNormal3f(0.2, Cos(i), Sin(i));
-      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5);
-      glVertex3f(0.2, 0.05 * Cos(i), 0.05 * Sin(i));
+      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5); glVertex3f(0.2, 0.05 * Cos(i), 0.05 * Sin(i));
    }
    glEnd();
 
@@ -362,15 +314,28 @@ void Rocket(double x, double y, double z, double dx, double dy,
    {
       int theta = i * 30;
       glNormal3f(0.2, Cos(theta), Sin(theta)); 
-      glTexCoord2f(0, i % 2);
-      glVertex3f(0.2, 0.05 * Cos(theta), 0.05 * Sin(theta));
-      glTexCoord2f(1, i % 2);
-      glVertex3f(-0.5, 0.05 * Cos(theta), 0.05 * Sin(theta));
+      glTexCoord2f(0, i % 2); glVertex3f(0.2, 0.05 * Cos(theta), 0.05 * Sin(theta));
+      glTexCoord2f(1, i % 2); glVertex3f(-0.5, 0.05 * Cos(theta), 0.05 * Sin(theta));
    }
+   glEnd();
+
+   // Compute normal, and bind fire texture to the thruster cone.
+   glBindTexture(GL_TEXTURE_2D, rocketTextures[2]);
+   glNormal3f(-0.7, 0.0, 0.0);
+   glBegin(GL_TRIANGLE_FAN);
+   glTexCoord2f(0.5, 0.5); glVertex3f(-0.7, 0.0, 0.0);
+
+   for (int i = 0; i <= 360; i += 30)
+   {
+	   glNormal3f(-0.5, Cos(i), Sin(i));
+	   glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5); glVertex3f(-0.5, 0.05 * Cos(i), 0.05 * Sin(i));
+   }
+
    glEnd();
 
    // Apply metal texture to tail fins.
    glBindTexture(GL_TEXTURE_2D, rocketTextures[1]);
+   glColor4fv(red);
 
    // Compute normals and draw tail fins.
    for (int i = 0; i < 4; i++)
@@ -396,26 +361,10 @@ void Rocket(double x, double y, double z, double dx, double dy,
       DrawTriangle(finBaseVert[finBase[i+1].C], finBaseVert[finBase[i+1].B], finBaseVert[finBase[i+1].A]);
    }
 
-   // Compute normal, and bind fire texture to the thruster cone.
-   glBindTexture(GL_TEXTURE_2D, rocketTextures[2]);
-   glNormal3f(-0.7, 0.0, 0.0);
-   glBegin(GL_TRIANGLE_FAN);
-   glTexCoord2f(0.5, 0.5);
-   glVertex3f(-0.7, 0.0, 0.0);
-   
-   for (int i = 0; i <= 360; i += 30)
-   {
-      glNormal3f(-0.5, Cos(i), Sin(i));
-      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5);
-      glVertex3f(-0.5, 0.05 * Cos(i), 0.05 * Sin(i));
-   }
-
-   glEnd();
    glDisable(GL_TEXTURE_2D);
    
 
    // Draw lines so tail fins are visible from sides/front/back.
-   glColor3f(1, 1, 1);
    glBegin(GL_LINES);
    glVertex3f(finTip, radius, radius);
    glVertex3f(finEdge, radius + 0.1, radius + 0.1);
@@ -462,6 +411,17 @@ void Rocket(double x, double y, double z, double dx, double dy,
 void Box(double x, double y, double z, double dx, double dy,
          double dz, double theta)
 {
+   // Delta x-z parameters determine if/how many times to repeat textures
+   // across faces.
+   float X = 1.0;
+   float Z = 1.0;
+
+   if (dx > 1)
+      X = dx;
+
+   if (dz > 1)
+      Z = dz;
+
    // Apply shininess, specular and emission qualities for a box object.
    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black);
    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, white);
@@ -474,17 +434,62 @@ void Box(double x, double y, double z, double dx, double dy,
    glRotated(theta, 0, 1, 0);
    glScaled(dx, dy, dz);
 
-   // Draw the faces of the box.
-   for (int i = 0; i < 12; i++)
-   {
-      if (i % 2 == 0)
-         glBegin(GL_QUAD_STRIP);
+   // Repeat textures across large faces.
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 
-      DrawQuad(cuboidVert[cuboid[i].A], cuboidVert[cuboid[i].B], cuboidVert[cuboid[i].C]);
+   // Right side.
+   glNormal3f(0.0, 0.0, 1.0);
+   glBegin(GL_QUADS);
+   glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, 1.0, 1.0);
+   glTexCoord2f(0.0, X); glVertex3f(1.0, 1.0, 1.0);
+   glTexCoord2f(X, 0.0); glVertex3f(1.0, -1.0, 1.0);
+   glTexCoord2f(X, X); glVertex3f(-1.0, -1.0, 1.0);
+   glEnd();
 
-      if (i % 2 == 1)
-         glEnd();
-   }
+   // Left side.
+   glNormal3f(0.0, 0.0, -0.5);
+   glBegin(GL_QUADS);
+   glTexCoord2f(0.0, 0.0); glVertex3f(1.0, 1.0, -1.0);
+   glTexCoord2f(0.0, X); glVertex3f(-1.0, 1.0, -1.0);
+   glTexCoord2f(X, X); glVertex3f(-1.0, -1.0, -1.0);
+   glTexCoord2f(X, 0.0); glVertex3f(1.0, -1.0, -1.0);
+   glEnd();
+
+   // Front side.
+   glNormal3f(-0.5, 0.0, 0.0);
+   glBegin(GL_QUADS);
+   glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, 1.0, 1.0);
+   glTexCoord2f(0.0, Z); glVertex3f(-1.0, -1.0, 1.0);
+   glTexCoord2f(Z, Z); glVertex3f(-1.0, -1.0, -1.0);
+   glTexCoord2f(Z, 0.0); glVertex3f(-1.0, 1.0, -1.0);
+   glEnd();
+
+   // Back side.
+   glNormal3f(0.5, 0.0, 0.0);
+   glBegin(GL_QUADS);
+   glTexCoord2f(0.0, 0.0); glVertex3f(1.0, 1.0, 1.0);
+   glTexCoord2f(0.0, Z); glVertex3f(1.0, -1.0, 1.0);
+   glTexCoord2f(Z, Z); glVertex3f(1.0, -1.0, -1.0);
+   glTexCoord2f(Z, 0.0); glVertex3f(1.0, 1.0, -1.0);
+   glEnd();
+
+   // Top face.
+   glNormal3f(0.0, 0.5, 0.0);
+   glBegin(GL_QUADS);
+   glTexCoord2f(0.0, 0.0); glVertex3f(1.0, 1.0, 1.0);
+   glTexCoord2f(0.0, X); glVertex3f(1.0, 1.0, -1.0);
+   glTexCoord2f(Z, X); glVertex3f(-1.0, 1.0, -1.0);
+   glTexCoord2f(Z, 0.0); glVertex3f(-1.0, 1.0, 1.0);
+   glEnd();
+
+   // Bottom face.
+   glNormal3f(0.0, -0.5, 0.0);
+   glBegin(GL_QUADS);
+   glTexCoord2f(0.0, 0.0); glVertex3f(1.0, -1.0, 1.0);
+   glTexCoord2f(0.0, X); glVertex3f(1.0, -1.0, -1.0);
+   glTexCoord2f(Z, X); glVertex3f(-1.0, -1.0, -1.0);
+   glTexCoord2f(Z, 0.0); glVertex3f(-1.0, -1.0, 1.0);
+   glEnd();
 
    glPopMatrix();
 }

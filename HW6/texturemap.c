@@ -25,7 +25,7 @@ double Cy = 0.4;           // Center vector y-value.
 double Cz = -3.3;          // Center vector z-value.
 float distance = 3;        // Light distance.
 float lightElev = 2.0;     // Light elevation (if horizontal orbit).
-unsigned int textures[4];
+unsigned int groundTexture;
 
 /*
  *  Redraw the scene. 
@@ -119,20 +119,21 @@ void display()
    // Otherwise, render the entire scene.
    else
    {
-      // Generate objects to populate the scene.
-      Rocket(0.75, 0.9, 0.75, 1.0, 1.0, 1.0, 90, 0, 0);
+      glColor3f(1.0, 1.0, 1.0);
       glEnable(GL_TEXTURE_2D);
       glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-      glBindTexture(GL_TEXTURE_2D, textures[1]);
-      Box(0.0, -0.1, 0.0, 3.0, 0.1, 3.0, 0);
+      glBindTexture(GL_TEXTURE_2D, groundTexture);
+	  Box(0.0, -0.1, 0.0, 3.0, 0.1, 3.0, 0);
 	  glDisable(GL_TEXTURE_2D);
+    
+	  // Generate objects to populate the scene.
+	  Rocket(0.75, 0.9, 0.75, 1.0, 1.0, 1.0, 90, 0, 0);
       glColor3f(0.2, 1.0, 0.2);
       Rover(1.3, 0.225, 1.3, 0.4, 0.15, 0.1, 0);
       glColor3f(1.0, 0.0, 0.0);
       Rover(0.0, 0.225, 1.2, 0.4, 0.15, 0.1, 90);
       glColor3f(0.0, 0.0, 1.0);
       Rover(-0.5, 0.95, -0.1, 0.8, 0.6, 0.5, 0);
-	  
    }
 
    glColor3f(1.0, 1.0, 1.0);
@@ -355,8 +356,7 @@ int main(int argc, char* argv[])
    glutIdleFunc(idle);
 
    // Load textures.
-   textures[0] = LoadTexBMP("concrete.bmp");
-   textures[1] = LoadTexBMP("Dirt.bmp");
+   groundTexture = LoadTexBMP("dirt.bmp");
    LoadTextures();
 
    // Check for errors and pass control to glut.

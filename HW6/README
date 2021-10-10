@@ -1,10 +1,14 @@
+CSCI-4229; Homework 6 : Textures and Lighting
+Created by Jeff Colgan, 10/10/2021.
+
+Controls:
 
 
 Sources (texture images):
 
 Hubcap image was my own (took a photo of my car's tire from the side).
 Rusty metal was my own (took a photo of my apartment's dumpster).
-Concrete image was my own (took a photo of my aparment walkways).
+Dirt image was my own (took a photo of my aparment yard).
 
 Tire Tread image was retrieved from: 
 https://depositphotos.com/stock-photos/tire-tread.html
@@ -17,3 +21,10 @@ https://pixabay.com/illustrations/metal-background-steel-brushed-1212115/
 
 Fire image was retrieved from:
 https://pixabay.com/photos/fire-flames-red-hot-burn-orange-2821775/
+
+Steel grate image was retrieved from:
+https://pixabay.com/photos/metal-metallic-steel-background-5574787/
+
+Sources (Code):
+
+Estimated time:
