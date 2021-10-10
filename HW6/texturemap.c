@@ -5,27 +5,27 @@
 #include "utility.h"
 #include "shapes.h"
 
-int th = 45;               // View angle azimuth.
-int ph = 45;               // View angle elevation.
-int zh = 90;               // Light azimuth.
-int mode = 0;              // Viewing mode.
-int autoLight = 1;         // Automatic light orbit toggle.
-int horizontalOrbit = 1;   // Horizontal/vertical orbit toggle.
-int object = 0;            // Debug object toggle.
-double dim = 5.0;          // Size of world.
-double asp = 1.0;          // Aspect ratio.
-double Ex = -3.0;          // Eye position x-value.
-double Ey = 0.4;           // Eye position y-value.
-double Ez = 3.0;           // Eye position z-value.
-double Upx = 0.0;          // Up vector x-value.
-double Upy = 1.0;          // Up vector y-value.
-double Upz = 0.0;          // Up vector z-value.
-double Cx = 3.3;           // Center vector x-value.
-double Cy = 0.4;           // Center vector y-value.
-double Cz = -3.3;          // Center vector z-value.
-float distance = 3;        // Light distance.
-float lightElev = 2.0;     // Light elevation (if horizontal orbit).
-unsigned int groundTexture;
+int th = 45;                // View angle azimuth.
+int ph = 45;                // View angle elevation.
+int zh = 90;                // Light azimuth.
+int mode = 0;               // Viewing mode.
+int autoLight = 1;          // Automatic light orbit toggle.
+int horizontalOrbit = 1;    // Horizontal/vertical orbit toggle.
+int object = 0;             // Debug object toggle.
+double dim = 5.0;           // Size of world.
+double asp = 1.0;           // Aspect ratio.
+double Ex = -3.0;           // Eye position x-value.
+double Ey = 0.4;            // Eye position y-value.
+double Ez = 3.0;            // Eye position z-value.
+double Upx = 0.0;           // Up vector x-value.
+double Upy = 1.0;           // Up vector y-value.
+double Upz = 0.0;           // Up vector z-value.
+double Cx = 3.3;            // Center vector x-value.
+double Cy = 0.4;            // Center vector y-value.
+double Cz = -3.3;           // Center vector z-value.
+float distance = 3;         // Light distance.
+float lightElev = 2.0;      // Light elevation (if horizontal orbit).
+unsigned int groundTexture; // Texture for the ground of the scene.
 
 /*
  *  Redraw the scene. 
@@ -123,11 +123,11 @@ void display()
       glEnable(GL_TEXTURE_2D);
       glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
       glBindTexture(GL_TEXTURE_2D, groundTexture);
-	  Box(0.0, -0.1, 0.0, 3.0, 0.1, 3.0, 0);
-	  glDisable(GL_TEXTURE_2D);
+      Box(0.0, -0.1, 0.0, 3.0, 0.1, 3.0, 0);
+      glDisable(GL_TEXTURE_2D);
     
-	  // Generate objects to populate the scene.
-	  Rocket(0.75, 0.9, 0.75, 1.0, 1.0, 1.0, 90, 0, 0);
+      // Generate objects to populate the scene.
+      Rocket(0.75, 0.9, 0.75, 1.0, 1.0, 1.0, 90, 0, 0);
       glColor3f(0.2, 1.0, 0.2);
       Rover(1.3, 0.225, 1.3, 0.4, 0.15, 0.1, 0);
       glColor3f(1.0, 0.0, 0.0);

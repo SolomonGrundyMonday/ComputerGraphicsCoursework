@@ -32,11 +32,11 @@ void LoadTextures()
    axelTextures[3] = LoadTexBMP("metal.bmp");
 
    // Load texture for placholder texture for rover body.
-   bodyTexture = LoadTexBMP("steelgrate.bmp");
+   bodyTexture = LoadTexBMP("tailfinsteel.bmp");
 
    // Load textures for rocket objects.
    rocketTextures[0] = LoadTexBMP("rustymetal.bmp");
-   rocketTextures[1] = axelTextures[3];
+   rocketTextures[1] = LoadTexBMP("steelgrate.bmp");
    rocketTextures[2] = LoadTexBMP("fire.bmp");
 }
 
@@ -49,14 +49,14 @@ void LoadTextures()
 void DrawTriangle(vtx A, vtx B, vtx C)
 {
    // Compute A - B.
-   float dx0 = A.x - B.x;
-   float dy0 = A.y - B.y;
-   float dz0 = A.z - B.z;
+   float dx0 = B.x - A.x;
+   float dy0 = B.y - A.y;
+   float dz0 = B.z - A.z;
 
    // Compute C - A.
-   float dx1 = C.x - A.x;
-   float dy1 = C.y - A.y;
-   float dz1 = C.z - A.z;
+   float dx1 = C.x - B.x;
+   float dy1 = C.y - B.y;
+   float dz1 = C.z - B.z;
 
    // Compute Normal.
    float Nx = dy0 * dz1 - dy1 * dz0;
@@ -69,6 +69,26 @@ void DrawTriangle(vtx A, vtx B, vtx C)
    glTexCoord2f(0.0, 0.0); glVertex3f(B.x, B.y, B.z);
    glTexCoord2f(1.0, 0.0); glVertex3f(A.x, A.y, A.z);
    glTexCoord2f(1.0, 1.0); glVertex3f(C.x, C.y, C.z);
+   glEnd();
+}
+
+/*
+ *  Function draws the line segments outlining the tail fin of Rocket objects.
+ *  This allows the tail fins to be seen from the sides/back. 
+ */
+void DrawTailFinOutline(float y, float z, float yOffset, float zOffset)
+{
+   float finTip = -0.1;
+   float finEdge = -0.3;
+   float fuselageBase = -0.50;
+
+   glBegin(GL_LINES);
+   glTexCoord1f(0.0); glVertex3f(finTip, y, z);
+   glTexCoord1f(1.0); glVertex3f(finEdge, y + yOffset, z + zOffset);
+   glTexCoord1f(0.0); glVertex3f(fuselageBase, y, z);
+   glTexCoord1f(1.0); glVertex3f(fuselageBase, y + yOffset, z + zOffset);
+   glTexCoord1f(0.0); glVertex3f(finEdge, y + yOffset, z + zOffset);
+   glTexCoord1f(1.0); glVertex3f(fuselageBase, y + yOffset, z + zOffset);
    glEnd();
 }
 
@@ -113,7 +133,6 @@ const vtx finBaseVert[] =
 void WheelAxel(double x, double y, double z, double dx, double dy,
                double dz, double theta)
 {
-
    // Apply color, emission, ambient, diffuse, specular and shininess lighing qualities.
    glColor4fv(grey);
    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black);
@@ -267,9 +286,6 @@ void Rocket(double x, double y, double z, double dx, double dy,
    // Locals for computing vertices.
    double circumference = 0.05;
    double radius = circumference * 0.5;
-   double fuselageBase = -0.50;
-   double finTip = -0.1;
-   double finEdge = -0.3;
 
    glEnable(GL_TEXTURE_2D);
 
@@ -323,19 +339,19 @@ void Rocket(double x, double y, double z, double dx, double dy,
    glBindTexture(GL_TEXTURE_2D, rocketTextures[2]);
    glNormal3f(-0.7, 0.0, 0.0);
    glBegin(GL_TRIANGLE_FAN);
-   glTexCoord2f(0.5, 0.5); glVertex3f(-0.7, 0.0, 0.0);
+   glTexCoord2f(0.0, 0.0); glVertex3f(-0.7, 0.0, 0.0);
 
-   for (int i = 0; i <= 360; i += 30)
+   for (int i = 0; i <= 12; i++)
    {
-	   glNormal3f(-0.5, Cos(i), Sin(i));
-	   glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5); glVertex3f(-0.5, 0.05 * Cos(i), 0.05 * Sin(i));
+      float theta = i * 30;
+      glNormal3f(-0.5, Cos(theta), Sin(theta));
+      glTexCoord2f(1.0, i % 2); glVertex3f(-0.5, 0.05 * Cos(theta), 0.05 * Sin(theta));
    }
 
    glEnd();
 
    // Apply metal texture to tail fins.
    glBindTexture(GL_TEXTURE_2D, rocketTextures[1]);
-   glColor4fv(red);
 
    // Compute normals and draw tail fins.
    for (int i = 0; i < 4; i++)
@@ -353,53 +369,24 @@ void Rocket(double x, double y, double z, double dx, double dy,
       // This bit of code is from my research into culling faces (khronos documentation, see README).
       glEnable(GL_CULL_FACE);
       glCullFace(GL_FRONT);
-      DrawTriangle(finBaseVert[finBase[i].A], finBaseVert[finBase[i].B], finBaseVert[finBase[i].C]);
-      DrawTriangle(finBaseVert[finBase[i+1].A], finBaseVert[finBase[i+1].B], finBaseVert[finBase[i+1].C]);
-
-      glDisable(GL_CULL_FACE);
       DrawTriangle(finBaseVert[finBase[i].C], finBaseVert[finBase[i].B], finBaseVert[finBase[i].A]);
       DrawTriangle(finBaseVert[finBase[i+1].C], finBaseVert[finBase[i+1].B], finBaseVert[finBase[i+1].A]);
+
+      glDisable(GL_CULL_FACE);
+      DrawTriangle(finBaseVert[finBase[i].A], finBaseVert[finBase[i].B], finBaseVert[finBase[i].C]);
+      DrawTriangle(finBaseVert[finBase[i+1].A], finBaseVert[finBase[i+1].B], finBaseVert[finBase[i+1].C]);
    }
 
    glDisable(GL_TEXTURE_2D);
-   
+   glEnable(GL_TEXTURE_1D);
 
    // Draw lines so tail fins are visible from sides/front/back.
-   glBegin(GL_LINES);
-   glVertex3f(finTip, radius, radius);
-   glVertex3f(finEdge, radius + 0.1, radius + 0.1);
-   glVertex3f(fuselageBase, radius, radius);
-   glVertex3f(fuselageBase, radius + 0.1, radius + 0.1);
-   glVertex3f(finEdge, radius + 0.1, radius + 0.1);
-   glVertex3f(fuselageBase, radius + 0.1, radius + 0.1);
-   glEnd();
+   DrawTailFinOutline(radius, radius, 0.1, 0.1);
+   DrawTailFinOutline(-radius, -radius, -0.1, -0.1);
+   DrawTailFinOutline(-radius, radius, -0.1, 0.1);  
+   DrawTailFinOutline(radius, -radius, 0.1, -0.1); 
 
-   glBegin(GL_LINES);
-   glVertex3f(finTip, -radius, -radius);
-   glVertex3f(finEdge, -radius - 0.1, -radius - 0.1);
-   glVertex3f(fuselageBase, -radius, -radius);
-   glVertex3f(fuselageBase, -radius - 0.1, -radius - 0.1);
-   glVertex3f(finEdge, -radius - 0.1, -radius - 0.1);
-   glVertex3f(fuselageBase, -radius - 0.1, -radius - 0.1);
-   glEnd();
-
-   glBegin(GL_LINES);
-   glVertex3f(finTip, -radius, radius);
-   glVertex3f(finEdge, -radius - 0.1, radius + 0.1);
-   glVertex3f(fuselageBase, -radius, radius);
-   glVertex3f(fuselageBase, -radius - 0.1, radius + 0.1);
-   glVertex3f(finEdge, -radius - 0.1, radius + 0.1);
-   glVertex3f(fuselageBase, -radius - 0.1, radius + 0.1);
-   glEnd();
-
-   glBegin(GL_LINES);
-   glVertex3f(finTip, radius, -radius);
-   glVertex3f(finEdge, radius + 0.1, -radius - 0.1);
-   glVertex3f(fuselageBase, radius, -radius);
-   glVertex3f(fuselageBase, radius + 0.1, -radius - 0.1);
-   glVertex3f(finEdge, radius + 0.1, -radius - 0.1);
-   glVertex3f(fuselageBase, radius + 0.1, -radius - 0.1);
-   glEnd();
+   glDisable(GL_TEXTURE_1D);
 
    glPopMatrix();
 }

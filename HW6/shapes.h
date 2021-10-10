@@ -21,8 +21,8 @@ void LoadTextures();
 // Function declaration for DrawTriangle function.
 void DrawTriangle(vtx A, vtx B, vtx C);
 
-// Function declaration for DrawQuad function.
-void DrawQuad(vtx A, vtx B, vtx C);
+// Function declaration for DrawTailFinOutline function.
+void DrawTailFinOutline(float y, float z, float yOffset, float zOffset);
 
 // Function declaration for WheelAxel function.
 void WheelAxel(double x, double y, double z, double dx, double dy, 
