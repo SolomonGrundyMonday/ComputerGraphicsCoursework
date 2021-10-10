@@ -87,7 +87,7 @@ void display()
    glEnable(GL_NORMALIZE);
    glEnable(GL_LIGHTING);
 
-   glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 0);
+   //glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 0);
    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
    // Create point light.
@@ -121,7 +121,6 @@ void display()
    {
       // Generate objects to populate the scene.
       Rocket(0.75, 0.9, 0.75, 1.0, 1.0, 1.0, 90, 0, 0);
-      //glColor3f(0.196, 0.514, 0.659);
       glEnable(GL_TEXTURE_2D);
       glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
       glBindTexture(GL_TEXTURE_2D, textures[1]);

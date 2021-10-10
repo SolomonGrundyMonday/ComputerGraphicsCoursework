@@ -13,7 +13,7 @@ const float white[] = {1.0, 1.0, 1.0, 1.0};
 const float orange[] = {1.0, 0.5, 0.0, 1.0};
 const float grey[] = {0.729, 0.690, 0.686, 1.0};
 const float yellow[] = {1.0, 1.0, 0.0, 1.0};
-const float red[] = {1.0, 0.0, 0.1, 1.0};
+const float red[] = {0.8, 0.0, 0.1, 0.0};
 unsigned int axelTextures[4];
 unsigned int bodyTexture;
 unsigned int rocketTextures[3];
@@ -24,6 +24,10 @@ void LoadTextures()
    axelTextures[1] = LoadTexBMP("tread.bmp");
    axelTextures[2] = LoadTexBMP("innertire.bmp");
    axelTextures[3] = LoadTexBMP("metal.bmp");
+
+   rocketTextures[0] = LoadTexBMP("rustymetal.bmp");
+   rocketTextures[1] = axelTextures[3];
+   rocketTextures[2] = LoadTexBMP("fire.bmp");
 }
 
 /* 
@@ -52,8 +56,11 @@ void DrawTriangle(vtx A, vtx B, vtx C)
    // Draw the triangle.
    glNormal3f(Nx, Ny, Nz);
    glBegin(GL_TRIANGLES);
-   glVertex3f(A.x, A.y, A.z);
+   glTexCoord2f(0.0, 0.0);
    glVertex3f(B.x, B.y, B.z);
+   glTexCoord2f(1.0, 0.0);
+   glVertex3f(A.x, A.y, A.z);
+   glTexCoord2f(1.0, 1.0);
    glVertex3f(C.x, C.y, C.z);
    glEnd();
 }
@@ -106,48 +113,6 @@ const tri cyllender[] =
    {22, 21, 20}, {21, 22, 23}, {0, 23, 22}, {23, 0, 1}
 };
 
-// List of vertices for the tread of the left wheel.
-const vtx axelBar[] =
-{
-   {0.01, 0.0, 0.25}, {0.01, 0.0, 0.4}, {0.01 * Cos(30), 0.01 * Sin(30), 0.25},
-   {0.01 * Cos(30), 0.01 * Sin(30), 0.4}, {0.01 * Cos(60), 0.01 * Sin(60), 0.25},
-   {0.01 * Cos(60), 0.01 * Sin(60), 0.4}, {0.0, 0.01, 0.25}, {0.0, 0.01, 0.4},
-   {0.01 * Cos(120), 0.01 * Sin(120), 0.25}, {0.01 * Cos(120), 0.01 * Sin(120), 0.4},
-   {0.01 * Cos(150), 0.01 * Sin(150), 0.25}, {0.01 * Cos(150), 0.01 * Sin(150), 0.4},
-   {-0.01, 0.0, 0.25}, {-0.01, 0.0, 0.4}, {0.01 * Cos(210), 0.01 * Sin(210), 0.25},
-   {0.01 * Cos(210), 0.01 * Sin(210), 0.4}, {0.01 * Cos(240), 0.01 * Sin(240), 0.25},
-   {0.01 * Cos(240), 0.01 * Sin(240), 0.4}, {0.0, -0.01, 0.25}, {0.0, -0.01, 0.4},
-   {0.01 * Cos(300), 0.01 * Sin(300), 0.25}, {0.01 * Cos(300), 0.01 * Sin(300), 0.4},
-   {0.01 * Cos(330), 0.01 * Sin(330), 0.25}, {0.01 * Cos(330), 0.01 * Sin(330), 0.4}
-};
-
-// Specify the vertices for drawing the nose cone of the Rocket.
-const vtx noseCone[] =
-{
-   {0.50, 0.0, 0.0}, {0.20, 0.05, 0.0},
-   {0.20, 0.05 * Cos(30), 0.05 * Sin(30)}, {0.20, 0.05 * Cos(60), 0.05 * Sin(60)},
-   {0.20, 0.0, 0.05}, {0.20, 0.05 * Cos(120), 0.05 * Sin(120)},
-   {0.20, 0.05 * Cos(150), 0.05 * Sin(150)}, {0.20, -0.05, 0.0},
-   {0.20, 0.05 * Cos(210), 0.05 * Sin(210)}, {0.20, 0.05 * Cos(240), 0.05 * Sin(240)},
-   {0.20, 0.0, -0.05}, {0.20, 0.05 * Cos(300), 0.05 * Sin(300)},
-   {0.20, 0.05 * Cos(330), 0.05 * Sin(330)}
-};
-
-// Vertices for the fuselage.
-const vtx fuselageVert[] =
-{
-   {0.20, 0.05, 0.0}, {-0.50, 0.05, 0.0}, {0.20, 0.05 * Cos(30), 0.05 * Sin(30)},
-   {-0.50, 0.05 * Cos(30), 0.05 * Sin(30)}, {0.20, 0.05 * Cos(60), 0.05 * Sin(60)},
-   {-0.50, 0.05 * Cos(60), 0.05 * Sin(60)}, {0.20, 0.0, 0.05}, {-0.50, 0.0, 0.05},
-   {0.20, 0.05 * Cos(120), 0.05 * Sin(120)}, {-0.50, 0.05 * Cos(120), 0.05 * Sin(120)},
-   {0.20, 0.05 * Cos(150), 0.05 * Sin(150)}, {-0.50, 0.05 * Cos(150), 0.05 * Sin(150)},
-   {0.20, -0.05, 0.0}, {-0.50, -0.05, 0.0}, {0.20, 0.05 * Cos(210), 0.05 * Sin(210)},
-   {-0.50, 0.05 * Cos(210), 0.05 * Sin(210)}, {0.20, 0.05 * Cos(240), 0.05 * Sin(240)},
-   {-0.50, 0.05 * Cos(240), 0.05 * Sin(240)}, {0.20, 0.0, -0.05}, {-0.50, 0.0, -0.05},
-   {0.20, 0.05 * Cos(300), 0.05 * Sin(300)}, {-0.50, 0.05 * Cos(300), 0.05 * Sin(300)},
-   {0.20, 0.05 * Cos(330), 0.05 * Sin(330)}, {-0.50, 0.05 * Cos(330), 0.05 * Sin(330)}
-};
-
 // Order to compute normals for the top triangles of the tail fins.
 const tri finTop[] =
 {
@@ -173,14 +138,14 @@ const tri finBase[] =
 // Vertices for the rectangle components of the tail fins.
 const vtx finBaseVert[] =
 {
-   {-0.50, 0.025, 0.025}, {-0.50, 0.025 + 0.1, 0.025 + 0.1},
    {-0.3, 0.025, 0.025}, {-0.3, 0.025 + 0.1, 0.025 + 0.1},
-   {-0.50, -0.025, -0.025}, {-0.50, -0.025 - 0.1, -0.025 - 0.1},
+   {-0.50, 0.025, 0.025}, {-0.50, 0.025 + 0.1, 0.025 + 0.1},
    {-0.3, -0.025, -0.025}, {-0.3, -0.025 - 0.1, -0.025 - 0.1},
-   {-0.50, -0.025, 0.025}, {-0.50, -0.025 - 0.1, 0.025 + 0.1},
+   {-0.50, -0.025, -0.025}, {-0.50, -0.025 - 0.1, -0.025 - 0.1},
    {-0.3, -0.025, 0.025}, {-0.3, -0.025 - 0.1, 0.025 + 0.1},
-   {-0.50, 0.025, -0.025}, {-0.50, 0.025 + 0.1, -0.025 - 0.1},
-   {-0.3, 0.025, -0.025}, {-0.3, 0.025 + 0.1, -0.025 - 0.1}
+   {-0.50, -0.025, 0.025}, {-0.50, -0.025 - 0.1, 0.025 + 0.1},
+   {-0.3, 0.025, -0.025}, {-0.3, 0.025 + 0.1, -0.025 - 0.1},
+   {-0.50, 0.025, -0.025}, {-0.50, 0.025 + 0.1, -0.025 - 0.1}
 };
 
 // Specify the vertices for drawing the nose cone of the Rocket.
@@ -340,14 +305,6 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
 
    glDisable(GL_TEXTURE_2D);
 
-   // Draw the axel between the wheels.
-   //glBegin(GL_QUAD_STRIP);
-   //for(int i = 0; i < 24; i++)
-   //{
-      //DrawQuad(axelBar[cyllender[i].C], axelBar[cyllender[i].B], axelBar[cyllender[i].A]);
-   //}
-   //glEnd();
-
    glPopMatrix();
 }
 
@@ -389,12 +346,14 @@ void Rocket(double x, double y, double z, double dx, double dy,
    double finTip = -0.1;
    double finEdge = -0.3;
 
+   glEnable(GL_TEXTURE_2D);
+
    // Apply color, emission, ambient, diffuse, specular and shininess lighting qualities.
-   glColor4fv(orange);
    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black);
-   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, orange);
+   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, white);
    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, white);
    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shiny);
+   //glColor4fv(white);
 
    glPushMatrix();
 
@@ -405,22 +364,39 @@ void Rocket(double x, double y, double z, double dx, double dy,
    glRotated(gamma, 1, 0, 0);
    glRotated(omega, 0, 1, 0);
 
-   // Compute vertex normals and draw the nose cone.
-   for (int i = 0; i < 12; i++)
-      DrawTriangle(noseCone[cone[i].A], noseCone[cone[i].B], noseCone[cone[i].C]);
+   glColor3f(1, 1, 1);
+   
+   glBindTexture(GL_TEXTURE_2D, rocketTextures[0]);
+   glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+   glNormal3f(0.5, 0.0, 0.0);
+   glBegin(GL_TRIANGLE_FAN);
+   glTexCoord2f(0.5, 0.5);
+   glVertex3f(0.5, 0.0, 0.0);
 
-   // Draw the fuselage.
-   glBegin(GL_QUAD_STRIP);
-   for (int i = 0; i < 24; i++)
-      DrawQuad(fuselageVert[cyllender[i].A], fuselageVert[cyllender[i].B], fuselageVert[cyllender[i].C]);
+   for (int i = 0; i <= 360; i += 30)
+   {
+      glNormal3f(0.2, Cos(i), Sin(i));
+      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5);
+      glVertex3f(0.2, 0.05 * Cos(i), 0.05 * Sin(i));
+   }
    glEnd();
 
-   glColor4fv(red);
+   glBegin(GL_QUAD_STRIP);
+   for (int i = 0; i <= 12; i++)
+   {
+      int theta = i * 30;
+      glNormal3f(0.2, Cos(theta), Sin(theta)); 
+      glTexCoord2f(0, i % 2);
+      glVertex3f(0.2, 0.05 * Cos(theta), 0.05 * Sin(theta));
+      glTexCoord2f(1, i % 2);
+      glVertex3f(-0.5, 0.05 * Cos(theta), 0.05 * Sin(theta));
+   }
+   glEnd();
 
-   // Draw the tops of the tail fins.
+   glBindTexture(GL_TEXTURE_2D, rocketTextures[1]);
+
    for (int i = 0; i < 4; i++)
    {
-      // This bit of code is from my research into culling faces (khronos documentation, see README).
       glEnable(GL_CULL_FACE);
       glCullFace(GL_FRONT);
       DrawTriangle(finTopVert[finTop[i].A], finTopVert[finTop[i].B], finTopVert[finTop[i].C]);
@@ -441,9 +417,12 @@ void Rocket(double x, double y, double z, double dx, double dy,
       DrawTriangle(finBaseVert[finBase[i].C], finBaseVert[finBase[i].B], finBaseVert[finBase[i].A]);
       DrawTriangle(finBaseVert[finBase[i+1].C], finBaseVert[finBase[i+1].B], finBaseVert[finBase[i+1].A]);
    }
+
+   glDisable(GL_TEXTURE_2D);
    
 
    // Draw lines so tail fins are visible from sides/front/back.
+   glColor3f(1, 1, 1);
    glBegin(GL_LINES);
    glVertex3f(finTip, radius, radius);
    glVertex3f(finEdge, radius + 0.1, radius + 0.1);
@@ -490,7 +469,8 @@ void Rocket(double x, double y, double z, double dx, double dy,
    // Thruster jet.
    for (int i = 0; i < 12; i++)
       DrawTriangle(thrusterCone[cone[i].A], thrusterCone[cone[i].B], thrusterCone[cone[i].C]);
-      
+     
+   glColor4fv(white);
    glPopMatrix();
 }
 
