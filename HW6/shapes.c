@@ -94,25 +94,6 @@ void DrawQuad(vtx A, vtx B, vtx C)
    glTexCoord2f(5.0/2, 5.0); glVertex3f(C.x, C.y, C.z);
 }
 
-// Specify the order of vertices to compute normals for a cone object.
-const tri cone[] =
-{
-   {1, 0, 2}, {2, 0, 3}, {3, 0, 4}, {4, 0, 5}, {5, 0, 6},
-   {6, 0, 7}, {7, 0, 8}, {8, 0, 9}, {9, 0, 10}, {10, 0, 11},
-   {11, 0, 12}, {12, 0, 1}
-};
-
-// Specify order of vertices to compute normals for a cyllender.
-const tri cyllender[] =
-{
-   {2, 1, 0}, {1, 2, 3}, {4, 3, 2}, {3, 4, 5},
-   {6, 5, 4}, {5, 6, 7}, {8, 7, 6}, {7, 8, 9},
-   {10, 9, 8}, {9, 10, 11}, {12, 11, 10}, {11, 12, 13},
-   {14, 13, 12}, {13, 14, 15}, {16, 15, 14}, {15, 16, 17},
-   {18, 17, 16}, {17, 18, 19}, {20, 19, 18}, {19, 20, 21},
-   {22, 21, 20}, {21, 22, 23}, {0, 23, 22}, {23, 0, 1}
-};
-
 // Order to compute normals for the top triangles of the tail fins.
 const tri finTop[] =
 {
@@ -146,18 +127,6 @@ const vtx finBaseVert[] =
    {-0.50, -0.025, 0.025}, {-0.50, -0.025 - 0.1, 0.025 + 0.1},
    {-0.3, 0.025, -0.025}, {-0.3, 0.025 + 0.1, -0.025 - 0.1},
    {-0.50, 0.025, -0.025}, {-0.50, 0.025 + 0.1, -0.025 - 0.1}
-};
-
-// Specify the vertices for drawing the nose cone of the Rocket.
-const vtx thrusterCone[] =
-{
-   {-0.7, 0.0, 0.0}, {-0.50, 0.05, 0.0},
-   {-0.50, 0.05 * Cos(30), 0.05 * Sin(30)}, {-0.50, 0.05 * Cos(60), 0.05 * Sin(60)},
-   {-0.50, 0.0, 0.05}, {-0.50, 0.05 * Cos(120), 0.05 * Sin(120)},
-   {-0.50, 0.05 * Cos(150), 0.05 * Sin(150)}, {-0.50, -0.05, 0.0},
-   {-0.50, 0.05 * Cos(210), 0.05 * Sin(210)}, {-0.50, 0.05 * Cos(240), 0.05 * Sin(240)},
-   {-0.50, 0.0, -0.05}, {-0.50, 0.05 * Cos(300), 0.05 * Sin(300)},
-   {-0.50, 0.05 * Cos(330), 0.05 * Sin(330)}
 };
 
 // Order of vertices to compute normals for cuboid.
@@ -290,10 +259,13 @@ void WheelAxel(double x, double y, double z, double dx, double dy,
    }
    glEnd();
 
+   // Apply the tire tread texture to the wheel treads.
    glBindTexture(GL_TEXTURE_2D, axelTextures[3]);
    glBegin(GL_QUAD_STRIP);
    for (int i = 0; i <= 12; i++)
    {
+      // Ensure that exactly one copy of the tread texture is applied to each component
+      // rectangle.
       int theta = i * 30;
       glNormal3f(0.01 * Cos(theta), 0.01 * Cos(theta), 0.25);
       glTexCoord2f(0, i % 2);
@@ -353,7 +325,6 @@ void Rocket(double x, double y, double z, double dx, double dy,
    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, white);
    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, white);
    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shiny);
-   //glColor4fv(white);
 
    glPushMatrix();
 
@@ -366,13 +337,17 @@ void Rocket(double x, double y, double z, double dx, double dy,
 
    glColor3f(1, 1, 1);
    
+   // Apply rusty metal texture for the nose cone and fuselage of rocket.
    glBindTexture(GL_TEXTURE_2D, rocketTextures[0]);
    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+   // Compute normal for tip of nose cone.
    glNormal3f(0.5, 0.0, 0.0);
    glBegin(GL_TRIANGLE_FAN);
    glTexCoord2f(0.5, 0.5);
    glVertex3f(0.5, 0.0, 0.0);
 
+   // Compute normals and draw the nose cone base.
    for (int i = 0; i <= 360; i += 30)
    {
       glNormal3f(0.2, Cos(i), Sin(i));
@@ -381,6 +356,7 @@ void Rocket(double x, double y, double z, double dx, double dy,
    }
    glEnd();
 
+   // Compute normals and draw fuselage.
    glBegin(GL_QUAD_STRIP);
    for (int i = 0; i <= 12; i++)
    {
@@ -393,8 +369,10 @@ void Rocket(double x, double y, double z, double dx, double dy,
    }
    glEnd();
 
+   // Apply metal texture to tail fins.
    glBindTexture(GL_TEXTURE_2D, rocketTextures[1]);
 
+   // Compute normals and draw tail fins.
    for (int i = 0; i < 4; i++)
    {
       glEnable(GL_CULL_FACE);
@@ -418,6 +396,21 @@ void Rocket(double x, double y, double z, double dx, double dy,
       DrawTriangle(finBaseVert[finBase[i+1].C], finBaseVert[finBase[i+1].B], finBaseVert[finBase[i+1].A]);
    }
 
+   // Compute normal, and bind fire texture to the thruster cone.
+   glBindTexture(GL_TEXTURE_2D, rocketTextures[2]);
+   glNormal3f(-0.7, 0.0, 0.0);
+   glBegin(GL_TRIANGLE_FAN);
+   glTexCoord2f(0.5, 0.5);
+   glVertex3f(-0.7, 0.0, 0.0);
+   
+   for (int i = 0; i <= 360; i += 30)
+   {
+      glNormal3f(-0.5, Cos(i), Sin(i));
+      glTexCoord2f(0.5 * Cos(i) + 0.5, 0.5 * Sin(i) + 0.5);
+      glVertex3f(-0.5, 0.05 * Cos(i), 0.05 * Sin(i));
+   }
+
+   glEnd();
    glDisable(GL_TEXTURE_2D);
    
 
@@ -459,18 +452,6 @@ void Rocket(double x, double y, double z, double dx, double dy,
    glVertex3f(fuselageBase, radius + 0.1, -radius - 0.1);
    glEnd();
 
-   // Set material settings approprate for the tail thruster flame jet.
-   glColor4fv(yellow);
-   glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, yellow);
-   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, yellow);
-   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, yellow);
-   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shiny);
-
-   // Thruster jet.
-   for (int i = 0; i < 12; i++)
-      DrawTriangle(thrusterCone[cone[i].A], thrusterCone[cone[i].B], thrusterCone[cone[i].C]);
-     
-   glColor4fv(white);
    glPopMatrix();
 }
 
