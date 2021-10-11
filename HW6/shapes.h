@@ -1,7 +1,8 @@
 /*
  *  Function declarations and struct definitions for
- *  3D object drawing for CSCI-4229 Homework 6: Textures and Lighting.
- *  Created by Jeff Colgan.  
+ *  3D object drawing
+ *  CSCI-4229 Homework 6: Textures and Lighting.
+ *  Updated by Jeff Colgan, 10/10/2021.  
  */
 #include "CSCIx229.h"
 

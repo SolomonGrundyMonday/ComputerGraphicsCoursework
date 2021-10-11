@@ -1,7 +1,7 @@
 /*
- *  Utility function declarations for CSCI-4229
- *  Homework 5.
- *  Created by Jeff Colgan. 
+ *  Utility function declarations. 
+ *  CSCI-4229 Homework 6 : Textures and Lighting.
+ *  Created by Jeff Colgan, 10/10/2021. 
  */
 
 #include "CSCIx229.h"

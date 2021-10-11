@@ -1,6 +1,7 @@
 /*
+ *  Main application code for lighting and texturing 3D objects. 
  *  CSCI-4229, Homework 6: Lighting and Textures
- *  Created by Jeff Colgan, 10/4/2021. 
+ *  Created by Jeff Colgan, 10/10/2021. 
  */
 #include "utility.h"
 #include "shapes.h"
@@ -54,6 +55,7 @@ void display()
 
    glShadeModel(GL_SMOOTH);
 
+   // Specify ambient, diffuse, specular qualities of light source, as well as position.
    float Ambient[] = { 0.1, 0.1, 0.1, 1.0 };
    float Diffuse[] = { 0.5, 0.5, 0.5, 1.0 };
    float Specular[] = { 0.0, 0.0, 0.0, 1.0 };
@@ -119,6 +121,7 @@ void display()
    // Otherwise, render the entire scene.
    else
    {
+      // Apply the ground texture to the floor Box object.
       glColor3f(1.0, 1.0, 1.0);
       glEnable(GL_TEXTURE_2D);
       glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -215,6 +218,7 @@ void special(int key, int x, int y)
  */
 void key(unsigned char key, int x, int y)
 {
+   // If user hits escape key, exit application with status of zero.
    if (key == 27)
    {
       exit(0);

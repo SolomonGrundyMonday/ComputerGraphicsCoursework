@@ -51,7 +51,8 @@ I continued to iterate on the scene in 3d that I have submitted for the previous
 In addition, I borrowed several snippets of code on texture mapping from the following in-class
 examples: ex14 and ex19.  These snippets are labeled with appropriate comments in the code.  I also
 utilized the CSCI-x229 library for certain functionality.  Finally, I used the structure from the
-in-class examples generally for the following functions: main, idle, reshape, and DrawTriangles.  I
+in-class examples generally for the following functions: main, idle, reshape, and DrawTriangles, 
+as well as the general makefile structure.  I
 also used the struct typedefs for the vtx and tri structs from ex13.  
 
 Notes:

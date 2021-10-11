@@ -1,7 +1,7 @@
 /*
- *  Utility function definitions for CSCI-4229 Homework
- *  5: Lighting.
- *  Created by Jeff Colgan. 
+ *  Utility function definitions.
+ *  CSCI-4229 Homework 6: Textures and Lighting.
+ *  Created by Jeff Colgan, 10/10/2021. 
  */
 
 #include "utility.h"
